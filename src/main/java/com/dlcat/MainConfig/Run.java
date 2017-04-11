@@ -20,7 +20,7 @@ import com.jfinal.plugin.activerecord.dialect.MysqlDialect;
 import com.jfinal.plugin.druid.DruidPlugin;
 import com.jfinal.plugin.druid.DruidStatViewHandler;
 import com.jfinal.template.Engine;
-
+import net.dreamlu.ui.jfinal.AssetsDirective;
 public class Run extends JFinalConfig {
 
 	public static void main(String[] args) {
@@ -49,6 +49,8 @@ public class Run extends JFinalConfig {
 	@Override
 	public void configEngine(Engine me) {
 		// TODO Auto-generated method stub
+		//js.css压缩插件
+		me.addDirective("assets",new AssetsDirective());
 		me.addSharedFunction("/WEB-INF/Template/core.html");
 	}
 

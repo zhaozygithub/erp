@@ -5,8 +5,11 @@ import com.dlcat.model.SysUser;
 import com.jfinal.captcha.CaptchaRender;
 import com.jfinal.core.Controller;
 
-
 public class IndexController extends Controller {
+	
+	/**
+	 * 默认方法
+	 */
 	public void index() {
 		SysUser user = (SysUser) getSessionAttr("user");
 		if (user != null) {
@@ -17,31 +20,39 @@ public class IndexController extends Controller {
 		toLogin();
 	}
 
+	/**
+	 * 去首页
+	 */
 	private void toIndex() {
 		// TODO Auto-generated method stub
 		render("index.html");
 	}
 
+	/**
+	 * 滚到登录页面
+	 */
 	private void toLogin() {
 		// TODO Auto-generated method stub
 		render("login.html");
 	}
-	
+
+	/**
+	 * 登录验证
+	 */
 	public void doLogin() {
 		String loginId = getPara("userName");
 		String loginPwd = getPara("pwd");
 
-		boolean istrue=validateCaptcha("captcha");
-		
-		if (istrue==false) {
-			keepPara(new String[] { "userName","pwd"});
+		boolean istrue = validateCaptcha("captcha");
+
+		if (istrue == false) {
+			keepPara(new String[] { "userName", "pwd" });
 			setAttr("msg", "验证码错误，请重新输入！");
 			toLogin();
 			return;
 		}
 
-
-		SysUser user=SysUser.dao.findFirst("select * from sys_user where name = ?", loginId);
+		SysUser user = SysUser.dao.findFirst("select * from sys_user where name = ?", loginId);
 		if (user == null) {
 			setAttr("msg", "用户名不存在");
 			toLogin();
@@ -55,35 +66,29 @@ public class IndexController extends Controller {
 			return;
 		}
 
-		
-/*		try {
-//			loginInit(this, user);
-		} catch (Exception e) {
-			setAttr("msg", e.getMessage());
-			keepPara(new String[] { "userName" });
-			toLogin();
-			return;
-		}*/
+		/*
+		 * try { // loginInit(this, user); } catch (Exception e) {
+		 * setAttr("msg", e.getMessage()); keepPara(new String[] { "userName"
+		 * }); toLogin(); return; }
+		 */
 		setSessionAttr("user", user);
 
 		redirect("/");
 	}
-	
+
 	/**
-	 *添加验证码
+	 * 添加验证码
 	 */
 	public void captcha() {
 		render(new CaptchaRender());
 	}
-	
+
 	/*
 	 * 退出登录
-	 * */
+	 */
 	public void doExit() {
 		removeSessionAttr("user");
 		redirect("/");
 	}
-	
-	
-	
+
 }

@@ -3,6 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <title>dlcat login</title>
+<script type="text/javascript" src='#assets("/assets/assets.jjs")'></script>
 </head>
 <body style="text-align:center;margin-top:200px">
 	<form id="loginForm" method="post" action="/doLogin">
@@ -20,12 +21,11 @@
 		<input type="button" value="Submit" id="loginbtn">
 	</form>
 
-	#@jquery?()
-	#@nest?()
-	
+#@nest?()
+
 	<script type="text/javascript">
 		$(function() {
-			//$("#msg").html("test");
+			$("#msg").html("test");
 			$(".logininput").blur(function() {
 				if ($(this).val() == "") {
 					$(this).css("border-color", "red");

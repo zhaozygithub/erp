@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>dlcat login</title>
+</head>
+<body style="text-align:center;margin-top:200px">
+	<form id="loginForm" method="post" action="/doLogin">
+		用户名：<input type="text" name="userName" class="logininput blue" value="#(userName??)"><br>
+		密&nbsp;&nbsp;&nbsp;码：<input type="password" name="pwd" value="#(pwd??)"><br> <span id="msg">#(msg??)</span>
+
+		<p>
+			<label for="captcha">验证码:</label> 
+			<input class="logininput"
+				name="captcha" id="captcha" type="text" value=""
+				style="width: 100px;" maxlength="4" /> 
+				<img src="/captcha" height="27" onclick="this.src='/captcha?'+Math.random()"
+				style="cursor: pointer; vertical-align: middle;" />
+		</p>
+		<input type="button" value="Submit" id="loginbtn">
+	</form>
+
+	#@jquery?()
+	#@nest?()
+	
+	<script type="text/javascript">
+		$(function() {
+			//$("#msg").html("test");
+			$(".logininput").blur(function() {
+				if ($(this).val() == "") {
+					$(this).css("border-color", "red");
+				} else {
+					$(this).css("border-color", "#D9D6C4");
+				}
+			});
+
+			$("#loginbtn").click(function() {
+				var k = 0;
+				var ajaxhtml = "";
+				$(".logininput").each(function(i, obj) {
+					if ($(obj).val().trim() == "") {
+						k++;
+						$(this).css("border-color", "red");
+						$(this).focus();
+						return false;
+					}
+				});
+				if (k != 0)
+					return;
+				ajaxhtml = $("#loginbtn").html();
+				$("#loginbtn").html("Loading....");
+				$("#loginbtn").attr("disabled", "disabled");
+				$("#loginForm").submit();
+			})
+
+		})
+	</script>
+
+
+</body>
+</html>

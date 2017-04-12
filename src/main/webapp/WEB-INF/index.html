@@ -3,11 +3,51 @@
 <head>
 <meta charset="UTF-8">
 <title>dlcat index</title>
+<script type="text/javascript" src='#assets("/assets/assets.jjs")'></script>
 </head>
-<body style="text-align:center;">
-	
-<h1>登录成功！！！</h1>
+<body style="text-align: center;">
 
+	<h1>登录成功！！！</h1>
+
+	
+	###(session.menu[1][0]) 
+	
+	
+	#for(m: session.menu[1][0]??)
+	<a href="/secMenu/#(m.id)">#(m.name)</a>
+	#end
+
+	<div style="width: 200px;height: 800;left: 20px;">
+		<ul class="ul">
+			#for( x: session.secMenu??)
+			<li>
+			<a href="/thirdMenu/#(x.id)">#(x.name)</a>
+			
+			</li>
+			#end
+			
+			
+			
+		</ul>
+		
+		<ul>
+		    #for( x: session.thirdMenu??)
+			<li>
+			<a href="#">#(x.name)</a>
+			
+			</li>
+			#end
+		</ul>
+
+	</div>
+
+
+	<script type="text/javascript">
+		$(function() {
+			
+
+		});
+	</script>
 
 </body>
 </html>

@@ -3,3 +3,10 @@
 .svn/wc.db
 vim .gitignore
 .svn/wc.db
+target/classes/com/dlcat/base/BaseRoleBtn.class
+target/classes/com/dlcat/base/BaseSysBtn.class
+target/classes/com/dlcat/base/BaseSysRole.class
+target/classes/com/dlcat/controller/IndexController.class
+target/classes/com/dlcat/model/_MappingKit.class
+target/classes/com/dlcat/model/RoleBtn.class
+target/classes/com/dlcat/model/SysBtn.class

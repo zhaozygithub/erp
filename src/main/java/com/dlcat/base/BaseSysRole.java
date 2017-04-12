@@ -25,6 +25,14 @@ public abstract class BaseSysRole<M extends BaseSysRole<M>> extends Model<M> imp
 		return get("role_name");
 	}
 
+	public void setRoleMenus(java.lang.String roleMenus) {
+		set("role_menus", roleMenus);
+	}
+
+	public java.lang.String getRoleMenus() {
+		return get("role_menus");
+	}
+
 	public void setStatus(java.lang.Integer status) {
 		set("status", status);
 	}

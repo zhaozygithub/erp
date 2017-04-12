@@ -32,13 +32,15 @@ public class _MappingKit {
 		arp.addMapping("loan_business_category", "id", LoanBusinessCategory.class);
 		arp.addMapping("loan_product_category", "id", LoanProductCategory.class);
 		arp.addMapping("loan_repay_type", "id", LoanRepayType.class);
+		arp.addMapping("role_btn", "id", RoleBtn.class);
+		arp.addMapping("sys_btn", "id", SysBtn.class);
 		arp.addMapping("sys_menu", "id", SysMenu.class);
 		arp.addMapping("sys_org", "org_id", SysOrg.class);
 		arp.addMapping("sys_role", "id", SysRole.class);
 		arp.addMapping("sys_user", "id", SysUser.class);
 		// Composite Primary Key order: code_no,item_no
 		arp.addMapping("t_code_library", "code_no,item_no", TCodeLibrary.class);
-		arp.addMapping("t_task", Task.class);
+		arp.addMapping("t_task", "id", Task.class);
 	}
 }
 

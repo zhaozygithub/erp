@@ -42,6 +42,32 @@
 	</div>
 
 
+<hr>
+
+ <table border="1px" cellspacing="0px" cellpadding="5px">
+ <th>id</th><th>name</th><th>leave</th><th>pid</th>
+#for(first: session.menu??)
+ #for(sec: first.value)
+ #for(thrid : sec.value)
+
+ 
+ <tr>
+ <td>#(thrid.id)</td>
+ <td>#(thrid.name)</td>
+ <td>#(thrid.level)</td>
+ <td>#(thrid.pid)</td>
+ </tr>
+ 
+
+ #end
+ #end
+#end
+ </table>
+
+
+
+
+
 	<script type="text/javascript">
 		$(function() {
 			

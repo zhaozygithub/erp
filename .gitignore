@@ -29,3 +29,13 @@ target/classes/com/dlcat/base/BaseSysMenu.class
 target/classes/com/dlcat/controller/IndexController.class
 target/classes/com/dlcat/model/_MappingKit.class
 target/classes/com/dlcat/model/SysMenu.class
+
+ #过滤数据库文件、sln解决方案文件、配置文件  
+*.mdb  
+*.ldb  
+*.sln  
+*.config  
+  
+  
+#过滤文件夹
+.svn/

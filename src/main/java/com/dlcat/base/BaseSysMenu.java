@@ -31,14 +31,6 @@ public abstract class BaseSysMenu<M extends BaseSysMenu<M>> extends Model<M> imp
 		return get("pid");
 	}
 
-	public void setRoleId(java.lang.Integer roleId) {
-		set("role_id", roleId);
-	}
-
-	public java.lang.Integer getRoleId() {
-		return get("role_id");
-	}
-
 	public void setLevel(java.lang.Integer level) {
 		set("level", level);
 	}

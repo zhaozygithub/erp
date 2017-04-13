@@ -8,29 +8,47 @@
 <body style="text-align: center;">
 
 	<h1>登录成功！！！</h1>
+<div>
+   <ul id="treeDemo" class="ztree"></ul>
+</div>
 
-	
-	<div style="width: 400px;height: 800px;left: 2px">
-	<table border="1px" cellspacing="0px" cellpadding="5px">
-	<th>一级菜单</th><th>二级菜单</th><th>三级菜单</th>
-	#for(first :session.menu.children) 
-	<tr><td>#(first.name??)</td></tr>
-	  #for(sec : first.children??)
-	    <tr><td></td><td>#(sec.name??)</td></tr>
-	    #for(third:sec.children??)
-	      <tr><td></td><td></td><td>#(third.name??)</td></tr>
-	    #end
-	  #end 
-	
-	#end
-	
-	</table>
-	</div>
-
+	#@ztree?()
 
 	<script type="text/javascript">
+		var zTreeObj;
+		// zTree 的参数配置，深入使用请参考 API 文档（setting 配置详解）
+		var setting = {
+				
+		};
+		// zTree 的数据属性，深入使用请参考 API 文档（zTreeNode 节点数据详解）
+		var zNodes = [ 
+            #for(first :session.menu.children)          
+		               {
+			name : '#(first.name??)',
+			url:'https://www.baidu.com/',
+			open : true,
+			children : [ 
+			 #for(sec : first.children??)           
+			             {
+				name : '#(sec.name??)',
+				open : true,
+				children:[
+                      #for(third : sec.children??)
+				          {
+				        	  name:'#(third.name??)',
+				        	  open : false
+				          },
+				       #end
+				          ]
+			}, 
+			#end
+			]
+		},
+       #end		
+		];
+		
 		$(function() {
-
+			zTreeObj = $.fn.zTree.init($("#treeDemo"), setting, zNodes);
 		});
 	</script>
 

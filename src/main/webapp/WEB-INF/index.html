@@ -10,67 +10,26 @@
 	<h1>登录成功！！！</h1>
 
 	
-	###(session.menu[1][0]) 
+	<div style="width: 400px;height: 800px;left: 2px">
+	<table border="1px" cellspacing="0px" cellpadding="5px">
+	<th>一级菜单</th><th>二级菜单</th><th>三级菜单</th>
+	#for(first :session.menu.children) 
+	<tr><td>#(first.name??)</td></tr>
+	  #for(sec : first.children??)
+	    <tr><td></td><td>#(sec.name??)</td></tr>
+	    #for(third:sec.children??)
+	      <tr><td></td><td></td><td>#(third.name??)</td></tr>
+	    #end
+	  #end 
 	
-	
-	#for(m: session.menu[1][0]??)
-	<a href="/secMenu/#(m.id)">#(m.name)</a>
 	#end
-
-	<div style="width: 200px;height: 800;left: 20px;">
-		<ul class="ul">
-			#for( x: session.secMenu??)
-			<li>
-			<a href="/thirdMenu/#(x.id)">#(x.name)</a>
-			
-			</li>
-			#end
-			
-			
-			
-		</ul>
-		
-		<ul>
-		    #for( x: session.thirdMenu??)
-			<li>
-			<a href="#">#(x.name)</a>
-			
-			</li>
-			#end
-		</ul>
-
+	
+	</table>
 	</div>
-
-
-<hr>
-
- <table border="1px" cellspacing="0px" cellpadding="5px">
- <th>id</th><th>name</th><th>leave</th><th>pid</th>
-#for(first: session.menu??)
- #for(sec: first.value)
- #for(thrid : sec.value)
-
- 
- <tr>
- <td>#(thrid.id)</td>
- <td>#(thrid.name)</td>
- <td>#(thrid.level)</td>
- <td>#(thrid.pid)</td>
- </tr>
- 
-
- #end
- #end
-#end
- </table>
-
-
-
 
 
 	<script type="text/javascript">
 		$(function() {
-			
 
 		});
 	</script>

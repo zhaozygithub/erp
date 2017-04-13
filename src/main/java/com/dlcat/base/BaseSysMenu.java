@@ -1,6 +1,11 @@
 package com.dlcat.base;
 
 import com.jfinal.plugin.activerecord.Model;
+
+import java.util.ArrayList;
+import java.util.List;
+
+import com.dlcat.model.SysMenu;
 import com.jfinal.plugin.activerecord.IBean;
 
 /**
@@ -8,6 +13,7 @@ import com.jfinal.plugin.activerecord.IBean;
  */
 @SuppressWarnings("serial")
 public abstract class BaseSysMenu<M extends BaseSysMenu<M>> extends Model<M> implements IBean {
+	
 
 	public void setId(java.lang.Integer id) {
 		set("id", id);

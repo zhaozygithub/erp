@@ -3,10 +3,8 @@ package com.dlcat.controller;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
 
 import com.dlcat.core.utils.SecurityUtil;
 import com.dlcat.model.SysMenu;
@@ -29,99 +27,49 @@ public class IndexController extends Controller {
 
 		toLogin();
 	}
+	
+	
 
 	/**
 	 * 去首页
 	 */
 	private void toIndex() {
-		SysUser user = (SysUser) getSessionAttr("user");
-		int rid = user.getRoleId();
-		// 根据rid去查看所具有的所有菜单
-		String roleMenus = SysRole.dao.findById(rid).getRoleMenus();
-		roleMenus = roleMenus.substring(0, roleMenus.length() - 1);
-		List<SysMenu> list = SysMenu.dao.find("select * from sys_menu where id in (" + roleMenus + ")");
-		// 构造一级菜单
-		Map<Integer, List<SysMenu>> map0 = new HashMap<Integer,List<SysMenu>>();
-
-		// 二级菜单map
-		Map<Integer, List<SysMenu>> map = new HashMap<Integer,List<SysMenu>>();
-
-		// 三级菜单
-		Map<Integer, List<SysMenu>> map2 = new HashMap<Integer, List<SysMenu>>();
 		
-		for (SysMenu sysMenu : list) {
-			Integer level = sysMenu.getLevel();
-			Integer pid = sysMenu.getPid();
-			Integer id = sysMenu.getId();
-			if (level == 2) {
-				getChildTree(pid, sysMenu, map);
-			} else if (level == 3) {
-				getChildTree(pid, sysMenu, map2);
+		render("index.html");
+	}
 
-			} else if (level == 1) {
-				getChildTree(pid, sysMenu, map0);
-			} else{
-				//留着给四级菜单
-//				fristMenu.add(sysMenu);
-			}
+	private SysMenu recursiveTree(int id) {
+		// TODO Auto-generated method stub
+		// 根据id获取节点对象
+		Map<Integer, SysMenu> map = getSessionAttr("menus");
+		SysMenu sysMenu = map.get(id);
 
-		}
-		
-		Map<Integer, Map<Integer, List<SysMenu>>> map3=new HashMap<Integer, Map<Integer,List<SysMenu>>>();
-		map3.put(1, map0);
-		map3.put(2, map);
-		map3.put(3, map2);
-		setSessionAttr("menu", map3);
-		render("index.html");
-	}
-	public void secMenu() {
-		List<SysMenu> thirdMenu=getSessionAttr("thirdMenu");
-		if (thirdMenu!=null) {
-			removeSessionAttr("thirdMenu");
-		}
-		int index=getParaToInt(0);
-		List<SysMenu> secMenu=getMenu(index, 2);
-		setSessionAttr("secMenu", secMenu);
-		render("index.html");
-	}
-	public void thirdMenu() {
-		int index=getParaToInt(0);
-		List<SysMenu> thirdMenu=getMenu(index, 3);
-		setSessionAttr("thirdMenu", thirdMenu);
-		render("index.html");
-	}
-	
-	
-	public List<SysMenu> getMenu(Integer index,Integer level) {
-		List<SysMenu> secMenu=new ArrayList<SysMenu>();
-		Map<Integer, Map<Integer, List<SysMenu>>> map=getSessionAttr("menu");
-		Map<Integer, List<SysMenu>> m=map.get(level);
-		Set<Integer>  keys= m.keySet();
-		for (Integer integer : keys) {
-			List<SysMenu> list=m.get(integer);
-			for (SysMenu sysMenu : list) {
-				if (sysMenu.getPid()==index) {
-					secMenu.add(sysMenu);
-				}
+		// 获取该节点的所有children
+		List<SysMenu> childTreeNodes = getChildren(id);
+		if (childTreeNodes.size() > 0) {
+			for (SysMenu child : childTreeNodes) {
+				SysMenu sysMenu2 = recursiveTree(child.getId()); // 递归
+				sysMenu.getChildren().add(sysMenu2);
 			}
 		}
-		return secMenu;
+		return sysMenu;
 	}
-	
-	public void getChildTree(Integer pid,SysMenu sysMenu,Map<Integer, List<SysMenu>> map) {
-		// 如果具有相同的一级菜单
-		if (map.containsKey(pid)) {
-			List<SysMenu> lMenus=map.get(pid);
-			lMenus.add(sysMenu);
-			
-			map.put(pid, lMenus);
-		} else {
-			List<SysMenu> lMenus=new ArrayList<SysMenu>();
-			lMenus.add(sysMenu);
-			
-			map.put(pid, lMenus);
+
+	private List<SysMenu> getChildren(int pid) {
+		// TODO Auto-generated method stub
+
+		List<SysMenu> list = new ArrayList<SysMenu>();
+		Map<Integer, SysMenu> map = getSessionAttr("menus");
+		Collection<SysMenu> values = map.values();
+		for (SysMenu sysMenu : values) {
+			if (sysMenu.getPid() == pid) {
+				list.add(sysMenu);
+			}
 		}
+		return list;
 	}
+
+	
 
 	/**
 	 * 滚到登录页面
@@ -161,14 +109,62 @@ public class IndexController extends Controller {
 			return;
 		}
 
-		/*
-		 * user.getRole(); try { // loginInit(this, user); } catch (Exception e)
-		 * { setAttr("msg", e.getMessage()); keepPara(new String[] { "userName"
-		 * }); toLogin(); return; }
-		 */
+		
+		  try { 
+			loginInit(this, user); 
+			   }
+		  catch (Exception e){ 
+			  setAttr("msg", e.getMessage()); 
+			  keepPara(new String[] { "userName"}); toLogin(); 
+			  return; 
+			  
+		  }
+		 
 		setSessionAttr("user", user);
 
 		redirect("/");
+	}
+
+	private void loginInit(IndexController indexController, SysUser user) {
+		// TODO Auto-generated method stub
+		int rid = user.getRoleId();
+		// 根据rid去查看所具有的所有菜单
+		String roleMenus = SysRole.dao.findById(rid).getRoleMenus();
+		roleMenus = roleMenus.substring(0, roleMenus.length() - 1);
+		List<SysMenu> list = SysMenu.dao.find("select * from sys_menu where id in (" + roleMenus + ")");
+		Map<Integer, SysMenu> map = new HashMap<Integer, SysMenu>();
+
+		List<SysMenu> firstMenu = new ArrayList<SysMenu>();
+		for (SysMenu sysMenu : list) {
+			map.put(sysMenu.getId(), sysMenu);
+			if (sysMenu.getLevel() == 1) {
+				firstMenu.add(sysMenu);
+			}
+
+		}
+		setSessionAttr("menus", map);
+		
+        SysMenu sysMenus=new SysMenu();
+		if (firstMenu.size() < 1) {
+			try {
+				throw new Exception("没有查看任何菜单的权限，请联系管理员。");
+			} catch (Exception e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		}else {
+			for (SysMenu sysMenu : firstMenu) {
+				SysMenu child = recursiveTree(sysMenu.getId());
+				sysMenus.getChildren().add(child);
+			}
+		}
+		
+        sysMenus.setName("顶级菜单");
+
+		//System.out.println(sysMenus);
+		setSessionAttr("menu", sysMenus);
+		
+		
 	}
 
 	/**

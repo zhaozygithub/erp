@@ -1,5 +1,8 @@
 package com.dlcat.model;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import com.dlcat.base.BaseSysMenu;
 
 /**
@@ -8,4 +11,23 @@ import com.dlcat.base.BaseSysMenu;
 @SuppressWarnings("serial")
 public class SysMenu extends BaseSysMenu<SysMenu> {
 	public static final SysMenu dao = new SysMenu().dao();
+	
+	/**
+	 * 用于递归查询菜单
+	 */
+	private List<SysMenu> children=new ArrayList<SysMenu>();
+
+	public List<SysMenu> getChildren() {
+		return children;
+	}
+
+	public void setChildren(List<SysMenu> children) {
+		this.children = children;
+	}
+
+	@Override
+	public String toString() {
+		return super.toString()+"SysMenu [children=" + children + "]";
+	}
+	
 }

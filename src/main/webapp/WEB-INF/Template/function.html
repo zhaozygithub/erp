@@ -1,0 +1,21 @@
+#define table(columns,data)
+<table border="1px" cellspacing="0px" cellpadding="5px">
+
+#for(x : columns)
+<th>#(x)</th>
+#end
+
+
+#for(x : data)
+
+<tr>
+#for(i : x)
+
+<td>#(i)</td>
+
+#end
+</tr>
+#end
+
+</table>
+#end

@@ -12,6 +12,8 @@ import com.dlcat.model.SysRole;
 import com.dlcat.model.SysUser;
 import com.jfinal.captcha.CaptchaRender;
 import com.jfinal.core.Controller;
+import com.jfinal.kit.HashKit;
+import com.jfinal.plugin.activerecord.Db;
 
 public class IndexController extends Controller {
 
@@ -102,7 +104,7 @@ public class IndexController extends Controller {
 			return;
 		}
 
-		if (!(user.getStr("password").equals(SecurityUtil.sha1(loginPwd)))) {
+		if (!(user.getStr("password").equals(HashKit.sha1(loginPwd)))) {
 			setAttr("msg", "密码错误");
 			keepPara(new String[] { "userName" });
 			toLogin();
@@ -130,7 +132,10 @@ public class IndexController extends Controller {
 		int rid = user.getRoleId();
 		// 根据rid去查看所具有的所有菜单
 		String roleMenus = SysRole.dao.findById(rid).getRoleMenus();
-		roleMenus = roleMenus.substring(0, roleMenus.length() - 1);
+		if (roleMenus.endsWith(",")) {
+			roleMenus = roleMenus.substring(0, roleMenus.length() - 1);
+		}
+		
 		List<SysMenu> list = SysMenu.dao.find("select * from sys_menu where id in (" + roleMenus + ")");
 		Map<Integer, SysMenu> map = new HashMap<Integer, SysMenu>();
 
@@ -180,6 +185,20 @@ public class IndexController extends Controller {
 	public void doExit() {
 		removeSessionAttr("user");
 		redirect("/");
+	}
+	
+	public void table() {
+		String tableName="sys_user";
+		String queryField="id,name,password,role_id";
+		String[] columns_={"ID","用户名","密码","角色ID"};
+	
+
+		List<Object> list=Db.query("SELECT "+queryField+" FROM "+tableName);
+
+		setAttr("columns", columns_);
+		setAttr("data", list);
+		
+		render("views/table.html");
 	}
 
 }

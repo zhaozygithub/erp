@@ -37,8 +37,8 @@ public class _MappingKit {
 		arp.addMapping("sys_role", "id", SysRole.class);
 		arp.addMapping("sys_user", "id", SysUser.class);
 		// Composite Primary Key order: code_no,item_no
-		arp.addMapping("t_code_library", "code_no,item_no", TCodeLibrary.class);
-		arp.addMapping("t_task", "id", Task.class);
+		arp.addMapping("to_code_library", "code_no,item_no", ToCodeLibrary.class);
+		arp.addMapping("to_task", "id", ToTask.class);
 	}
 }
 

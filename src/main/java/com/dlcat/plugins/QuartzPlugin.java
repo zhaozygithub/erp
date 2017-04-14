@@ -12,7 +12,7 @@ import org.quartz.SchedulerFactory;
 import org.quartz.TriggerBuilder;
 import org.quartz.impl.StdSchedulerFactory;
 
-import com.dlcat.model.Task;
+import com.dlcat.model.ToTask;
 import com.jfinal.kit.LogKit;
 import com.jfinal.plugin.IPlugin;
 
@@ -33,8 +33,8 @@ public class QuartzPlugin implements IPlugin {
 		try {
 			scheduler = sf.getScheduler();
 
-			List<Task> tasks = Task.dao.findAll();
-			for (com.dlcat.model.Task task : tasks) {
+			List<ToTask> tasks = ToTask.dao.findAll();
+			for (com.dlcat.model.ToTask task : tasks) {
 				String jobClassName = task.getStr("clazz");
 				String jobCronExp = task.getStr("exp");
 				int state = task.getInt("state");
@@ -51,7 +51,7 @@ public class QuartzPlugin implements IPlugin {
 
 				try {
 					scheduler.scheduleJob(job, trigger);
-					if (state == Task.STATE_STOP) {
+					if (state == ToTask.STATE_STOP) {
 						// 暂停触发
 						scheduler.pauseTrigger(trigger.getKey());
 					}

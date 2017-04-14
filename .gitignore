@@ -34,13 +34,12 @@ target/classes/com/dlcat/model/SysMenu.class
 *.mdb  
 *.ldb  
 *.sln  
-*.config  
+*.config
+*.class 
   
   
 #过滤文件夹
 .svn/
-src/main/resources/db.config
-target/classes/db.config
-.gitignore
-src/main/resources/db.config
-target/classes/db.config
+target/
+src/main/resources/
+

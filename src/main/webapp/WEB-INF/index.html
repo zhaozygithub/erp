@@ -8,11 +8,66 @@
 <body style="text-align: center;">
 
 	<h1>登录成功！！！</h1>
-<div>
-   <ul id="treeDemo" class="ztree"></ul>
-</div>
+	<div>
+		<ul id="treeDemo" class="ztree"></ul>
+	</div>
 
-	#@ztree?()
+	<div sytle="width:400px;heigth:400px;">
+		<ul>
+			#if(btns==null)
+			<li>该tab页面下无定义按钮</li> 
+			#end 
+			#for(btn:btns ??)
+			<li>#(btn.name??)</li>
+			#end
+		</ul>
+	</div>
+
+
+
+
+	<table border="1px" cellspacing="0px" cellpadding="5px">
+		<th>一级菜单</th>
+		<th>二级菜单</th>
+		<th>三级菜单</th>
+		<th>四级菜单</th> #for(first :session.menuTree.children)
+		<tr>
+			<td>#(first.name??)</td>
+		</tr>
+		#for(sec : first.children??)
+		<tr>
+			<td></td>
+			<td>#(sec.name??)</td>
+		</tr>
+		#for(third:sec.children??)
+		<tr>
+			<td></td>
+			<td></td>
+			<td>#(third.name??)</td>
+		</tr>
+
+		#for(tab : third.children??)
+		<tr>
+			<td></td>
+			<td></td>
+			<td></td>
+			<td><a href="/getBtnsBytabId/#(tab.id??)">#(tab.name??)</a></td>
+		</tr>
+		#for(btn : tab.children??)
+		<tr>
+			<td></td>
+			<td></td>
+			<td></td>
+			<td></td>
+			<td>#(btn.name??)</td>
+		</tr>
+		#end #end #end #end #end
+
+	</table>
+
+
+
+	###@ztree?()
 
 	<script type="text/javascript">
 		var zTreeObj;
@@ -22,7 +77,7 @@
 		};
 		// zTree 的数据属性，深入使用请参考 API 文档（zTreeNode 节点数据详解）
 		var zNodes = [ 
-            #for(first :session.menu.children)          
+            #for(first :session.menuTree.children)          
 		               {
 			name : '#(first.name??)',
 			url:'https://www.baidu.com/',

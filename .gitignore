@@ -43,3 +43,18 @@ target/classes/com/dlcat/model/SysMenu.class
 target/
 src/main/resources/
 
+target/m2e-wtp/web-resources/META-INF/maven/com.dlcat/erp/pom.properties
+target/classes/com/dlcat/controller/IndexController.class
+target/classes/com/dlcat/core/utils/StringUtils.class
+target/classes/com/dlcat/MainConfig/Run.class
+target/classes/com/dlcat/model/SysMenu.class
+target/classes/log4j.properties
+target/m2e-wtp/web-resources/META-INF/maven/com.dlcat/erp/pom.properties
+target/m2e-wtp/web-resources/META-INF/maven/com.dlcat/erp/pom.xml
+target/classes/com/dlcat/controller/IndexController.class
+target/classes/com/dlcat/core/utils/StringUtils.class
+target/classes/com/dlcat/MainConfig/Run.class
+target/classes/com/dlcat/model/SysMenu.class
+target/classes/log4j.properties
+target/m2e-wtp/web-resources/META-INF/maven/com.dlcat/erp/pom.properties
+target/m2e-wtp/web-resources/META-INF/maven/com.dlcat/erp/pom.xml

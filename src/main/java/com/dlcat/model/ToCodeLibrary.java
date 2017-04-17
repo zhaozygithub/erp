@@ -11,22 +11,25 @@ import com.dlcat.base.BaseToCodeLibrary;
 public class ToCodeLibrary extends BaseToCodeLibrary<ToCodeLibrary> {
 	public static final ToCodeLibrary dao = new ToCodeLibrary().dao();
 	/**
-	 * 以code_no作为参数查询
+	 * 根据code_no查询有效字典映射列表
 	 * @param codeNo
 	 * @return
 	 */
-	public List<ToCodeLibrary> getCodeLibraries(String codeNo) {
-		String sqlString="select * from t_code_library where code_no=?";
-		List<ToCodeLibrary> codeLibraries=ToCodeLibrary.dao.find(sqlString,codeNo);
+	public static List<ToCodeLibrary> getCodeLibrariesByCodeNo(String codeNo) {
+		List<ToCodeLibrary> codeLibraries = null;
+		if(codeNo != null && !"".equals(codeNo.trim())){
+			String sqlString="select * from to_code_library where status=1 and code_no=?";
+			codeLibraries = ToCodeLibrary.dao.find(sqlString,codeNo);
+		}
 		return codeLibraries;
 	}
 	
 	/**
-	 * 以SQL语句作为参数查询
+	 * 根据SQL语句查询字典映射列表
 	 * @param sql
 	 * @return
 	 */
-	public List<ToCodeLibrary> getCodeLibrariesSQL(String sql) {
+	public static List<ToCodeLibrary> getCodeLibrariesBySQL(String sql) {
 		List<ToCodeLibrary> codeLibraries=ToCodeLibrary.dao.find(sql);
 		return codeLibraries;
 	}

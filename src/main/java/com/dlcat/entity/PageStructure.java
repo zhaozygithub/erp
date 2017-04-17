@@ -3,6 +3,8 @@ package com.dlcat.entity;
 import java.io.Serializable;
 import java.util.List;
 
+import com.dlcat.model.SysMenu;
+
 /**
  * 列表页 -- 页面结构
  * @ClassName: PageStructure
@@ -16,13 +18,17 @@ public class PageStructure implements Serializable {
 	 */
 	private List<Search> search;
 	/**
+	 * 按钮
+	 */
+	private List<SysMenu> button;
+	/**
 	 * 表头
 	 */
 	private List<TableHeader> tableHeader;
 	/**
-	 * 表格数据url
+	 * 表格数据
 	 */
-	private String tableDataUrl;
+	private List<Object> dataList;
 	
 	public List<Search> getSearch() {
 		return search;
@@ -40,12 +46,20 @@ public class PageStructure implements Serializable {
 		this.tableHeader = tableHeader;
 	}
 
-	public String getTableDataUrl() {
-		return tableDataUrl;
+	public List<Object> getDataList() {
+		return dataList;
 	}
 
-	public void setTableDataUrl(String tableDataUrl) {
-		this.tableDataUrl = tableDataUrl;
+	public void setDataList(List<Object> dataList) {
+		this.dataList = dataList;
+	}
+
+	public List<SysMenu> getButton() {
+		return button;
+	}
+
+	public void setButton(List<SysMenu> button) {
+		this.button = button;
 	}
 
 }

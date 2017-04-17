@@ -13,11 +13,15 @@ import java.util.Map;
 
 
 
+
+
 import com.dlcat.entity.DyResponse;
 import com.dlcat.entity.PageStructure;
 import com.dlcat.entity.Search;
 import com.dlcat.entity.TableHeader;
+import com.dlcat.model.SysMenu;
 import com.dlcat.model.ToCodeLibrary;
+import com.jfinal.plugin.activerecord.Db;
 
 /**
  * 页面工具类
@@ -235,8 +239,8 @@ public class PageUtil {
 	}*/
 	
 	/**
-	 * 构造列表页面
-	 * @param url
+	 * 构造列表页面:结构+数据
+	 * @param sql
 	 * @param tableHeader
 	 * @param search
 	 * @return
@@ -245,11 +249,8 @@ public class PageUtil {
 	 * @time:2017年4月13日 下午7:30:28
 	 */
 	@SuppressWarnings("unchecked")
-	public static DyResponse createTablePageStructure(String url, TableHeader tableHeader, Search search) throws Exception {
+	public static DyResponse createTablePageStructure(String sql, TableHeader tableHeader, Search search,String menuId,SysMenu MenuTree) throws Exception {
 		PageStructure pageStructure = new PageStructure();
-		
-		//列表获取数据url
-		pageStructure.setTableDataUrl(url);
 		
 		//表头
 		List<TableHeader> tableHeaderList = null;
@@ -282,7 +283,12 @@ public class PageUtil {
 			}
 		}
 		pageStructure.setSearch(searchList);
+		//按钮
+		List<SysMenu> menuList = new SysMenu().getFristChildNode(menuId, MenuTree);
+		pageStructure.setButton(menuList);
 		
+		//数据
+		pageStructure.setDataList(Db.query(sql));
 		DyResponse response = new DyResponse();
 		response.setStatus(DyResponse.OK);
 		response.setDescription("OK");

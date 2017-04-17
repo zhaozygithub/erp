@@ -3,7 +3,9 @@ package com.dlcat.MainConfig;
 import com.alibaba.druid.filter.stat.StatFilter;
 import com.alibaba.druid.util.JdbcUtils;
 import com.alibaba.druid.wall.WallFilter;
+import com.dlcat.Interceptor.LoginInterceptor;
 import com.dlcat.controller.IndexController;
+import com.dlcat.controller.TestController;
 import com.dlcat.model._MappingKit;
 import com.jfinal.config.Constants;
 import com.jfinal.config.Handlers;
@@ -20,11 +22,11 @@ import com.jfinal.plugin.activerecord.dialect.MysqlDialect;
 import com.jfinal.plugin.druid.DruidPlugin;
 import com.jfinal.plugin.druid.DruidStatViewHandler;
 import com.jfinal.template.Engine;
+
 import net.dreamlu.ui.jfinal.AssetsDirective;
 public class Run extends JFinalConfig {
 
 	public static void main(String[] args) {
-		// TODO Auto-generated method stub
 		JFinal.start("src/main/webapp", 80, "/", 5);
 
 	}
@@ -35,11 +37,13 @@ public class Run extends JFinalConfig {
 		me.setBaseViewPath("/WEB-INF");
 		
 		me.add("/", IndexController.class);
+		//测试路由
+		me.add("/test", TestController.class,"/views");
+		//测试路由
 	}
 
 	@Override
 	public void configConstant(Constants me) {
-		// TODO Auto-generated method stub
 		me.setDevMode(true);
 		PropKit.use("db.config");
 		
@@ -48,7 +52,6 @@ public class Run extends JFinalConfig {
 
 	@Override
 	public void configEngine(Engine me) {
-		// TODO Auto-generated method stub
 		//js.css压缩插件
 		me.addDirective("assets",new AssetsDirective());
 		me.addSharedFunction("/WEB-INF/Template/core.html");
@@ -56,7 +59,6 @@ public class Run extends JFinalConfig {
 
 	@Override
 	public void configHandler(Handlers me) {
-		// TODO Auto-generated method stub
 		//开启druid sql监控
 		DruidStatViewHandler dvh = new DruidStatViewHandler("/druid");
 		me.add(dvh);
@@ -65,15 +67,15 @@ public class Run extends JFinalConfig {
 
 	@Override
 	public void configInterceptor(Interceptors me) {
-		// TODO Auto-generated method stub
 		//开启session
 		me.addGlobalActionInterceptor(new SessionInViewInterceptor());
+		//登录验证
+		me.addGlobalActionInterceptor(new LoginInterceptor());
 
 	}
 
 	@Override
 	public void configPlugin(Plugins me) {
-		// TODO Auto-generated method stub
 		ActiveRecordPlugin arp = addDataSource(me, "dlcat_erp", JdbcUtils.MYSQL);
 
 	}

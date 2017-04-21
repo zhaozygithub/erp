@@ -19,3 +19,29 @@
 
 </table>
 #end
+
+
+###form
+
+#define form(form,model)
+<form action="/form/#(form.type)/#(form.tableName)" method="post">
+#for(widget : form.widgets)
+<br>
+#(widget.cnName):
+
+#if(widget.type=="text")
+#@inputText(widget.enName,model[for.index])
+#end
+
+#if(widget.type=="password")
+#@inputPwd(widget.enName,model[for.index])
+#end
+
+#if(widget.type=="select")
+#@selectTag(widget.enName,widget.values,model[for.index])
+#end
+
+<br>
+#end
+</form>
+#end

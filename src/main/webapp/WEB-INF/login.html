@@ -26,6 +26,7 @@
 
 	<script type="text/javascript">
 		$(function() {
+			//debugger;
 			//$("#msg").html("test");
 			$(".logininput").blur(function() {
 				if ($(this).val() == "") {
@@ -53,6 +54,13 @@
 				$("#loginbtn").attr("disabled", "disabled");
 				$("#loginForm").submit();
 			})
+			
+			//输完验证码直接按回车登录
+			$('#captcha').keyup(function(event) {
+				if (event.keyCode == 13) {
+					$('#loginForm').submit();
+				}
+			});
 
 		})
 	</script>

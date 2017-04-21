@@ -14,6 +14,7 @@
 	#set(tableHeaderList = response.data.tableHeader)
 	#set(searchList = response.data.search)
 	#set(dataList = response.data.dataList)
+	#set(btnList = response.data.button)
 	<p>检索区域</p>
 	<div>
 		#if(searchList)
@@ -35,10 +36,16 @@
 			#end
 		#end
 	</div>
+	<p>按钮区域</p>
+	<div>
+	#if(btnList)
+		#for(btn:btnList)
+			<a href="#(btn.url)">#(btn.name)</a>&nbsp;&nbsp;&nbsp;&nbsp;
+		#end
+	#end
+	</div>
 	
-	
-	
-	
+	<p></p>
 	<table border="1">
 		<thead>
 		#if(tableHeaderList)
@@ -50,14 +57,16 @@
 		#end
 		</thead>
 		<tbody>
-		#if(dataList)
-			#for(data:dataList)
-				<tr>
-				#for(attribute:data)
-					<td>#(attribute)</td>
+		#for(data:dataList)
+			<tr>
+			#for(header:tableHeaderList)
+				#for(rec:data.columns)
+					#if(header.fildName == rec.key)
+					<td>#(rec.value)</td>		
+					#end
 				#end	
-				</tr>
 			#end
+			</tr>
 		#end
 	    </tbody>
 	</table>

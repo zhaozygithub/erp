@@ -8,6 +8,7 @@
 <body style="text-align: center;">
 
 	<h1>登录成功！！！</h1>
+	
 	<div>
 		<ul id="treeDemo" class="ztree"></ul>
 	</div>
@@ -30,7 +31,9 @@
 		<th>一级菜单</th>
 		<th>二级菜单</th>
 		<th>三级菜单</th>
-		<th>四级菜单</th> #for(first :session.menuTree.children)
+		<th>四级菜单</th> 
+		<th>按钮</th> 
+		#for(first :session.menuTree.children)
 		<tr>
 			<td>#(first.name??)</td>
 		</tr>

@@ -1,0 +1,270 @@
+###定义一个文本框
+#define inputText(fieldName,value)
+<input type="text" name="#(fieldName)" value="#(value)"></input>
+#end
+
+###定义一个密码框
+#define inputPwd(fieldName,value)
+<input type="password" name="#(fieldName)" value="#value"></input>
+#end
+
+###定义一个选择框
+#define selectTag(fieldName,values,defaultVal)
+<select name="#(fieldName)">
+#for(x:values)
+
+#if(x==defaultVal)
+<option value="#(x)" selected="selected">#(x)</option>
+#else
+<option value="#(x)">#(x)</option>
+#end
+
+
+#end
+</select>
+#end
+
+###定义一个复选框
+#define checkBoxTag(fieldName,list,defaultVals)
+
+#for(x:list)
+<input name="#(fieldName)" type="checkbox" value="#(x)" /> <label>#(x)</label>
+#end
+
+<script type="text/javascript">
+	$(function(){
+		#for(x:defaultVals??)
+			$(":checkbox[value='#(x)']").attr("checked","checked");	
+		#end	
+	})
+</script>
+
+#end
+
+
+###定义一个单选按钮
+#define redioTag(fieldName,list,defaultVal)
+
+#for(x:list)
+
+#if(x==defaultVal??)
+#(x):<input type="radio" checked="checked" name="#(fieldName)" value="#(x)" />
+#else
+#(x):<input type="radio" name="#(fieldName)" value="#(x)" />
+#end
+
+#end
+
+#end
+
+###定义一个富文本编辑器
+#define wangEditTag(fieldName,text)
+#@wangEdit()
+ <!--用父容器来控制宽度-->
+	<div style="width: 60%">
+		<!-- 用当前元素来控制高度 -->
+		<div id="div1" style="height: 300px; max-height: 500px;">
+			<p>请输入内容...</p>
+		</div>
+	</div>
+	<button id="btn1">清空内容</button>
+
+	<script type="text/javascript">
+	//debugger;
+		$("#div1 p").mousedown(function() {
+			$("#div1 p").remove();
+		});
+
+		var editor = new wangEditor('div1');
+		
+		// 配置自定义表情，在 create() 之前配置
+		editor.config.emotions = {
+		    // 支持多组表情
+
+		    // 第一组，id叫做 'default' 
+		    'default': {
+		        title: '默认',  // 组名称
+		        data: 'http://www.wangeditor.com/wangEditor/test/emotions.data'  // 服务器的一个json文件url，例如官网这里配置的是 http://www.wangeditor.com/wangEditor/test/emotions.data
+		    },
+		    /* // 第二组，id叫做'weibo'
+		    'weibo': {
+		        title: '微博表情',  // 组名称
+		        data: [  // data 还可以直接赋值为一个表情包数组
+		            // 第一个表情
+		            {
+		                'icon': 'http://img.t.sinajs.cn/t35/style/images/common/face/ext/normal/7a/shenshou_thumb.gif',
+		                'value': '[草泥马]'
+		            },
+		            // 第二个表情
+		            {
+		                'icon': 'http://img.t.sinajs.cn/t35/style/images/common/face/ext/normal/60/horse2_thumb.gif',
+		                'value': '[神马]'
+		            }
+		            // 下面还可以继续，第三个、第四个、第N个表情。。。
+		        ]
+		    } */
+		    // 下面还可以继续，第三组、第四组、、、
+		};
+
+		// 上传图片
+		editor.config.uploadImgUrl = '/form/upload';
+
+		// 自定义load事件
+		editor.config.uploadImgFns.onload = function(resultText, xhr) {
+			// resultText 服务器端返回的text
+			// xhr 是 xmlHttpRequest 对象，IE8、9中不支持
+
+			// 上传图片时，已经将图片的名字存在 editor.uploadImgOriginalName
+			var originalName = editor.uploadImgOriginalName || '';
+
+			// 如果 resultText 是图片的url地址，可以这样插入图片：
+			editor.command(null, 'insertHtml', '<img src="' + resultText
+					+ '" alt="' + originalName + '" style="max-width:50%;"/>');
+			// 如果不想要 img 的 max-width 样式，也可以这样插入：
+			// editor.command(null, 'InsertImage', resultText);
+		};
+
+		// 自定义timeout事件
+		editor.config.uploadImgFns.ontimeout = function(xhr) {
+			// xhr 是 xmlHttpRequest 对象，IE8、9中不支持
+			alert('上传超时');
+		};
+
+		// 自定义error事件
+		editor.config.uploadImgFns.onerror = function(xhr) {
+			// xhr 是 xmlHttpRequest 对象，IE8、9中不支持
+			alert('上传错误');
+		};
+
+		editor.create();
+		
+		
+		 $('#btn1').click(function () {
+		        // 清空内容。
+		        editor.$txt.html('<p><br></p>');
+		    });
+		 // 初始化编辑器的内容
+		 editor.$txt.html('#(text)');
+		 
+		// 获取格式化后的纯文本
+	    //var formatText = editor.$txt.formatText();
+		 
+		 
+	</script> 
+
+#end
+
+
+
+
+
+###图片上传 不带自定义主题，如果想使用带主题的上传，只能手动添加
+
+#define pluploadTag()
+#@jquery()
+<script type="text/javascript" src="/js/jqueryUI/jquery-ui.min.js"></script>
+<link type="text/css" rel="stylesheet" href="/js/jqueryUI/jquery-ui.min.css">
+<script src="/js/plupload/plupload.full.min.js"></script>
+<script src="/js/plupload/jquery.ui.plupload/jquery.ui.plupload.min.js"></script>
+<link rel="stylesheet" href="/js/plupload/jquery.ui.plupload/css/jquery.ui.plupload.css" type="text/css">
+
+    <div  style="width:800px;height: 400px;">
+	<div id="uploader" style="margin-top: 30px;clear: both;">
+		<p>Your browser doesn't have Flash, Silverlight or HTML5 support.</p>
+	</div>
+	</div>
+	
+	
+	<script type="text/javascript">
+		// Initialize the widget when the DOM is ready
+		$(function(){
+			$("#uploader").plupload({
+				// General settings
+				runtimes : 'html5,flash,silverlight,html4',
+				url : "/form/upload",
+
+				// Maximum file size
+				max_file_size : '2mb',
+
+				chunk_size : '1mb',
+
+				// Resize images on clientside if we can
+				resize : {
+					width : 200,
+					height : 200,
+					quality : 90,
+					crop : true
+				// crop to exact dimensions
+				},
+
+				// Specify what files to browse for
+				filters : [ {
+					title : "Image files",
+					extensions : "jpg,gif,png"
+				}, {
+					title : "Zip files",
+					extensions : "zip,avi"
+				} ],
+
+				// Rename files by clicking on their titles
+				rename : true,
+
+				// Sort files
+				sortable : true,
+
+				// Enable ability to drag'n'drop files onto the widget (currently only HTML5 supports that)
+				dragdrop : true,
+
+				// Views to activate
+				views : {
+					list : true,
+					thumbs : true, // Show thumbs
+					active : 'thumbs'
+				},
+
+				// Flash settings
+				flash_swf_url : '/js/plupload/Moxie.swf',
+
+				// Silverlight settings
+				silverlight_xap_url : '/js/plupload/Moxie.xap'
+			});
+	
+		});
+ 
+	</script>
+
+#end
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

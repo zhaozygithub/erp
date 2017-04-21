@@ -3,11 +3,38 @@
 <head>
 <meta charset="UTF-8">
 <title>show Table</title>
+<script type="text/javascript" src='#assets("/assets/assets.jjs")'></script>
+
 </head>
 <body>
 
 <h3>测试 table(columns,data)</h3>
-#@table?(columns,data)
+	###@table?(columns,data)
+
+	<hr>
+	#@form?(form,model)
+	<h3>测试 checkBoxTag(fieldName,list,defaultVals)组件</h3>
+
+
+
+	#@checkBoxTag?("sub",list,list2)
+	<h3>测试 redioTag(fieldName,list,defaultVal)组件</h3>
+
+	#@redioTag?("redio",list,"js")
+
+	<h3>测试 wangEditTag(fieldName,text)组件</h3>
+	#@wangEditTag?("ua","测试文本")
+
+
+
+	<h3>图片上传</h3>
+	#@pluploadTag()
+
+<script type="text/javascript">
+	debugger;
+	
+	</script>
+
 
 </body>
 </html>

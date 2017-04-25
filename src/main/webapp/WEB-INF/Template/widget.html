@@ -3,9 +3,20 @@
 <input type="text" name="#(fieldName)" value="#(value)"></input>
 #end
 
+###定义一个文本框
+#define inputText1(fieldName)
+<input type="text" name="#(fieldName)"></input>
+#end
+
 ###定义一个密码框
 #define inputPwd(fieldName,value)
 <input type="password" name="#(fieldName)" value="#value"></input>
+#end
+
+
+###定义一个密码框
+#define inputPwd1(fieldName)
+<input type="password" name="#(fieldName)"></input>
 #end
 
 ###定义一个选择框

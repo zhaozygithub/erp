@@ -1,5 +1,7 @@
 package com.dlcat.core.model;
 
+import java.util.List;
+
 import com.dlcat.common.BaseModel;
 
 /**
@@ -8,4 +10,29 @@ import com.dlcat.common.BaseModel;
 @SuppressWarnings("serial")
 public class FlowData extends BaseModel<FlowData> {
 	public static final FlowData dao = new FlowData().dao();
+	
+	public static  List<FlowData> getFlowDatasBySql(String sql) {
+		List<FlowData> datas=FlowData.dao.find(sql);
+		return datas;
+	}
+	
+	/**
+	 * 根据ID获取数据
+	 * @author liuran
+	 * @time 2017年4月22日 上午9:43:24
+	 * @param id
+	 * @return
+	 */
+	public  static List<FlowData> getFlowDatasById(int id) {
+		List<FlowData> datas=FlowData.dao.find("select * from flow_data where and id=?",id);
+		return datas;
+	}
+	
+	/**
+	 * 根据审批流程任务编号查询流程数据
+	 */
+	public static List<FlowData> getFlowDatasByFlowTaskNo(String flowTaskNo){
+		List<FlowData> datas = FlowData.dao.find("select * from flow_data where flow_task_no=?",flowTaskNo);
+		return datas;
+	}
 }

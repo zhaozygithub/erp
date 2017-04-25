@@ -1,5 +1,7 @@
 package com.dlcat.core.model;
 
+import java.util.List;
+
 import com.dlcat.common.BaseModel;
 
 /**
@@ -8,4 +10,23 @@ import com.dlcat.common.BaseModel;
 @SuppressWarnings("serial")
 public class FlowTask extends BaseModel<FlowTask> {
 	public static final FlowTask dao = new FlowTask().dao();
+	public List<FlowTask> getFlowTasksBySql(String sql) {
+		List<FlowTask> datas=FlowTask.dao.find(sql);
+		return datas;
+	}
+	
+	public static List<FlowTask> getFlowTasksById(String taskNo) {
+		List<FlowTask> datas=FlowTask.dao.find("select * from flow_task where task_no=?",taskNo);
+		return datas;
+	}
+	
+	/**
+	 * 根据流程对象编号和节点编号获取流程任务
+	 */
+	public static FlowTask getFlowTaskByObjectNoNodeNo(String objectNo,String nodeNo){
+		FlowTask tasks=FlowTask.dao.findFirst("select * from flow_task where flow_object_no=? and cur_node_no=? ",objectNo,nodeNo);
+		return tasks;
+	}
+	
+
 }

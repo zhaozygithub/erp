@@ -1,5 +1,7 @@
 package com.dlcat.core.model;
 
+import java.util.List;
+
 import com.dlcat.common.BaseModel;
 
 /**
@@ -8,4 +10,13 @@ import com.dlcat.common.BaseModel;
 @SuppressWarnings("serial")
 public class FlowModel extends BaseModel<FlowModel> {
 	public static final FlowModel dao = new FlowModel().dao();
+	public static List<FlowModel> getFlowModelsBySql(String sql) {
+		List<FlowModel> datas=FlowModel.dao.find(sql);
+		return datas;
+	}
+	
+	public static List<FlowModel> getFlowModelsById(String id) {
+		List<FlowModel> datas=FlowModel.dao.find("select * from flow_model where id=?",id);
+		return datas;
+	}
 }

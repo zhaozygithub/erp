@@ -1,5 +1,5 @@
 package com.dlcat.core.model;
-
+import java.util.List;
 import com.dlcat.common.BaseModel;
 
 /**
@@ -27,4 +27,15 @@ public class SysUser extends BaseModel<SysUser> {
 		return SysOrg.dao.findById(this.get("belong_ord_id")) != null ? true : false; 
 	}
 	
+	/**
+	 * 获取当前用户的所有管户客户
+	 * @param userId 	用户编号 
+	 * @return
+	 * @author masai
+	 * @time 2017年4月21日 上午11:53:35
+	 */
+	public static List<CuObjectCustomer> getBelongUserList(int userId){
+		String sql = "select * from cu_object_customer";
+		return CuObjectCustomer.dao.find(sql,userId);
+	}
 }

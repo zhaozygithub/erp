@@ -36,10 +36,10 @@
 				}
 			});
 
-			$("#loginbtn").click(function() {
+			 $("#loginbtn").click(function() {
 				var k = 0;
 				var ajaxhtml = "";
-				$(".logininput").each(function(i, obj) {
+				/*$(".logininput").each(function(i, obj) {
 					if ($(obj).val().trim() == "") {
 						k++;
 						$(this).css("border-color", "red");
@@ -48,12 +48,12 @@
 					}
 				});
 				if (k != 0)
-					return;
+					return;*/
 				ajaxhtml = $("#loginbtn").html();
 				$("#loginbtn").html("Loading....");
 				$("#loginbtn").attr("disabled", "disabled");
 				$("#loginForm").submit();
-			})
+			}) 
 			
 			//输完验证码直接按回车登录
 			$('#captcha').keyup(function(event) {

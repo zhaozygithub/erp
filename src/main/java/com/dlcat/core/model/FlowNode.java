@@ -1,5 +1,7 @@
 package com.dlcat.core.model;
 
+import java.util.List;
+
 import com.dlcat.common.BaseModel;
 
 /**
@@ -8,4 +10,22 @@ import com.dlcat.common.BaseModel;
 @SuppressWarnings("serial")
 public class FlowNode extends BaseModel<FlowNode> {
 	public static final FlowNode dao = new FlowNode().dao();
+	public static List<FlowNode> getFlowNodesBySql(String sql) {
+		List<FlowNode> datas=FlowNode.dao.find(sql);
+		return datas;
+	}
+	
+	public static List<FlowNode> getFlowNodesById(String nodeNo) {
+		List<FlowNode> datas=FlowNode.dao.find("select * from flow_node where node_no=?",nodeNo);
+		return datas;
+	}
+	
+	/**
+	 * 根据流程对象编号获取流程节点
+	 */
+	public static  List<FlowNode> getFlowNodeByObjectNo(String objectNo) {
+	    String modeId= FlowObject.getFlowObjectsById(objectNo).get(0).getStr("flow_model_id");
+		List<FlowNode> nodes=FlowNode.dao.find("select * from flow_node where flow_model_id=?",modeId);
+		return nodes;	
+	}
 }

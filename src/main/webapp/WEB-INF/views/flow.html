@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>show Flow</title>
+<script type="text/javascript" src='#assets("/assets/assets.jjs")'></script>
+</head>
+<body>
+<form >
+<div>
+###流程对象名称
+<h1>#(objectName??)</h1>
+#for(node:nodes)
+###节点名称
+<br>
+-----------------------------------------------
+<br>
+
+
+<font color="#FF0000">#(node.value)</font>
+  #for(task:tasks)
+    #if(task.cur_node_name==node.value)
+        #for(role:roles) 
+            #if(node.key==role.key)
+            ###角色
+           <strong> #(role.value)</strong> 
+            #end
+        #end
+        ###名字
+        #(task.cur_approve_user_name)
+        ###时间
+        #(task.cur_approve_time)
+        <p>审批意见:</p>
+        <input type="text" name="approve_opinion" 
+  value="#(task.cur_approve_opinion)" readonly="readonly" />
+       
+         <p>相关资料:</p>
+        #for(data:datas) 
+           #if(node.key==data.key)
+            ###图片
+              #for(url:data.value)
+               <img  src="#(url)" width="110" height="100">
+              #end
+           #end
+        #end
+    #end
+  #end
+
+#end
+</div>
+</form>
+</body>
+<script type="text/javascript">
+   /* if(#(objectName)==null||#(objectName)==""){
+	alert("无法获取对象名称 ");
+     } */
+</script>
+</html>

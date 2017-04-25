@@ -5,8 +5,10 @@ import com.alibaba.druid.util.JdbcUtils;
 import com.alibaba.druid.wall.WallFilter;
 import com.dlcat.core.Interceptor.LoginInterceptor;
 import com.dlcat.core.controller.CrudController;
+import com.dlcat.core.controller.FlowController;
 import com.dlcat.core.controller.IndexController;
 import com.dlcat.core.controller.TestController;
+import com.dlcat.core.controller.TestUserController;
 import com.dlcat.core.model._MappingKit;
 import com.jfinal.config.Constants;
 import com.jfinal.config.Handlers;
@@ -42,13 +44,17 @@ public class Run extends JFinalConfig {
 		me.add("/test", TestController.class,"/views");
 		//测试路由
 		me.add("/form", CrudController.class,"/views");
+		//测试路由
+		me.add("/flow", FlowController.class,"/views");
+		//测试路由
+		me.add("/user",TestUserController.class,"views");
 	}
 
 	@Override
 	public void configConstant(Constants me) {
 		me.setDevMode(true);
 		PropKit.use("db.config");
-		
+		me.setBaseUploadPath(PropKit.get("img_path"));
 
 	}
 

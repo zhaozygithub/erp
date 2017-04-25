@@ -44,4 +44,17 @@ public class SysOrg extends BaseModel<SysOrg> {
 		String sql = "select * from cu_object_customer where belong_org_id = ?";
 		return CuObjectCustomer.dao.find(sql,orgId);
 	}
+	
+	/**
+	* @author:zhaozhongyuan 
+	* @Description: 根据机构ID确定层级
+	* @param @param orgId
+	* @param @return
+	* @return int
+	* @date 2017年4月24日 下午2:44:10  
+	*/
+	public static int getLevel(int org_id){
+		return SysOrg.dao.findById(org_id).getInt("org_level");
+	}
+	
 }

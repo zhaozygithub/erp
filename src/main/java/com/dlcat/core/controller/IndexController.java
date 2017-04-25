@@ -6,7 +6,9 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import com.dlcat.core.model.CuObjectCustomer;
 import com.dlcat.core.model.SysMenu;
+import com.dlcat.core.model.SysOrg;
 import com.dlcat.core.model.SysRole;
 import com.dlcat.core.model.SysUser;
 import com.jfinal.captcha.CaptchaRender;
@@ -38,6 +40,10 @@ public class IndexController extends Controller {
 	 * 去首页
 	 */
 	private void toIndex() {
+		SysUser user=getSessionAttr("user");
+		initEchars(user);
+		
+		
 		render("index.html");
 	}
 
@@ -100,14 +106,14 @@ public class IndexController extends Controller {
 		String loginId = getPara("userName");
 		String loginPwd = getPara("pwd");
 
-		boolean istrue = validateCaptcha("captcha");
+		/*boolean istrue = validateCaptcha("captcha");
 
 		if (istrue == false) {
 			keepPara(new String[] { "userName", "pwd" });
 			setAttr("msg", "验证码错误，请重新输入！");
 			toLogin();
 			return;
-		}
+		}*/
 
 		SysUser user = SysUser.dao.findFirst("select * from sys_user where name = ?", loginId);
 		if (user == null) {
@@ -173,9 +179,10 @@ public class IndexController extends Controller {
 		}
 
 		sysMenus.set("name", "顶级菜单");
-		System.out.println(sysMenus);
 
 		setSessionAttr("menuTree", sysMenus);
+		
+		
 	}
 
 	/**
@@ -211,6 +218,13 @@ public class IndexController extends Controller {
 
 	}
 
+	/**
+	* @author:zhaozhongyuan 
+	* @Description: 测试表格模板
+	* @param 
+	* @return void
+	* @date 2017年4月21日 下午8:02:48  
+	*/
 	public void table() {
 		String tableName = "sys_user";
 
@@ -223,6 +237,88 @@ public class IndexController extends Controller {
 		setAttr("data", list);
 
 		render("views/table.html");
+	}
+	
+	/**
+	* @author:zhaozhongyuan 
+	* @Description: 初始化echars，展示页面统计信息 
+	* @param 
+	* @return void
+	* @date 2017年4月21日 下午8:03:02  
+	*/
+	private void initEchars(SysUser user){
+		//圆饼图
+		initPie(user);
+		//下面的三个条形图
+		initBar(user);
+		//门店
+		initBarMd(user);
+		//违约
+		initBarWy(user);
+		
+	}
+	private void initBarMd(SysUser user) {
+		
+	}
+
+	private void initBarWy(SysUser user) {
+		
+	}
+
+	private void initBar(SysUser user) {
+		
+		
+		
+	}
+
+	private void initPie(SysUser user){
+		//客户统计 :只统计本节点和以下机构
+				int org_id=user.getInt("belong_org_id");
+//				int level=SysOrg.getLevel(org_id);
+				int level=3;
+				List<CuObjectCustomer> list=null;
+				//1为总部
+				if (level==1) {
+					list=CuObjectCustomer.getAll();
+				//2支部
+				}else if (level==2) {
+					//list=
+				//3分部	
+				}else if (level==3) {
+					list=SysOrg.getBelongCustomer(org_id);
+				}
+				
+				int black=0,individual=0,company=0;
+				
+				for (CuObjectCustomer cuObjectCustomer : list) {
+					String status=cuObjectCustomer.getStr("status");
+					//3为黑名单
+					if (status.equals("3")) {
+						black++;
+						
+					//1为正常
+					}else if (status.equals("1")) {
+						String type=cuObjectCustomer.getStr("type");
+						//01为公司客户
+						if (type.equals("01")) {
+							company++;
+							
+						//02为个人客户
+						}else if (type.equals("02")) {
+							individual++;
+						}
+						
+						
+					}
+					
+				}
+				//填充圆饼图数据
+				Map<String, Integer> pie=new HashMap<String, Integer>();
+				pie.put("黑名单", black);
+				pie.put("个人客户", individual);
+				pie.put("对公客户", company);
+				
+				setAttr("pie", pie);
 	}
 
 

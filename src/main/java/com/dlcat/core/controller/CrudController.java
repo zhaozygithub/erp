@@ -8,8 +8,11 @@ import com.dlcat.core.model.Form;
 import com.dlcat.core.model.SysUser;
 import com.dlcat.core.model.Widget;
 import com.jfinal.core.Controller;
+import com.jfinal.kit.PropKit;
+import com.jfinal.plugin.activerecord.ActiveRecordPlugin;
 import com.jfinal.plugin.activerecord.Table;
 import com.jfinal.plugin.activerecord.TableMapping;
+import com.jfinal.plugin.activerecord.generator.MappingKitGenerator;
 import com.jfinal.upload.UploadFile;
 
 public class CrudController extends Controller {
@@ -17,7 +20,28 @@ public class CrudController extends Controller {
 	public void index() {
 	//   /query-tableName-id
 		
-		 List<String> seList=new ArrayList<String>();
+		String type=getPara(0);
+		String tableName=getPara(1);
+		
+		 List<Widget> list=new ArrayList<Widget>();
+		if (type.equals("add")) {
+			Table table=null;
+			if (tableName.toLowerCase().equals("sys_user")) {
+				table=TableMapping.me().getTable(SysUser.class);
+			}
+			
+			Set<String> keys=table.getColumnTypeMap().keySet();
+			for (String key : keys) {
+				 list.add(new Widget(key, key, "text"));
+			}
+			 Form form=new Form("query", "sys_user", list);
+			 setAttr("form", form);
+			
+		}
+		
+		
+		
+		/* List<String> seList=new ArrayList<String>();
 		 seList.add("java");
 		 seList.add("js");
 		 seList.add("c#");
@@ -51,8 +75,8 @@ public class CrudController extends Controller {
 		   setAttr("form", form);
 		   setAttr("model", model);
 		   setAttr("list", seList);
-		   setAttr("list2", seList2);
-		  render("table.html");
+		   setAttr("list2", seList2);*/
+		  render("userAdd.html");
 	}
 
 	
@@ -73,7 +97,9 @@ public class CrudController extends Controller {
 		/*String pString2=uploadFile.getOriginalFileName();
 		String pString3=uploadFile.getParameterName();*/
 		
-		renderHtml("/upload/"+pString);
+		String imgpath=PropKit.get("img_base")+"/"+pString;
+		
+		renderHtml("<img src='"+imgpath+"'>");
 	}
 
 	/**
@@ -103,7 +129,7 @@ public class CrudController extends Controller {
 	}
 
 	public void query() {
-		render("img.html");
+		render("userAdd.html");
 
 	}
 }

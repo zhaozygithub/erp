@@ -1,5 +1,7 @@
 package com.dlcat.core.model;
 
+import java.util.List;
+
 import com.dlcat.common.BaseModel;
 
 /**
@@ -8,4 +10,16 @@ import com.dlcat.common.BaseModel;
 @SuppressWarnings("serial")
 public class CuObjectCustomer extends BaseModel<CuObjectCustomer> {
 	public static final CuObjectCustomer dao = new CuObjectCustomer().dao();
+	
+	/**
+	* @author:zhaozhongyuan 
+	* @Description: TODO 
+	* @param @return
+	* @return List<CuObjectCustomer>
+	* @date 2017年4月24日 下午2:54:06  
+	*/
+	public static List<CuObjectCustomer> getAll() {
+		return CuObjectCustomer.dao.find("select * from cu_object_customer");
+	}
+	
 }

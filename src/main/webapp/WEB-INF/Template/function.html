@@ -21,10 +21,10 @@
 #end
 
 
-###form
+###带默认值的form
 
 #define form(form,model)
-<form action="/form/#(form.type)/#(form.tableName)" method="post">
+<form action="/form/#(form.type)-#(form.tableName)" method="post">
 #for(widget : form.widgets)
 <br>
 #(widget.cnName):
@@ -45,3 +45,26 @@
 #end
 </form>
 #end
+
+###仅仅显示form
+
+#define form1(form)
+<form action="/form/#(form.type)-#(form.tableName)" method="post">
+#for(widget : form.widgets)
+<br>
+#(widget.cnName):
+
+#if(widget.type=="text")
+#@inputText1(widget.enName)
+#end
+
+
+<br>
+#end
+</form>
+#end
+
+
+
+
+

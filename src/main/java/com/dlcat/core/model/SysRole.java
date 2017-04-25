@@ -1,5 +1,7 @@
 package com.dlcat.core.model;
 
+import java.util.List;
+
 import com.dlcat.common.BaseModel;
 
 /**
@@ -9,5 +11,15 @@ import com.dlcat.common.BaseModel;
 public class SysRole extends BaseModel<SysRole> {
 	public static final SysRole dao = new SysRole().dao();
 	
-	
+	/**
+	 * 获取指定角色下的所有有效用户
+	 * @param roleId	角色编号
+	 * @return
+	 * @author masai
+	 * @time 2017年4月21日 下午3:22:05
+	 */
+	public static List<SysUser> getUserBelongRole(int roleId){
+		String sql  = "select * from sys_user where status = '1' role_id = ?";
+		return SysUser.dao.find(sql, roleId);
+	}
 }

@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Insert title here</title>
+</head>
+<body>
+
+<div id="main" class="container">
+  <div class="row">
+  
+  <div class="pull-right"><a href="/user/add" class="btn btn-primary">新增用户</a></div>
+  <table class="table table-hover table-bordered">
+  <thead><th>id</th><th>姓名</th><th>密码</th><th>角色id</th><th>组织id</th><th>组织名字</th><th>手机</th><th>状态</th><th>更新时间</th><th>操作</th></thead>
+   <tbody>
+    #for(user:users)
+   
+   <tr><td>#(user.id)</td><td>#(user.name)</td><td>#(user.password)</td><td>#(user.role_id)</td><td>#(user.belong_org_id)</td><td>#(user.belong_org_name)</td><td>#(user.phone)</td><td>#(user.status)</td><td>#(user.update_time)</td><td><a href="/user/del/#(user.id )" class="btn btn-danger btn-sm">删除</a></td></tr>
+   
+   #end
+   </tbody>
+  </table>
+  
+  </div>  
+  </div>
+
+</body>
+</html>

@@ -31,7 +31,6 @@ public class Run extends JFinalConfig {
 
 	public static void main(String[] args) {
 		JFinal.start("src/main/webapp", 80, "/", 5);
-
 	}
 
 	@Override
@@ -85,6 +84,7 @@ public class Run extends JFinalConfig {
 	@Override
 	public void configPlugin(Plugins me) {
 		ActiveRecordPlugin arp = addDataSource(me, "dlcat_erp", JdbcUtils.MYSQL);
+		_MappingKit.mapping(arp);
 
 	}
 
@@ -113,8 +113,6 @@ public class Run extends JFinalConfig {
 		// 是否显示SQL
 		arp.setShowSql(true);
 		System.out.println("load data source:" + url + "/" + user);
-
-		_MappingKit.mapping(arp);
 
 		plugins.add(dp).add(arp);
 

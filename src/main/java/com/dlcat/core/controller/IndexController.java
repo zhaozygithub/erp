@@ -6,13 +6,18 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.eclipse.jetty.util.ajax.JSON;
+
 import com.dlcat.core.model.CuObjectCustomer;
+import com.dlcat.core.model.LoanApplyApprove;
 import com.dlcat.core.model.SysMenu;
 import com.dlcat.core.model.SysOrg;
 import com.dlcat.core.model.SysRole;
 import com.dlcat.core.model.SysUser;
 import com.jfinal.captcha.CaptchaRender;
 import com.jfinal.core.Controller;
+import com.jfinal.json.FastJson;
+import com.jfinal.json.Json;
 import com.jfinal.kit.HashKit;
 import com.jfinal.plugin.activerecord.Db;
 
@@ -42,8 +47,6 @@ public class IndexController extends Controller {
 	private void toIndex() {
 		SysUser user=getSessionAttr("user");
 		initEchars(user);
-		
-		
 		render("index.html");
 	}
 
@@ -257,68 +260,122 @@ public class IndexController extends Controller {
 		initBarWy(user);
 		
 	}
+	/**
+	* @author:zhaozhongyuan 
+	* @Description:门店表格
+	* @return void   
+	* @date 2017年4月26日 下午8:12:11  
+	*/
 	private void initBarMd(SysUser user) {
 		
 	}
 
+	/**
+	* @author:zhaozhongyuan 
+	* @Description:初始化违约表格
+	* @return void   
+	* @date 2017年4月26日 下午8:12:23  
+	*/
 	private void initBarWy(SysUser user) {
+		String defaultYear="";
+		//获取年份
+		String[] years=LoanApplyApprove.getYear_mouth(user);
+		//默认为当年
+		if (years.length>0) {
+			defaultYear= years[0];
+			setAttr("years_month", years);
+		}
+		
+		//获取页面需要的数据
+	if (!defaultYear.equals("")) {	
+		Map<String, Number> map=LoanApplyApprove.getMdNum(defaultYear,user);
+		setAttr("bar", map);
+	}
+	
+	}
+	
+	/**
+	 * @author:zhaozhongyuan 
+	 * @Description: 年度借款数据
+	 * @param @param user
+	 * @return void
+	 * @date 2017年4月26日 上午9:52:42  
+	 */
+	public void initBar(SysUser user) {
+		String defaultYear="";
+			//获取年份
+			String[] years=LoanApplyApprove.getyear(user);
+			//默认为当年
+			if (years.length>0) {
+				defaultYear= years[0];
+				setAttr("years", years);
+			}
+		if (!defaultYear.equals("")) {	
+			Map<String, List<Number>> map=LoanApplyApprove.getMonthNum(defaultYear,user);
+			setAttr("bar", map);
+		}
 		
 	}
+	
+	public void initBarByYear() {
+		String currentYear=getPara("year");
+		SysUser user=getSessionAttr("user");
+		Map<String, List<Number>> map=LoanApplyApprove.getMonthNum(currentYear,user);
+		
+		renderHtml("{\"a\":\""+map.get("成交笔数").toString()+"\",\"b\":\""+map.get("借款总额").toString()+"\"}");
 
-	private void initBar(SysUser user) {
-		
-		
-		
 	}
+	
 
 	private void initPie(SysUser user){
 		//客户统计 :只统计本节点和以下机构
-				int org_id=user.getInt("belong_org_id");
-//				int level=SysOrg.getLevel(org_id);
-				int level=3;
-				List<CuObjectCustomer> list=null;
-				//1为总部
-				if (level==1) {
-					list=CuObjectCustomer.getAll();
-				//2支部
-				}else if (level==2) {
-					//list=
-				//3分部	
-				}else if (level==3) {
-					list=SysOrg.getBelongCustomer(org_id);
-				}
+		int org_id=user.getInt("belong_org_id");
+		int level=SysOrg.getLevel(org_id);
+		//int level=3;
+		List<CuObjectCustomer> list=null;
+		//1为总部
+		if (level==1) {
+			list=CuObjectCustomer.getAll();
+		//2分部
+		}else if (level==2) {
+		//获取分部以及支部
+			list=CuObjectCustomer.getCuObjectCustomers(SysOrg.getDeptAndChildren(org_id));
+		//3支部
+		}else if (level==3) {
+			list=SysOrg.getBelongCustomer(org_id);
+		}
+		
+		int black=0,individual=0,company=0;
+		
+		for (CuObjectCustomer cuObjectCustomer : list) {
+			String status=cuObjectCustomer.getStr("status");
+			//3为黑名单
+			if (status.equals("3")) {
+				black++;
 				
-				int black=0,individual=0,company=0;
-				
-				for (CuObjectCustomer cuObjectCustomer : list) {
-					String status=cuObjectCustomer.getStr("status");
-					//3为黑名单
-					if (status.equals("3")) {
-						black++;
-						
-					//1为正常
-					}else if (status.equals("1")) {
-						String type=cuObjectCustomer.getStr("type");
-						//01为公司客户
-						if (type.equals("01")) {
-							company++;
-							
-						//02为个人客户
-						}else if (type.equals("02")) {
-							individual++;
-						}
-						
-						
-					}
+			//1为正常
+			}else if (status.equals("1")) {
+				String type=cuObjectCustomer.getStr("type");
+				//01为公司客户
+				if (type.equals("01")) {
+					company++;
 					
+				//02为个人客户
+				}else if (type.equals("02")) {
+					individual++;
 				}
-				//填充圆饼图数据
-				Map<String, Integer> pie=new HashMap<String, Integer>();
-				pie.put("黑名单", black);
-				pie.put("个人客户", individual);
-				pie.put("对公客户", company);
 				
-				setAttr("pie", pie);
+				
+			}
+			
+		}
+		//填充圆饼图数据
+		Map<String, Integer> pie=new HashMap<String, Integer>();
+		pie.put("黑名单", black);
+		pie.put("个人客户", individual);
+		pie.put("对公客户", company);
+		
+		setAttr("pie", pie);
 	}
 
 

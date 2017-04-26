@@ -14,12 +14,26 @@ public class CuObjectCustomer extends BaseModel<CuObjectCustomer> {
 	/**
 	* @author:zhaozhongyuan 
 	* @Description: TODO 
-	* @param @return
+	* @param
 	* @return List<CuObjectCustomer>
 	* @date 2017年4月24日 下午2:54:06  
 	*/
 	public static List<CuObjectCustomer> getAll() {
 		return CuObjectCustomer.dao.find("select * from cu_object_customer");
+	}
+	
+	
+	/**
+	* @author:zhaozhongyuan 
+	* @Description: TODO 
+	* @param  sqlIN string
+	* @return List<CuObjectCustomer>
+	* @date 2017年4月26日 上午9:45:17  
+	*/
+	public static List<CuObjectCustomer> getCuObjectCustomers(String sqlIN) {
+		
+		String sql="select * from cu_object_customer where belong_org_id in (?)";
+		return CuObjectCustomer.dao.find(sql,sqlIN);
 	}
 	
 }

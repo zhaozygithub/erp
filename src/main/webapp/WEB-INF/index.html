@@ -13,16 +13,19 @@
 	<div>
 		<div id="pie" style="height: 400px; width: 48%; float: left;"></div>
 		<div id="bar" style="height: 400px; width: 48%; float: right;"></div>
+		<div id="barMd" style="height: 400px; width: 48%; float: left;"></div>
+		<div id="barWy" style="height: 400px; width: 48%; float: right;"></div>
 	</div>
 
 	<script type="text/javascript">
+	
+	$(function(){
         // 基于准备好的dom，初始化echarts图表
         var myChart = echarts.init($("#pie")[0],"infographic"); 
         
         option = {
         	    title : {
         	        text: '某站点用户访问来源',
-        	        subtext: '纯属虚构',
         	        x:'center'
         	    },
         	    tooltip : {
@@ -79,86 +82,223 @@
         // 为echarts对象加载数据 
         myChart.setOption(option);
         
+       var bar=echarts.init($("#bar")[0],"infographic");
+        bar.setOption({
+       	 
+       	 title : {
+       	        text: '年度借款数据',
+       	       // subtext: '纯属虚构'
+       	    },
+       	    tooltip : {
+       	        trigger: 'axis'
+       	    },
+       	    legend: {
+       	        data:['成交笔数','借款总额']
+       	    },
+       	    toolbox: {
+       	        show : true,
+       	        feature : {
+       	            mark : {show: true},
+       	            dataView : {show: true, readOnly: false},
+       	            magicType : {show: true, type: ['line', 'bar']},
+       	            restore : {show: true},
+       	            saveAsImage : {show: true}
+       	        }
+       	    },
+       	    calculable : true,
+       	    xAxis : [
+       	        {
+       	            type : 'category',
+       	            data : ['1月','2月','3月','4月','5月','6月','7月','8月','9月','10月','11月','12月']
+       	        }
+       	    ],
+       	    yAxis : [
+       	        {
+       	            type : 'value'
+       	        }
+       	    ],
+       	    series : [
+       	           #for(x:bar ??)   
+       	        {
+       	            name:'#(x.key)',
+       	            type:'bar',
+       	            data:[
+       	                  #for(data:x.value)
+       	                  #(data),
+       	                  #end
+       	                  ]
+       	            
+       	        },
+       	        #end
+       	    ]
+       	
+       });
         
         
-        echarts.init($("#bar")[0],"infographic").setOption({
-        	 title : {
-        	        text: '某地区蒸发量和降水量',
-        	        subtext: '纯属虚构'
-        	    },
-        	    tooltip : {
-        	        trigger: 'axis'
-        	    },
-        	    legend: {
-        	        data:['蒸发量','降水量']
-        	    },
-        	    toolbox: {
-        	        show : true,
-        	        feature : {
-        	            mark : {show: true},
-        	            dataView : {show: true, readOnly: false},
-        	            magicType : {show: true, type: ['line', 'bar']},
-        	            restore : {show: true},
-        	            saveAsImage : {show: true}
-        	        }
-        	    },
-        	    calculable : true,
-        	    xAxis : [
-        	        {
-        	            type : 'category',
-        	            data : ['1月','2月','3月','4月','5月','6月','7月','8月','9月','10月','11月','12月']
-        	        }
-        	    ],
-        	    yAxis : [
-        	        {
-        	            type : 'value'
-        	        }
-        	    ],
-        	    series : [
-        	        {
-        	            name:'成交笔数',
-        	            type:'bar',
-        	            data:[2.0, 4.9, 7.0, 23.2, 25.6, 76.7, 135.6, 162.2, 32.6, 20.0, 6.4, 3.3]
-        	            
-        	        },
-        	        {
-        	            name:'申请笔数',
-        	            type:'bar',
-        	            data:[2.6, 5.9, 9.0, 26.4, 28.7, 70.7, 175.6, 182.2, 48.7, 18.8, 6.0, 2.3]
-        	           
-        	        },
-        	        {
-        	            name:'借款总额',
-        	            type:'bar',
-        	            data:[2.6, 5.9, 9.0, 26.4, 28.7, 70.7, 175.6, 182.2, 48.7, 18.8, 6.0, 2.3]
-        	           
-        	        }
-        	    ]
+        
+        var barMd=echarts.init($("#barMd")[0],"infographic");
+        barMd.setOption({
+       	 
+       	 title : {
+       	        text: '机构年度数据',
+       	       // subtext: '纯属虚构'
+       	    },
+       	    tooltip : {
+       	        trigger: 'axis'
+       	    },
+       	    legend: {
+       	        data:['成交笔数','借款总额']
+       	    },
+       	    toolbox: {
+       	        show : true,
+       	        feature : {
+       	            mark : {show: true},
+       	            dataView : {show: true, readOnly: false},
+       	            magicType : {show: true, type: ['line', 'bar']},
+       	            restore : {show: true},
+       	            saveAsImage : {show: true}
+       	        }
+       	    },
+       	    calculable : true,
+       	    xAxis : [
+       	        {
+       	            type : 'category',
+       	            data : ['1月','2月','3月','4月','5月','6月','7月','8月','9月','10月','11月','12月']
+       	        }
+       	    ],
+       	    yAxis : [
+       	        {
+       	            type : 'value'
+       	        }
+       	    ],
+       	    series : [
+       	           #for(x:bar)   
+       	        {
+       	            name:'#(x.key)',
+       	            type:'bar',
+       	            data:[
+       	                  #for(data:x.value)
+       	                  #(data),
+       	                  #end
+       	                  ]
+       	            
+       	        },
+       	        #end
+       	    ]
+       	
+       });
+        
+        
+        
+        
+        
+        
+        
+        
+        var barWy=echarts.init($("#barWy")[0],"infographic");
+        barWy.setOption({
+       	 
+       	 title : {
+       	        text: '违约统计',
+       	       // subtext: '纯属虚构'
+       	    },
+       	    tooltip : {
+       	        trigger: 'axis'
+       	    },
+       	    toolbox: {
+       	        show : true,
+       	        feature : {
+       	            mark : {show: true},
+       	            dataView : {show: true, readOnly: false},
+       	            magicType : {show: true, type: ['line', 'bar']},
+       	            restore : {show: true},
+       	            saveAsImage : {show: true}
+       	        }
+       	    },
+       	    calculable : true,
+       	    xAxis : [
+       	        {
+       	            type : 'category',
+       	            data : ['1月','2月','3月','4月','5月','6月','7月','8月','9月','10月','11月','12月']
+       	        }
+       	    ],
+       	    yAxis : [
+       	        {
+       	            type : 'value'
+       	        }
+       	    ],
+       	    series : [
+       	            
+       	        {
+       	            name:'违约',
+       	            type:'bar',
+       	            data:[1,2,5,4,1,5,2,6,5,7,6,3
+       	                  
+       	                  ]
+       	            
+       	        },
+       	       
+       	    ]
+       	
+       });
+        
+        
+        
+        
+        
+        
+        
+        $("#year").change(function(){
+    		var select=$(this).children('option:selected').val();
+    		$.ajax({
+    			   type: "POST",
+    			   url: "/initBarByYear",
+    			   data: "year="+select,
+    			   success: function(msg){
+    			   var obj=$.parseJSON(msg);
+    			   
+   				   //更新数据
+			      var option = bar.getOption();
+			      option.series[0].data = obj.b.substring(1,obj.b.length).split(",");   
+			      option.series[1].data = obj.a.substring(1,obj.a.length).split(",");   
+			      bar.setOption(option); 
+    				   
+    			   }
+    		});
         	
         });
         
+	
+	});
         
         
         
-        
-        
-        
-        
-        
-        
-        
-        
+       
     </script>
 
 
-<form action="/form/upload" method="post"  enctype="multipart/form-data">
+<!-- <form action="/form/upload" method="post"  enctype="multipart/form-data">
 <input type="file" name="name" multiple="multiple">
 <input type="submit">
-</form>
+</form> -->
 
+<select id="year">
+#for(year:years)
+<option value="#(year)">#(year)</option>
+#end
+</select>
 
-<a href="/form/add-sys_user">添加用户</a>
+<select id="barMd">
+#for(year:years_month ??)
+<option value="#(year)">#(year)</option>
+#end
+</select>
 
+<select id="barWy">
+#for(year:years)
+<option value="#(year)">#(year)</option>
+#end
+</select>
 
 
 
@@ -177,7 +317,9 @@
 
 
 
-	<table border="1px" cellspacing="0px" cellpadding="5px">
+
+
+	<!-- <table border="1px" cellspacing="0px" cellpadding="5px">
 		<th>一级菜单</th>
 		<th>二级菜单</th>
 		<th>三级菜单</th>
@@ -215,7 +357,7 @@
 		</tr>
 		#end #end #end #end #end
 
-	</table>
+	</table> -->
 
 
 

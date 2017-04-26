@@ -57,4 +57,38 @@ public class SysOrg extends BaseModel<SysOrg> {
 		return SysOrg.dao.findById(org_id).getInt("org_level");
 	}
 	
+	public static List<SysOrg> getChildren(int org_id) {
+		String sql = "select * from sys_org where belong_org_id = ?";
+		return SysOrg.dao.find(sql,org_id);
+	}
+	
+	/**
+	* @author:zhaozhongyuan 
+	* @Description: 获取本部以及分部的ID 
+	* @param @return
+	* @return String
+	* @date 2017年4月26日 下午7:03:56  
+	*/
+	public static String getDeptAndChildren(int org_id) {
+		List<SysOrg> list2=SysOrg.getChildren(org_id);
+		
+		StringBuilder sb=new StringBuilder();
+		for (int i = 0; i < list2.size(); i++) {
+		sb.append(list2.get(i).getInt("org_id")+",");
+		}
+		sb.append(org_id);
+		return sb.toString();
+	}
+	
+	/**
+	* @author:zhaozhongyuan 
+	* @Description:
+	* @return String   
+	* @date 2017年4月26日 下午9:10:16  
+	*/
+	public static String getNameById(int org_id) {
+		String sql="select org_name name from sys_org where org_id = ?";
+		return SysOrg.dao.findFirst(sql, org_id).getStr("name");
+	}
+	
 }

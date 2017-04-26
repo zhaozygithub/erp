@@ -34,12 +34,14 @@ public class CrudController extends Controller {
 			for (String key : keys) {
 				 list.add(new Widget(key, key, "text"));
 			}
-			 Form form=new Form("query", "sys_user", list);
-			 setAttr("form", form);
 			
+		}else if (type.equals("update")) {
+			String id=getPara(2);
 		}
 		
 		
+		Form form=new Form(type, tableName, list);
+		setAttr("form", form);
 		
 		/* List<String> seList=new ArrayList<String>();
 		 seList.add("java");
@@ -129,6 +131,8 @@ public class CrudController extends Controller {
 	}
 
 	public void query() {
+		
+		
 		render("userAdd.html");
 
 	}

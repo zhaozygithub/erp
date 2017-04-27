@@ -22,4 +22,13 @@ public class SysRole extends BaseModel<SysRole> {
 		String sql  = "select * from sys_user where status = '1' role_id = ?";
 		return SysUser.dao.find(sql, roleId);
 	}
+	
+	/**
+	 * 根据用户id获取用户角色名称
+	 */
+	public static String getRoleNameByUserId(int userId){
+		SysUser user = SysUser.dao.findById(userId);
+		String rolename = SysRole.dao.findById(user.getInt("role_id")).getStr("role_name");
+		return rolename;
+	}
 }

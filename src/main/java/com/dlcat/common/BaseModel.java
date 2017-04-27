@@ -26,52 +26,58 @@ public class BaseModel<M extends Model<M>> extends Model<M> implements IBean {
 	 * @Fields serialVersionUID : TODO
 	 */
 	private static final long serialVersionUID = 1L;
-	
+		
+		/*public int baseInsert(Class<?> clazz,Map<String,Object> map){
+		try {
+			BaseModel<?> baseDao  = (BaseModel<?>) ((BaseModel<?>) clazz.newInstance()).dao();
+			System.out.println("eeeeeeeeee");
+			//baseDao.put(map);
+			baseDao.put("name", "abcdef");
+			System.out.println("bbbbbbbbbb");
+			Db.use("").save(tableName, primaryKey, record);
+			Db.use("").del
+			baseDao.save();
+			System.out.println("aaaaaaaaa");
+		} catch (Exception e) {
+		}
+		return 0;
+	}*/
 	
 	/**
-	* @author:zhaozhongyuan 
-	* @Description: 根据年份去找出相应的12个月的数据
-	* @param @return
-	* @return List<Integer>
-	* @date 2017年4月26日 上午11:44:11  
-	*/
-	public static Map<String, List<Number>> getMonthNum(String year,SysUser user) {
-		Map<String, List<Number>> map=new HashMap<String, List<Number>>();
-		
-		//存放1-12月每个月的成交笔数
-		List<Number> success=new ArrayList<Number>();
-		
-		//存放1-12月每个月的借款总额
-		List<Number> amounts=new ArrayList<Number>();
-		
-		String[] months={"01","02","03","04","05","06","07","08","09","10","11","12"};
-		String[] year_month=new String[12];
-		for (int i = 0; i < 12; i++) {
-			year_month[i]=year+"-"+months[i];
+	 * 根据主键删除操作
+	 * @param baseModel		BaseModel对象
+	 * @param idValues	主键  单一主键直接放入；多主键使用字符串放入使用逗号间隔
+	 * @return
+	 * @author masai
+	 * @time 2017年4月27日 上午12:02:46
+	 */
+	public int baseDeleteById(BaseModel baseModel,Object idValues){
+		int result = 0;
+		try {
+			BaseModel baseDao  = (BaseModel) baseModel.dao();
+			result = baseDao.deleteById(idValues) == true ? 1 : 0;
+		} catch (Exception e) {
+			e.printStackTrace();
 		}
-		
-		String where=LoanApplyApprove.getWhere(user);
-		
-		String sql="";
-		String sql2="";
-		for (int i = 0; i < 12; i++) {
-			//统计每月的成交笔数
-			sql="SELECT COUNT(t.id) count " +
-					"FROM loan_apply_approve t " +
-					"WHERE LEFT(FROM_UNIXTIME(t.apply_time),7)='"+year_month[i]+"' AND t.status='1'"+where;
-			//统计每个月的借款总额
-			sql2="SELECT  SUM(t.amount) FROM loan_apply_approve t WHERE LEFT(FROM_UNIXTIME(t.apply_time),7)='"+year_month[i]+"'"+where;
-			success.add(Integer.parseInt(Db.queryFirst(sql).toString()));
-			Object object=Db.queryFirst(sql2);
-			if (object!=null) {
-				amounts.add(Float.parseFloat(object.toString()));
-			}else {
-				amounts.add(0);
-			}
-		}
-		map.put("成交笔数", success);
-		map.put("借款总额", amounts);
-		
-		return map;
+		return result;
 	}
+	/**
+	 * 根据主键删除操作
+	 * @param clazz		model类class对象
+	 * @param idValues	主键  单一主键直接放入；多主键使用字符串放入使用逗号间隔
+	 * @return
+	 * @author masai
+	 * @time 2017年4月26日 下午10:18:55
+	 */
+	public int baseDeleteById(Class<?> clazz,Object idValues){
+		int result = 0;
+		try {
+			BaseModel baseDao  = (BaseModel) ((BaseModel) clazz.newInstance()).dao();
+			result = baseDeleteById(baseDao,idValues);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return result;
+	}
+	
 }

@@ -10,14 +10,27 @@ import com.dlcat.common.BaseModel;
 @SuppressWarnings("serial")
 public class FlowTask extends BaseModel<FlowTask> {
 	public static final FlowTask dao = new FlowTask().dao();
+	
+	/**
+	 * 根据sql语句查询流程任务
+	 * @param sql
+	 * @return
+	 * @author masai
+	 * @time 2017年4月26日 上午11:25:42
+	 */
 	public List<FlowTask> getFlowTasksBySql(String sql) {
-		List<FlowTask> datas=FlowTask.dao.find(sql);
+		List<FlowTask> datas = FlowTask.dao.find(sql);
 		return datas;
 	}
-	
-	public static List<FlowTask> getFlowTasksById(String taskNo) {
-		List<FlowTask> datas=FlowTask.dao.find("select * from flow_task where task_no=?",taskNo);
-		return datas;
+	/**
+	 * 根据主键查询流程任务
+	 * @param taskNo
+	 * @return
+	 * @author masai
+	 * @time 2017年4月26日 上午11:34:33
+	 */
+	public static FlowTask getFlowTasksById(String taskNo) {
+		return FlowTask.dao.findById(taskNo);
 	}
 	
 	/**

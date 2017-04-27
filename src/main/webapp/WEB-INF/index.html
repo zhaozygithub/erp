@@ -153,7 +153,29 @@
        	        show : true,
        	        feature : {
        	            mark : {show: true},
-       	            dataView : {show: true, readOnly: false},
+       	            dataView : {show: true, readOnly: false,
+       	            	optionToContent: function (opt) {
+       	            	  /* var axisData = opt.xAxis[0].data;
+                          var series = opt.series;
+                          var table = '<table style="width:100%;text-align:center"><tbody><tr>'
+                                       + '<td>时间</td>'
+                                       + '<td>' + series[0].name + '</td>'
+                                       + '<td>' + series[1].name + '</td>'
+                                       + '</tr>';
+                          for (var i = 0, l = axisData.length; i < l; i++) {
+                              table += '<tr>'
+                                       + '<td>' + axisData[i] + '</td>'
+                                       + '<td>' + series[0].data[i] + '</td>'
+                                       + '<td>' + series[1].data[i] + '</td>'
+                                       + '</tr>';
+                          }
+                          table += '</tbody></table>';
+                          return table; */
+       	            		
+       	            	}
+       	            
+       	            
+       	            },
        	            magicType : {show: true, type: ['line', 'bar']},
        	            restore : {show: true},
        	            saveAsImage : {show: true}
@@ -163,7 +185,11 @@
        	    xAxis : [
        	        {
        	            type : 'category',
-       	            data : ['1月','2月','3月','4月','5月','6月','7月','8月','9月','10月','11月','12月']
+       	            data : [
+       	                 #for(x:barMd)
+       	                    '#(x.key)',
+       	                  #end  
+       	                    ]
        	        }
        	    ],
        	    yAxis : [
@@ -172,14 +198,12 @@
        	        }
        	    ],
        	    series : [
-       	           #for(x:bar)   
+       	           #for(x:barMd)   
        	        {
        	            name:'#(x.key)',
        	            type:'bar',
        	            data:[
-       	                  #for(data:x.value)
-       	                  #(data),
-       	                  #end
+       	                  #(x.value)
        	                  ]
        	            
        	        },
@@ -189,7 +213,33 @@
        });
         
         
-        
+        $("#barMds").change(function(){
+    		var select=$(this).children('option:selected').val();
+    		$.ajax({
+    			   type: "POST",
+    			   url: "/getDataByYearMonth",
+    			   data: "year="+select,
+    			   success: function(msg){
+    				   debugger;
+    			   var obj=$.parseJSON(msg);
+			       
+    			   var option = barMd.getOption();
+    			   var count=0
+   				   
+    			   for (x in obj){
+    				   if(obj.hasOwnProperty(x)){ 
+			           //option.series[count].name = x;   
+			           option.series[count].data[0] = obj[x];   
+    	        	   count++;  
+    	        	   } 
+    			
+    			   } 
+			      barMd.setOption(option);
+    				   
+    			   }
+    		});
+        	
+        });
         
         
         
@@ -244,19 +294,16 @@
         
         
         
-        
-        
-        
-        
         $("#year").change(function(){
     		var select=$(this).children('option:selected').val();
     		$.ajax({
+    		
     			   type: "POST",
     			   url: "/initBarByYear",
     			   data: "year="+select,
     			   success: function(msg){
     			   var obj=$.parseJSON(msg);
-    			   
+    				debugger;
    				   //更新数据
 			      var option = bar.getOption();
 			      option.series[0].data = obj.b.substring(1,obj.b.length).split(",");   
@@ -267,6 +314,10 @@
     		});
         	
         });
+        
+        
+        
+       
         
 	
 	});
@@ -281,20 +332,20 @@
 <input type="file" name="name" multiple="multiple">
 <input type="submit">
 </form> -->
-
+<p id="demo"></p>
 <select id="year">
 #for(year:years)
 <option value="#(year)">#(year)</option>
 #end
 </select>
 
-<select id="barMd">
+<select id="barMds">
 #for(year:years_month ??)
 <option value="#(year)">#(year)</option>
 #end
 </select>
 
-<select id="barWy">
+<select id="barWys">
 #for(year:years)
 <option value="#(year)">#(year)</option>
 #end

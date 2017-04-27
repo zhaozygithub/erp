@@ -10,22 +10,36 @@ import com.dlcat.common.BaseModel;
 @SuppressWarnings("serial")
 public class FlowNode extends BaseModel<FlowNode> {
 	public static final FlowNode dao = new FlowNode().dao();
+	
+	/**
+	 * 通过sql语句获取流程节点
+	 * @param sql
+	 * @return
+	 * @author masai
+	 * @time 2017年4月26日 上午11:54:16
+	 */
 	public static List<FlowNode> getFlowNodesBySql(String sql) {
-		List<FlowNode> datas=FlowNode.dao.find(sql);
+		List<FlowNode> datas = FlowNode.dao.find(sql);
 		return datas;
 	}
 	
-	public static List<FlowNode> getFlowNodesById(String nodeNo) {
-		List<FlowNode> datas=FlowNode.dao.find("select * from flow_node where node_no=?",nodeNo);
-		return datas;
+	/**
+	 * 根据主键获取流程节点
+	 * @param nodeNo
+	 * @return
+	 * @author masai
+	 * @time 2017年4月26日 上午11:56:25
+	 */
+	public static FlowNode getFlowNodesById(String nodeNo) {
+		return FlowNode.dao.findById(nodeNo);
 	}
 	
 	/**
 	 * 根据流程对象编号获取流程节点
 	 */
 	public static  List<FlowNode> getFlowNodeByObjectNo(String objectNo) {
-	    String modeId= FlowObject.getFlowObjectsById(objectNo).get(0).getStr("flow_model_id");
-		List<FlowNode> nodes=FlowNode.dao.find("select * from flow_node where flow_model_id=?",modeId);
-		return nodes;	
+	    String modeId= FlowObject.getFlowObjectsById(objectNo).getStr("flow_model_id");
+		List<FlowNode> nodes=FlowNode.dao.find("select * from flow_node where flow_model_id=? ORDER BY node_sort_order",modeId);
+		return nodes;
 	}
 }

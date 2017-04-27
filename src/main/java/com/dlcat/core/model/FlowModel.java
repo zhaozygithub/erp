@@ -10,13 +10,26 @@ import com.dlcat.common.BaseModel;
 @SuppressWarnings("serial")
 public class FlowModel extends BaseModel<FlowModel> {
 	public static final FlowModel dao = new FlowModel().dao();
+	
+	/**
+	 * 根据sql 语句查询 流程模型
+	 * @param sql
+	 * @return
+	 * @author masai
+	 * @time 2017年4月26日 下午12:08:17
+	 */
 	public static List<FlowModel> getFlowModelsBySql(String sql) {
-		List<FlowModel> datas=FlowModel.dao.find(sql);
+		List<FlowModel> datas = FlowModel.dao.find(sql);
 		return datas;
 	}
-	
-	public static List<FlowModel> getFlowModelsById(String id) {
-		List<FlowModel> datas=FlowModel.dao.find("select * from flow_model where id=?",id);
-		return datas;
+	/**
+	 * 根据主键获取流程模型
+	 * @param id
+	 * @return
+	 * @author masai
+	 * @time 2017年4月26日 下午12:07:34
+	 */
+	public static FlowModel getFlowModelsById(String id) {
+		return FlowModel.dao.findById(id);
 	}
 }

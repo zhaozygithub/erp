@@ -19,6 +19,10 @@ public class IndexEchartsImpl implements IndexEchartsService {
 		//客户统计 :只统计本节点和以下机构
 				int org_id=user.getInt("belong_org_id");
 				int level=SysOrg.getLevel(org_id);
+				if (level==-1) {
+					return null;
+				}
+				
 				//int level=3;
 				List<CuObjectCustomer> list=null;
 				//1为总部

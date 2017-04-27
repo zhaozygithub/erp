@@ -43,4 +43,12 @@ public class FlowData extends BaseModel<FlowData> {
 		List<FlowData> datas = FlowData.dao.find("select * from flow_data where flow_task_no=?",flowTaskNo);
 		return datas;
 	}
+	
+	/**
+	 * 根据审批流程对象编号查询流程数据
+	 */
+	public static List<FlowData> getFlowDatasByFlowObjectNo(String flowObjectNo){
+		List<FlowData> datas = FlowData.dao.find("select * from flow_data where flow_object_no=?",flowObjectNo);
+		return datas;
+	}
 }

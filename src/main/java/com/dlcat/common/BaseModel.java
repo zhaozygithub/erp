@@ -1,18 +1,7 @@
 package com.dlcat.common;
 
-import java.math.BigDecimal;
-import java.text.DecimalFormat;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-
-import com.dlcat.core.model.LoanApplyApprove;
-import com.dlcat.core.model.SysUser;
-import com.jfinal.plugin.activerecord.Db;
 import com.jfinal.plugin.activerecord.IBean;
 import com.jfinal.plugin.activerecord.Model;
-import com.jfinal.plugin.activerecord.Record;
 
 /** 
 * @author zhaozhongyuan
@@ -51,10 +40,10 @@ public class BaseModel<M extends Model<M>> extends Model<M> implements IBean {
 	 * @author masai
 	 * @time 2017年4月27日 上午12:02:46
 	 */
-	public int baseDeleteById(BaseModel baseModel,Object idValues){
+	public int baseDeleteById(BaseModel<?> baseModel,Object idValues){
 		int result = 0;
 		try {
-			BaseModel baseDao  = (BaseModel) baseModel.dao();
+			BaseModel<?> baseDao  = (BaseModel<?>) baseModel.dao();
 			result = baseDao.deleteById(idValues) == true ? 1 : 0;
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -72,7 +61,7 @@ public class BaseModel<M extends Model<M>> extends Model<M> implements IBean {
 	public int baseDeleteById(Class<?> clazz,Object idValues){
 		int result = 0;
 		try {
-			BaseModel baseDao  = (BaseModel) ((BaseModel) clazz.newInstance()).dao();
+			BaseModel<?> baseDao  = (BaseModel<?>) ((BaseModel<?>) clazz.newInstance()).dao();
 			result = baseDeleteById(baseDao,idValues);
 		} catch (Exception e) {
 			e.printStackTrace();

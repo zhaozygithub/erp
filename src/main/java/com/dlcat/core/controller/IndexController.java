@@ -6,20 +6,13 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import org.eclipse.jetty.util.ajax.JSON;
-
-import com.dlcat.core.model.CuObjectCustomer;
-import com.dlcat.core.model.LoanApplyApprove;
 import com.dlcat.core.model.SysMenu;
-import com.dlcat.core.model.SysOrg;
 import com.dlcat.core.model.SysRole;
 import com.dlcat.core.model.SysUser;
 import com.dlcat.service.flow.IndexEchartsService;
 import com.dlcat.service.flow.impl.IndexEchartsImpl;
 import com.jfinal.captcha.CaptchaRender;
 import com.jfinal.core.Controller;
-import com.jfinal.json.FastJson;
-import com.jfinal.json.Json;
 import com.jfinal.kit.HashKit;
 import com.jfinal.kit.JsonKit;
 import com.jfinal.plugin.activerecord.Db;
@@ -301,12 +294,9 @@ public class IndexController extends Controller {
 	
 	public void getDataByYearMonth() {
 		String currentYear=getPara("year");
-		
 		SysUser user=getSessionAttr("user");
 		Map<String, Number> map=indexEchartsService.getMdNum(currentYear, user);
-		String string=JsonKit.toJson(map);
-		renderHtml(string);
-		
+		renderHtml(JsonKit.toJson(map));
 	}
 	
 	
@@ -330,23 +320,22 @@ public class IndexController extends Controller {
 			Map<String, List<Number>> map=indexEchartsService.getMonthNum(defaultYear, user);
 			setAttr("bar", map);
 		}
-		
 	}
 	
 	public void initBarByYear() {
 		String currentYear=getPara("year");
 		SysUser user=getSessionAttr("user");
 		Map<String, List<Number>> map=indexEchartsService.getMonthNum(currentYear, user);
-		
-		renderHtml("{\"a\":\""+map.get("成交笔数").toString()+"\",\"b\":\""+map.get("借款总额").toString()+"\"}");
+		renderHtml(JsonKit.toJson(map));
 
 	}
 	
 
 	private void initPie(SysUser user){
 		Map<String, Integer> pie=indexEchartsService.getPieData(user);
-		
-		setAttr("pie", pie);
+		if (pie!=null) {
+			setAttr("pie", pie);
+		}
 	}
 
 

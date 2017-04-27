@@ -39,6 +39,7 @@ public class _MappingKit {
 		// Composite Primary Key order: code_no,item_no
 		arp.addMapping("to_code_library", "code_no,item_no", ToCodeLibrary.class);
 		arp.addMapping("to_task", "id", ToTask.class);
+		
 	}
 }
 

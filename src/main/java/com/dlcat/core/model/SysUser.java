@@ -38,4 +38,18 @@ public class SysUser extends BaseModel<SysUser> {
 		String sql = "select * from cu_object_customer";
 		return CuObjectCustomer.dao.find(sql,userId);
 	}
+	/**
+	 * 根据用户id获取同一机构下相同角色的所有人
+	 * @author liuran
+	 * @time 2017年4月27日 下午12:31:15
+	 * @param userId 
+	 * @return List<SysUser>
+	 */
+	public static List<SysUser> getUserList(int userId){
+		SysUser user = SysUser.dao.findById(userId);
+		String sql = "select * from sys_user where role_id = ? and belong_org_id = ?";
+		List<SysUser> users = SysUser.dao.find(sql,user.getInt("role_id"),user.getInt("belong_org_id"));
+		return users;
+		
+	}
 }

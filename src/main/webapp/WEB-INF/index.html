@@ -155,22 +155,22 @@
        	            mark : {show: true},
        	            dataView : {show: true, readOnly: false,
        	            	optionToContent: function (opt) {
-       	            	  /* var axisData = opt.xAxis[0].data;
+       	            	   var axisData = opt.xAxis[0].data;
                           var series = opt.series;
                           var table = '<table style="width:100%;text-align:center"><tbody><tr>'
-                                       + '<td>时间</td>'
-                                       + '<td>' + series[0].name + '</td>'
-                                       + '<td>' + series[1].name + '</td>'
+                                       + '<th>门店名字</th>'
+                                       + '<th>销售总额</th>'
+                                      // + '<td>' + series[1].name + '</td>'
                                        + '</tr>';
                           for (var i = 0, l = axisData.length; i < l; i++) {
                               table += '<tr>'
-                                       + '<td>' + axisData[i] + '</td>'
-                                       + '<td>' + series[0].data[i] + '</td>'
-                                       + '<td>' + series[1].data[i] + '</td>'
+                                       + '<td>' + series[i].name + '</td>'
+                                       + '<td>' + series[i].data[0] + '</td>'
+                                       //+ '<td>' + series[1].data[i] + '</td>'
                                        + '</tr>';
                           }
                           table += '</tbody></table>';
-                          return table; */
+                          return table;
        	            		
        	            	}
        	            
@@ -220,7 +220,6 @@
     			   url: "/getDataByYearMonth",
     			   data: "year="+select,
     			   success: function(msg){
-    				   debugger;
     			   var obj=$.parseJSON(msg);
 			       
     			   var option = barMd.getOption();
@@ -303,11 +302,10 @@
     			   data: "year="+select,
     			   success: function(msg){
     			   var obj=$.parseJSON(msg);
-    				debugger;
    				   //更新数据
 			      var option = bar.getOption();
-			      option.series[0].data = obj.b.substring(1,obj.b.length).split(",");   
-			      option.series[1].data = obj.a.substring(1,obj.a.length).split(",");   
+			      option.series[0].data = obj["借款总额"];   
+			      option.series[1].data = obj["成交笔数"];   
 			      bar.setOption(option); 
     				   
     			   }

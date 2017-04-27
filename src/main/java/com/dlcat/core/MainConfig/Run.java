@@ -85,6 +85,7 @@ public class Run extends JFinalConfig {
 	public void configPlugin(Plugins me) {
 		ActiveRecordPlugin arp = addDataSource(me, "dlcat_erp", JdbcUtils.MYSQL);
 		_MappingKit.mapping(arp);
+		
 
 	}
 

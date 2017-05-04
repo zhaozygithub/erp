@@ -40,8 +40,18 @@ public class FlowNode extends BaseModel<FlowNode> {
 	 * 根据流程对象编号获取流程节点
 	 */
 	public static  List<FlowNode> getFlowNodeByObjectNo(String objectNo) {
-	    int modeId= FlowObject.getFlowObjectsById(objectNo).getInt("flow_model_id");
-		List<FlowNode> nodes=FlowNode.dao.find("select * from flow_node where flow_model_id = ? AND status = '1' ORDER BY node_sort_order ASC",modeId);
+	    int modelId= FlowObject.getFlowObjectsById(objectNo).getInt("flow_model_id");	
+		return getFlowNodeByModelId(modelId);
+	}
+	/**
+	 * 根据流程模型编号获取流程节点
+	 * @author liuran
+	 * @time 2017年5月4日 下午12:14:46
+	 * @param modelId
+	 * @return List<FlowNode>
+	 */
+	public static List<FlowNode> getFlowNodeByModelId(int modelId){
+		List<FlowNode> nodes=FlowNode.dao.find("select * from flow_node where flow_model_id = ? AND status = '1' ORDER BY node_sort_order ASC",modelId);
 		return nodes;
 	}
 	

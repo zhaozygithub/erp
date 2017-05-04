@@ -45,6 +45,18 @@ table:first-child tr:first-child td{
  #@jquery()
  #@echarts()
  #@bootstrap()
+  <!-- <div >
+    <label>订单审批流程</label><br>
+    #for(flow:flowlist)
+        #for(x:flow)
+         #(x.key)
+             #for(node:x.value)
+                #(node.node_name)
+             #end
+             
+         #end
+    #end
+    </div> -->
 	<!-- 为ECharts准备一个具备大小（宽高）的Dom -->
 	<div>
 		<div class="echart-box" id="pie"></div>
@@ -259,24 +271,21 @@ table:first-child tr:first-child td{
                      icon:'images/excel.png', //图标    
                      option:{},    
                      onclick:function(opt) {//点击事件,这里的option1是chart的option信息    
-                           //alert('1');//这里可以加入自己的处理代码，切换不同的图形 
-                    	 var serie = opt.series;
-                         $.ajax({
+                    	 var year=$("#barMds").children('option:selected').val();
+                    	 $.ajax({
                              type : 'POST',
                              dataType : 'json',
                              async : false,
                              url : "/file/exportData", // 生成文件，保存在服务器
-                             data : {
-                            	 'data':serie,
-                            	 'size':serie.length},
+                             data : {'data':year},
                              success : function(data) {
-                                 var result = data["success"];
+                                var result = data["success"];
                                  if (result == "true") {
                                      
                                      $.download('/file',data["path"]); // 下载文件
                                  } else {
                                      alert("数据导出失败！");
-                                 }
+                                 } 
                              },
                              error : function(XMLHttpRequest, textStatus, e) {
                                  console.log("oilDetection.js  method exportOilDetection" + e);

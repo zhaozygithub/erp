@@ -12,6 +12,8 @@ import com.dlcat.common.entity.TableHeader;
 import com.dlcat.common.utils.PageUtil;
 import com.dlcat.core.model.SysMenu;
 import com.dlcat.core.model.ToCodeLibrary;
+import com.dlcat.service.flow.FlowService;
+import com.dlcat.service.flow.impl.FlowServiceImpl;
 
 public class TestController extends BaseController{
 	public void index(){
@@ -45,5 +47,11 @@ public class TestController extends BaseController{
 	   DyResponse response = PageUtil.createFormPageStructure("表单测试", FormBuilder.formBuilderTest(), 2, "aaa");
        this.setAttr("response", response);
        this.render("test_form.html");
+   }
+   public void mm(){
+	   FlowService fs = new FlowServiceImpl();
+	   System.out.println("11111");
+	   //fs.flowInit("aa");
+	   System.out.println("22222");
    }
 }

@@ -6,6 +6,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import com.dlcat.core.model.FlowModel;
+import com.dlcat.core.model.FlowNode;
 import com.dlcat.core.model.SysMenu;
 import com.dlcat.core.model.SysRole;
 import com.dlcat.core.model.SysUser;
@@ -17,6 +19,7 @@ import com.jfinal.kit.HashKit;
 import com.jfinal.kit.JsonKit;
 import com.jfinal.plugin.activerecord.Db;
 import com.jfinal.plugin.activerecord.TableMapping;
+import com.jfinal.template.stat.ast.For;
 
 /** 
 * @author zhaozhongyuan
@@ -52,9 +55,19 @@ public class IndexController extends Controller {
 	public void echarts() {
 		SysUser user=getSessionAttr("user");
 		initEchars(user);
+		flownodes();
+		
 		render("echarts.html");
 	}
-
+	/**
+	 * 主页流程信息
+	 * @author liuran
+	 * @time 2017年5月4日 下午12:57:16 void
+	 */
+	public void flownodes() {
+		List<Map<String, Object>> list = indexEchartsService.flownodes();
+		setAttr("flowlist", list);
+	}
 	/**
 	 * 递归构建菜单树
 	 * 
@@ -343,6 +356,7 @@ public class IndexController extends Controller {
 			setAttr("pie", pie);
 		}
 	}
-
+	
+	
 
 }

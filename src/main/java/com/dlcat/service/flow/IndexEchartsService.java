@@ -19,5 +19,7 @@ public interface IndexEchartsService {
 	
 	public String[] getYear_mouth(SysUser user);
 	
+	public List<Map<String, Object>> flownodes();
+	
 	
 }

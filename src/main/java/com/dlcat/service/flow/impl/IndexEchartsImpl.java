@@ -6,6 +6,8 @@ import java.util.List;
 import java.util.Map;
 
 import com.dlcat.core.model.CuObjectCustomer;
+import com.dlcat.core.model.FlowModel;
+import com.dlcat.core.model.FlowNode;
 import com.dlcat.core.model.SysOrg;
 import com.dlcat.core.model.SysUser;
 import com.dlcat.service.flow.IndexEchartsService;
@@ -19,21 +21,19 @@ public class IndexEchartsImpl implements IndexEchartsService {
 		//客户统计 :只统计本节点和以下机构
 				int org_id=user.getInt("belong_org_id");
 				int level=SysOrg.getLevel(org_id);
-				if (level==-1) {
-					return null;
-				}
+				if (level!=-1) {
 				
-				//int level=3;
+					//int level=3;
 				List<CuObjectCustomer> list=null;
 				//1为总部
 				if (level==1) {
 					list=CuObjectCustomer.getAll();
 				//2分部
-				}else if (level==2) {
+				}else if (level==2||level==3) {
 				//获取分部以及支部
 					list=CuObjectCustomer.getCuObjectCustomers(SysOrg.getDeptAndChildren(org_id));
 				//3支部
-				}else if (level==3) {
+				}else if (level==4||level==5) {
 					list=SysOrg.getBelongCustomer(org_id);
 				}
 				
@@ -68,6 +68,10 @@ public class IndexEchartsImpl implements IndexEchartsService {
 				pie.put("对公客户", company);
 				
 				return pie;
+				
+	}
+				
+				return null;
 	}
 
 	public Map<String, List<Number>> getMonthNum(String year, SysUser user) {
@@ -135,6 +139,8 @@ public class IndexEchartsImpl implements IndexEchartsService {
 		Map<String, Number> map=new HashMap<String, Number>();
 		int org_id=user.getInt("belong_org_id");
         int level=SysOrg.getLevel(org_id);
+		if (level!=-1) {
+			
 		
 		//添加条件约束
 		String ids="";
@@ -142,14 +148,19 @@ public class IndexEchartsImpl implements IndexEchartsService {
 		//1为总部
 		if (level==1) {
 			//总部可以看任意数据
-			ids=SysOrg.getChildrenIds(org_id);
+			ids=SysOrg.getChildrenIds(org_id,"and org_level=3");
 		//2分部
 		}else if (level==2) {
+			 ids=SysOrg.getChildrenIds(SysOrg.getPid(org_id),"and org_level=3");
+			//3支部
+			}else if (level==3) {
 		//获取分部以及支部
-			  ids=SysOrg.getChildrenIds(org_id);
+		 ids=SysOrg.getChildrenIds(org_id,"and org_level=5");
 		//3支部
-		}else if (level==3) {
-			ids=org_id+"";
+		}else if (level==5||level==4) {
+			//获取pid
+			int pid=SysOrg.getPid(org_id);
+			ids=SysOrg.getChildrenIds(pid,"and org_level=5");
 		}
 		
 		String[] arr=ids.split(",");
@@ -178,6 +189,9 @@ public class IndexEchartsImpl implements IndexEchartsService {
 			
 		}
 		return map;
+		}
+		
+		return null;
 	}
 
 	public String[] getyear(SysUser user) {
@@ -206,6 +220,21 @@ public class IndexEchartsImpl implements IndexEchartsService {
 		}
 		
 		return years;
+	}
+
+	public List<Map<String, Object>> flownodes() {
+		List<Map<String, Object>> list = new ArrayList<Map<String, Object>>();
+		
+		String getflowmodelsql = "select * from flow_model"; 
+		List<FlowModel> models = FlowModel.getFlowModelsBySql(getflowmodelsql);
+
+		for(FlowModel mode : models){
+			Map<String, Object> nodeMap= new HashMap<String, Object>();
+			List<FlowNode> nodes = FlowNode.getFlowNodeByModelId(mode.getInt("id"));
+			nodeMap.put(mode.getStr("name"), nodes);
+			list.add(nodeMap);
+		};
+		return list;
 	}
 
 	

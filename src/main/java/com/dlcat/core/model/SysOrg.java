@@ -68,9 +68,9 @@ public class SysOrg extends BaseModel<SysOrg> {
 	* @return String   
 	* @date 2017年5月4日 上午11:26:26  
 	*/
-	public static String  getChildrenIds(int org_id) {
+	public static String  getChildrenIds(int org_id,String sqlWhere) {
 		StringBuilder sb=new StringBuilder();
-		String sql = "select * from sys_org where belong_org_id = ?";
+		String sql = "select * from sys_org where belong_org_id = ? "+sqlWhere;
 		List<SysOrg> list=SysOrg.dao.find(sql,org_id);
 		if (list.size()>0) {
 			for (SysOrg sysOrg : list) {
@@ -85,6 +85,21 @@ public class SysOrg extends BaseModel<SysOrg> {
 		String sql = "select * from sys_org where belong_org_id = ?";
 		return SysOrg.dao.find(sql,org_id);
 	}
+	
+	public static int getPid(int org_id) {
+		String sql = "select * from sys_org where org_id = ?";
+		
+		if (SysOrg.dao.find(sql,org_id).size()>0) {
+			return SysOrg.dao.find(sql,org_id).get(0).getInt("belong_org_id");
+		}
+		return -1;
+		
+		
+	}
+	
+	
+	
+	
 	
 	/**
 	* @author:zhaozhongyuan 

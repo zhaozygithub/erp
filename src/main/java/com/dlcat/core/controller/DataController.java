@@ -1,6 +1,6 @@
 package com.dlcat.core.controller;
 
-import java.util.*;
+import java.util.List;
 
 import com.dlcat.common.BaseController;
 import com.dlcat.core.model.SysMenu;

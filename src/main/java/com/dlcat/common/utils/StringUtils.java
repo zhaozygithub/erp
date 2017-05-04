@@ -145,13 +145,9 @@ public class StringUtils {
 	public static String genenrateUniqueInd() {
 		return SecurityUtil.md5(UUID.randomUUID().toString());
 	}
-	public static void main(String[] args) {
-		for(int i=0;i<23;i++){
-			System.out.println(genenrateUniqueInd());
-		}
-	}
+
 	/**
-	 * 生成订单序列号
+	 * 生成订单序列号	16位序号 = 年份+日期+4位数字
 	 * 日期加上(currentNum+1) pg: 201506160001
 	 * @param curNumIndex
 	 * @return
@@ -160,6 +156,10 @@ public class StringUtils {
 		String nextNumStr = String.valueOf(currentNum + 1);
 		while (nextNumStr.length() < 4) {
 			nextNumStr = "0" + nextNumStr;
+		}
+		//如果nextNumStr长度大于4则取后四位
+		if(nextNumStr.length()>4){
+			nextNumStr = nextNumStr.substring(nextNumStr.length()-4, nextNumStr.length());
 		}
 		return DateUtil.getCurrentDateStr() + nextNumStr;
 	}
@@ -206,7 +206,7 @@ public class StringUtils {
 	}
 	
 	/**
-	 * 生成16位订单序列号
+	 * 生成16位唯一序列号
 	 * 日期加上(currentNum+1) pg: 201506160001
 	 * @param curNumIndex
 	 * @return

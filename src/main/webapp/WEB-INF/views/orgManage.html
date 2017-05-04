@@ -1,0 +1,129 @@
+﻿<html>
+<meta charset="utf-8">
+<title>机构树</title>
+<style type="text/css">
+body{margin-left:20px !important;  }
+.org_stru{width: 350px;display: inline;}
+#userpan{width: 60%;display: inline;float: left;}
+td{vertical-align:top;}
+</style>
+<link rel="stylesheet" type="text/css" href="/js/ext-5.1.0\packages\ext-theme-neptune\build\resources\ext-theme-neptune-all.css">
+<script type="text/javascript" src='/js/ext-5.1.0/ext-all-debug.js'></script>
+<body>
+<div>
+<table style="width: 1200px;height: 700px;vertical-align:top; ">
+<tr>
+<td style="width: 30%;">
+<div id='treenode' class='org_stru'>
+</div>
+</td><td>
+<div id='userpan'>
+<div style="background: cyan;">用户</div>
+<ol id='userslist'>
+</ol>
+</div>
+</div></td>
+</tr>
+</table>
+</body left-margin=20>
+<script type="text/javascript" >
+Ext.define('Org', {
+    extend: 'Ext.data.TreeModel',
+    //idProperty: 'postid',
+    fields: [{
+        name: "orgname",
+        convert: undefined
+    }]});
+var menudata;
+ //这一段主要是防止空节点发出AJAX请求导致响应很慢
+function formToCon(item){
+	var atta={checked:false,leaf:true,expandable:false};
+	if(!item||JSON.stringify(item)=='{}')return atta;
+	var stritem=(JSON.stringify(atta)+JSON.stringify(item)).replace('}{',',');
+	return JSON.parse(stritem);
+	}
+Ext.Ajax.request({url:'/data/getOrg',
+    success:function(resp,conf){
+        //console.log(resp);
+        menudata=JSON.parse(resp.responseText.toString());
+for(var i in menudata){menudata[i].id=menudata[i].org_id;
+menudata[i]=formToCon(menudata[i]);}        
+function getSubItemsById(id){
+	items=[];
+	for(var i in menudata){
+		if(menudata[i].belong_org_id==id){
+			items.push(menudata[i]);
+		}
+	 }
+	return items;
+ }  
+ mystore = Ext.create('Ext.data.TreeStore', {
+        //model: 'Org',
+        /*proxy: {
+            type: 'ajax',
+            reader: 'json',
+            url: 'forum-data.json'
+        },*/
+        //此处已假定id=0只有一个子元素,此子元素就是根
+        root:getSubItemsById(0)[0]/*{orgname:'test',
+        	checked:false,
+        	children:[{orgname:'ok',
+        		checked:false,
+        		leaf:true},
+        		{orgname:'happylu',
+        		checked:true,
+        		leaf:true}]
+    	},*/
+        //lazyFill: true
+    });
+//mystore.root.data.children=getSubItemsById(mystore.root.id);
+function formtotree(node){
+	// 
+	//node .children=getSubItemsById(node.id);
+	node.appendChild(getSubItemsById(node.id));
+	for(var i in node .childNodes){
+		formtotree(node.childNodes[i]);
+	 }
+} 
+formtotree(mystore.root);
+    
+//Ext.require(['Ext.data.*']);
+Ext.onReady(function(){
+	var treenode=document.getElementById('treenode');
+	var mydata=new Ext.data.TreeStore({
+		//model:'Ext.data.TreeModel',
+		root:{text:'xx',
+			expanded : true,
+			children:[{text:'5'}]
+		}
+	})
+	treepan=new Ext.tree.Panel({
+		title:'组织 ',
+		store:mystore,
+		renderTo:treenode,
+		//selModel:new Ext.selection.CheckboxModel(),
+		columns:[{
+			xtype: 'treecolumn',
+			text:'org',
+			flex:1,
+			dataIndex:'org_name',
+			sortable: true
+		}]
+	});
+	treepan.expandAll();
+	xt=new Ext.XTemplate(`<li>{0}</li>`);
+	treepan.onMouseDown(function(e){
+		
+		console.log(e);});
+	treenode.onmouseup=function(e){
+		setTimeout(function(){
+		var sel=treepan.getSelection();
+		var userslist=document.getElementById('userslist');
+		//userslist.ap sel[0].data.orgname;
+		xt.overwrite('userslist',[sel[0].data.orgname]);
+		xt.compile();},100);
+		}
+});
+    }});//一切在ajax中
+</script>
+</html>

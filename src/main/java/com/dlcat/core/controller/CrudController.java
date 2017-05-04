@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
 
+import com.dlcat.common.BaseController;
 import com.dlcat.core.model.Form;
 import com.dlcat.core.model.SysUser;
 import com.dlcat.core.model.Widget;
@@ -15,7 +16,7 @@ import com.jfinal.plugin.activerecord.TableMapping;
 import com.jfinal.plugin.activerecord.generator.MappingKitGenerator;
 import com.jfinal.upload.UploadFile;
 
-public class CrudController extends Controller {
+public class CrudController extends BaseController {
 	
 	public void index() {
 	//   /query-tableName-id
@@ -135,5 +136,11 @@ public class CrudController extends Controller {
 		
 		render("userAdd.html");
 
+	}
+	public void img() {
+		
+		
+		render("img.html");
+		
 	}
 }

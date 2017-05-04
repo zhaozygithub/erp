@@ -7,8 +7,12 @@ import com.dlcat.core.Interceptor.LoginInterceptor;
 import com.dlcat.core.controller.CrudController;
 import com.dlcat.core.controller.FlowController;
 import com.dlcat.core.controller.IndexController;
+import com.dlcat.core.controller.DataController;
+import com.dlcat.core.controller.FileController;
+import com.dlcat.core.controller.SystemManageController;
 import com.dlcat.core.controller.TestController;
 import com.dlcat.core.controller.TestUserController;
+import com.dlcat.core.controller.UserController;
 import com.dlcat.core.model._MappingKit;
 import com.jfinal.config.Constants;
 import com.jfinal.config.Handlers;
@@ -41,12 +45,17 @@ public class Run extends JFinalConfig {
 		me.add("/", IndexController.class);
 		//测试路由
 		me.add("/test", TestController.class,"/views");
-		//测试路由
+		//有关form表单的展示
 		me.add("/form", CrudController.class,"/views");
 		//测试路由
 		me.add("/flow", FlowController.class,"/views");
 		//测试路由
-		me.add("/user",TestUserController.class,"views");
+		me.add("/user",TestUserController.class,"/views");
+		me.add("/data",DataController.class);
+		//文件的上传下载
+		me.add("/file",FileController.class);
+		me.add("/set",UserController.class,"/views");
+		me.add("/systemManager",SystemManageController.class,"/views");
 	}
 
 	@Override
@@ -54,6 +63,7 @@ public class Run extends JFinalConfig {
 		me.setDevMode(true);
 		PropKit.use("db.config");
 		me.setBaseUploadPath(PropKit.get("img_path"));
+//		me.setBaseDownloadPath(PropKit.get("baseDownloadPath"));
 
 	}
 

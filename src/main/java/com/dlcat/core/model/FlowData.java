@@ -3,6 +3,7 @@ package com.dlcat.core.model;
 import java.util.List;
 
 import com.dlcat.common.BaseModel;
+import com.dlcat.common.utils.StringUtils;
 import com.jfinal.plugin.activerecord.Record;
 
 /**
@@ -31,24 +32,21 @@ public class FlowData extends BaseModel<FlowData> {
 	 * @param id
 	 * @return
 	 */
-	public  static List<FlowData> getFlowDatasById(int id) {
-		List<FlowData> datas = FlowData.dao.find("select * from flow_data where id=?",id);
-		return datas;
+	public  static FlowData getFlowDatasById(String id) {
+		return StringUtils.isNotBlank(id) ? FlowData.dao.findById(id) : null;
 	}
 	
 	/**
 	 * 根据审批流程任务编号查询流程数据
 	 */
 	public static List<FlowData> getFlowDatasByFlowTaskNo(String flowTaskNo){
-		List<FlowData> datas = FlowData.dao.find("select * from flow_data where flow_task_no=?",flowTaskNo);
-		return datas;
+		return  StringUtils.isNotBlank(flowTaskNo) ? FlowData.dao.find("select * from flow_data where flow_task_no=?",flowTaskNo) : null;
 	}
 	
 	/**
 	 * 根据审批流程对象编号查询流程数据
 	 */
 	public static List<FlowData> getFlowDatasByFlowObjectNo(String flowObjectNo){
-		List<FlowData> datas = FlowData.dao.find("select * from flow_data where flow_object_no=?",flowObjectNo);
-		return datas;
+		return StringUtils.isNotBlank(flowObjectNo) ? FlowData.dao.find("select * from flow_data where flow_object_no=?",flowObjectNo) : null;
 	}
 }

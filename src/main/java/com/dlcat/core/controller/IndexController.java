@@ -16,6 +16,7 @@ import com.jfinal.core.Controller;
 import com.jfinal.kit.HashKit;
 import com.jfinal.kit.JsonKit;
 import com.jfinal.plugin.activerecord.Db;
+import com.jfinal.plugin.activerecord.TableMapping;
 
 /** 
 * @author zhaozhongyuan
@@ -43,9 +44,15 @@ public class IndexController extends Controller {
 	 * 去首页
 	 */
 	private void toIndex() {
+
+		render("index.html");
+	}
+	
+	
+	public void echarts() {
 		SysUser user=getSessionAttr("user");
 		initEchars(user);
-		render("index.html");
+		render("echarts.html");
 	}
 
 	/**
@@ -265,16 +272,6 @@ public class IndexController extends Controller {
 	* @date 2017年4月26日 下午8:12:11  
 	*/
 	private void initBarMd(SysUser user) {
-		
-	}
-
-	/**
-	* @author:zhaozhongyuan 
-	* @Description:初始化违约表格
-	* @return void   
-	* @date 2017年4月26日 下午8:12:23
-	*/
-	private void initBarWy(SysUser user) {
 		String defaultYear="";
 		//获取年份
 		String[] years=indexEchartsService.getYear_mouth(user);
@@ -285,10 +282,20 @@ public class IndexController extends Controller {
 		}
 		
 		//获取页面需要的数据
-	if (!defaultYear.equals("")) {	
+	if (!defaultYear.equals("")) {
 		Map<String, Number> map=indexEchartsService.getMdNum(defaultYear, user);
 		setAttr("barMd", map);
 	}
+	}
+
+	/**
+	* @author:zhaozhongyuan 
+	* @Description:初始化违约表格
+	* @return void   
+	* @date 2017年4月26日 下午8:12:23
+	*/
+	private void initBarWy(SysUser user) {
+		
 	
 	}
 	
@@ -327,7 +334,6 @@ public class IndexController extends Controller {
 		SysUser user=getSessionAttr("user");
 		Map<String, List<Number>> map=indexEchartsService.getMonthNum(currentYear, user);
 		renderHtml(JsonKit.toJson(map));
-
 	}
 	
 

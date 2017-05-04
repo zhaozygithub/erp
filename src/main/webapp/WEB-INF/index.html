@@ -4,454 +4,121 @@
 <meta charset="UTF-8">
 <title>dlcat index</title>
 <script type="text/javascript" src='#assets("/assets/assets.jjs")'></script>
+<script src="js/bootstrap-3.3.7-dist/js/bootstrap.min.js"></script>
+<link href="js/bootstrap-3.3.7-dist/css/bootstrap.min.css" rel="stylesheet">
+<link href="css/index.css" rel="stylesheet">
+
 </head>
 <body style="text-align: center;">
-
-	<h1>登录成功！！！</h1>
-	#@echarts()
-	<!-- 为ECharts准备一个具备大小（宽高）的Dom -->
-	<div>
-		<div id="pie" style="height: 400px; width: 48%; float: left;"></div>
-		<div id="bar" style="height: 400px; width: 48%; float: right;"></div>
-		<div id="barMd" style="height: 400px; width: 48%; float: left;"></div>
-		<div id="barWy" style="height: 400px; width: 48%; float: right;"></div>
-	</div>
-
-	<script type="text/javascript">
 	
-	$(function(){
-        // 基于准备好的dom，初始化echarts图表
-        var myChart = echarts.init($("#pie")[0],"infographic"); 
-        
-        option = {
-        	    title : {
-        	        text: '某站点用户访问来源',
-        	        x:'center'
-        	    },
-        	    tooltip : {
-        	        trigger: 'item',
-        	        formatter: "{a} <br/>{b} : {c} ({d}%)"
-        	    },
-        	    legend: {
-        	        orient : 'vertical',
-        	        x : 'left',
-        	        data:[
-        	              #for(x:pie)
-        	              '#(x.key)',
-        	              #end
-        	              
-        	             ]
-        	    },
-        	    toolbox: {
-        	        show : true,
-        	        feature : {
-        	            mark : {show: true},
-        	            dataView : {show: true, readOnly: false},
-        	            magicType : {
-        	                show: true, 
-        	                type: ['pie', 'funnel'],
-        	                option: {
-        	                    funnel: {
-        	                        x: '25%',
-        	                        width: '50%',
-        	                        funnelAlign: 'left',
-        	                        max: 1548
-        	                    }
-        	                }
-        	            },
-        	            restore : {show: true},
-        	            saveAsImage : {show: true}
-        	        }
-        	    },
-        	    calculable : true,
-        	    series : [
-        	        {
-        	            name:'访问来源',
-        	            type:'pie',
-        	            radius : '55%',
-        	            center: ['50%', '60%'],
-        	            data:[
-        	                #for(x:pie)
-        	                {value:#(x.value), name:'#(x.key)'},
-        	                #end
-        	            ]
-        	        }
-        	    ]
-        	};
+	<div class="container-fluid">
+    <div class="row">
+        <div class="content-box clearfix col-lg-12">
+            <div class="row">
+                <div class="slider-left">
+                    <div><a href="#"><img alt="logo图片" src="images/logo.png"></a></div>
+                    <div id="myTabContent" class="tab-content">
+                     #for(first :session.menuTree.children)
+                    
+                        <div class="tab-pane fade in" id="#(first.id)">
+                            
+                            #for(sec : first.children??)
+                            <ul class="list-unstyled">
+                                
+                                #for(third:sec.children??)
+                                #set(size = for.size)
+                                #end
+                                
+                                #if(size!=null)
+                                <li class="dropdown">
+                                    <a href="##(sec.id ??)" id="myTabDrop1" class="dropdown-toggle" data-toggle="dropdown">#(sec.name??)
+                                        <b class="down-down"><img class="down-down-img" alt="向下箭头" src="images/down.png"></b>
+                                         <b class="down-up"><img class="down-up-img" alt="向上箭头" src="images/up.png"></b>
+                                    </a>
+                                    
+                                    <ul class="dropdown-menu" role="menu" aria-labelledby="myTabDrop1">
+                                    
+                                    #for(third:sec.children??)
+                                        <li><a href="#" tabindex="-1" data-toggle="tab">#(third.name??)</a><b class="triangle-box"><img alt="三角" src="images/triangle.png"></b></li>
+                                    #end
+                                    </ul>
+                                </li>
+                                 #set(size = null)
+                              #else
+                               <li><a href="#iframe_box" rel="#(sec.url??)">#(sec.name??)</a></li>
+                             #end
+                            </ul> 
+                            
+                            #end
+                        </div>
+                        #end
+                        
+                      
+                    </div>
+                </div>
+                
+                <div class="col-lg-12 slider-right"> 
+                    <div class="pull-left col-lg-9">
+                        <ul id="myTab" class="nav nav-tabs list-unstyled">
+                         #for(first :session.menuTree.children)
+                            <li><a href="##(first.id)" data-toggle="tab">#(first.name??)</a></li>
+                         #end
+                        </ul>
+                    </div>
+                    <div class="pull-right">
+                        <div class="media">
+                            <a class="pull-left" href="#">
+                                <img class="media-object" src="images/people.png" alt="用户头像">
+                            </a>
+                            <div class="media-body">
+                                <h4 class="media-heading">#(session.user.name)</h4>
+                            </div>
+                        </div>
+                        <div class="pull-right">
+                            <a href="#iframe_box" rel="/set" class="set-a"><img alt="设置图片" src="images/set.png"></a>
+                            <a href="#" class="news-a"><img alt="消息图片" src="images/news.png"></a>
+                            <a href="/doExit" class="close-a">退出</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
 
-        // 为echarts对象加载数据 
-        myChart.setOption(option);
-        
-       var bar=echarts.init($("#bar")[0],"infographic");
-        bar.setOption({
-       	 
-       	 title : {
-       	        text: '年度借款数据',
-       	       // subtext: '纯属虚构'
-       	    },
-       	    tooltip : {
-       	        trigger: 'axis'
-       	    },
-       	    legend: {
-       	        data:['成交笔数','借款总额']
-       	    },
-       	    toolbox: {
-       	        show : true,
-       	        feature : {
-       	            mark : {show: true},
-       	            dataView : {show: true, readOnly: false},
-       	            magicType : {show: true, type: ['line', 'bar']},
-       	            restore : {show: true},
-       	            saveAsImage : {show: true}
-       	        }
-       	    },
-       	    calculable : true,
-       	    xAxis : [
-       	        {
-       	            type : 'category',
-       	            data : ['1月','2月','3月','4月','5月','6月','7月','8月','9月','10月','11月','12月']
-       	        }
-       	    ],
-       	    yAxis : [
-       	        {
-       	            type : 'value'
-       	        }
-       	    ],
-       	    series : [
-       	           #for(x:bar ??)   
-       	        {
-       	            name:'#(x.key)',
-       	            type:'bar',
-       	            data:[
-       	                  #for(data:x.value)
-       	                  #(data),
-       	                  #end
-       	                  ]
-       	            
-       	        },
-       	        #end
-       	    ]
-       	
-       });
-        
-        
-        
-        var barMd=echarts.init($("#barMd")[0],"infographic");
-        barMd.setOption({
-       	 
-       	 title : {
-       	        text: '机构年度数据',
-       	       // subtext: '纯属虚构'
-       	    },
-       	    tooltip : {
-       	        trigger: 'axis'
-       	    },
-       	    legend: {
-       	        data:['成交笔数','借款总额']
-       	    },
-       	    toolbox: {
-       	        show : true,
-       	        feature : {
-       	            mark : {show: true},
-       	            dataView : {show: true, readOnly: false,
-       	            	optionToContent: function (opt) {
-       	            	   var axisData = opt.xAxis[0].data;
-                          var series = opt.series;
-                          var table = '<table style="width:100%;text-align:center"><tbody><tr>'
-                                       + '<th>门店名字</th>'
-                                       + '<th>销售总额</th>'
-                                      // + '<td>' + series[1].name + '</td>'
-                                       + '</tr>';
-                          for (var i = 0, l = axisData.length; i < l; i++) {
-                              table += '<tr>'
-                                       + '<td>' + series[i].name + '</td>'
-                                       + '<td>' + series[i].data[0] + '</td>'
-                                       //+ '<td>' + series[1].data[i] + '</td>'
-                                       + '</tr>';
-                          }
-                          table += '</tbody></table>';
-                          return table;
-       	            		
-       	            	}
-       	            
-       	            
-       	            },
-       	            magicType : {show: true, type: ['line', 'bar']},
-       	            restore : {show: true},
-       	            saveAsImage : {show: true}
-       	        }
-       	    },
-       	    calculable : true,
-       	    xAxis : [
-       	        {
-       	            type : 'category',
-       	            data : [
-       	                 #for(x:barMd)
-       	                    '#(x.key)',
-       	                  #end  
-       	                    ]
-       	        }
-       	    ],
-       	    yAxis : [
-       	        {
-       	            type : 'value'
-       	        }
-       	    ],
-       	    series : [
-       	           #for(x:barMd)   
-       	        {
-       	            name:'#(x.key)',
-       	            type:'bar',
-       	            data:[
-       	                  #(x.value)
-       	                  ]
-       	            
-       	        },
-       	        #end
-       	    ]
-       	
-       });
-        
-        
-        $("#barMds").change(function(){
-    		var select=$(this).children('option:selected').val();
-    		$.ajax({
-    			   type: "POST",
-    			   url: "/getDataByYearMonth",
-    			   data: "year="+select,
-    			   success: function(msg){
-    			   var obj=$.parseJSON(msg);
-			       
-    			   var option = barMd.getOption();
-    			   var count=0
-   				   
-    			   for (x in obj){
-    				   if(obj.hasOwnProperty(x)){ 
-			           //option.series[count].name = x;   
-			           option.series[count].data[0] = obj[x];   
-    	        	   count++;  
-    	        	   } 
-    			
-    			   } 
-			      barMd.setOption(option);
-    				   
-    			   }
-    		});
-        	
-        });
-        
-        
-        
-        
-        
-        var barWy=echarts.init($("#barWy")[0],"infographic");
-        barWy.setOption({
-       	 
-       	 title : {
-       	        text: '违约统计',
-       	       // subtext: '纯属虚构'
-       	    },
-       	    tooltip : {
-       	        trigger: 'axis'
-       	    },
-       	    toolbox: {
-       	        show : true,
-       	        feature : {
-       	            mark : {show: true},
-       	            dataView : {show: true, readOnly: false},
-       	            magicType : {show: true, type: ['line', 'bar']},
-       	            restore : {show: true},
-       	            saveAsImage : {show: true}
-       	        }
-       	    },
-       	    calculable : true,
-       	    xAxis : [
-       	        {
-       	            type : 'category',
-       	            data : ['1月','2月','3月','4月','5月','6月','7月','8月','9月','10月','11月','12月']
-       	        }
-       	    ],
-       	    yAxis : [
-       	        {
-       	            type : 'value'
-       	        }
-       	    ],
-       	    series : [
-       	            
-       	        {
-       	            name:'违约',
-       	            type:'bar',
-       	            data:[1,2,5,4,1,5,2,6,5,7,6,3
-       	                  
-       	                  ]
-       	            
-       	        },
-       	       
-       	    ]
-       	
-       });
-        
-        
-        
-        $("#year").change(function(){
-    		var select=$(this).children('option:selected').val();
-    		$.ajax({
-    		
-    			   type: "POST",
-    			   url: "/initBarByYear",
-    			   data: "year="+select,
-    			   success: function(msg){
-    			   var obj=$.parseJSON(msg);
-   				   //更新数据
-			      var option = bar.getOption();
-			      option.series[0].data = obj["借款总额"];   
-			      option.series[1].data = obj["成交笔数"];   
-			      bar.setOption(option); 
-    				   
-    			   }
-    		});
-        	
-        });
-        
-        
-        
-       
-        
-	
+<div class="container-fluid body-box">
+    <div class="row">
+    <iframe src="/echarts" id="iframe_box" style="width: 100%; height: 900px;" frameborder="no" border="0" framespacing="0">
+	</iframe>
+    </div>
+</div>
+<script type="text/javascript">
+$(function() {
+	$("a").click(function(){
+		$("iframe").attr("src",this.rel);
 	});
-        
-        
-        
-       
-    </script>
+	$("#myTabContent div:first-child").addClass("active");
+	$("#myTab li:first-child").addClass("active");
+	
+	$(".down-up").css("display","none");
+	
+	$(".dropdown-toggle").click(function(){
+		//debugger;
+		var down=$(this).attr("aria-expanded");
+		if(down==undefined||down=='false'){
+			$(this).find(".down-up").css("display","");
+			$(this).find(".down-down").css("display","none");
+		}else{
+			$(this).find(".down-up").css("display","none");
+			$(this).find(".down-down").css("display","");
+		}
+	}) 
+	
+	
+})
 
+</script>
 
-<!-- <form action="/form/upload" method="post"  enctype="multipart/form-data">
-<input type="file" name="name" multiple="multiple">
-<input type="submit">
-</form> -->
-<p id="demo"></p>
-<select id="year">
-#for(year:years)
-<option value="#(year)">#(year)</option>
-#end
-</select>
-
-<select id="barMds">
-#for(year:years_month ??)
-<option value="#(year)">#(year)</option>
-#end
-</select>
-
-<select id="barWys">
-#for(year:years)
-<option value="#(year)">#(year)</option>
-#end
-</select>
-
-
-
-	<div>
-		<ul id="treeDemo" class="ztree"></ul>
-	</div>
-
-	<div sytle="width:400px;heigth:400px;">
-		<ul>
-			#if(btns==null)
-			<li>该tab页面下无定义按钮</li> #end #for(btn:btns ??)
-			<li>#(btn.name??)</li> #end
-		</ul>
-	</div>
-
-
-
-
-
-
-	<!-- <table border="1px" cellspacing="0px" cellpadding="5px">
-		<th>一级菜单</th>
-		<th>二级菜单</th>
-		<th>三级菜单</th>
-		<th>四级菜单</th>
-		<th>按钮</th> #for(first :session.menuTree.children)
-		<tr>
-			<td>#(first.name??)</td>
-		</tr>
-		#for(sec : first.children??)
-		<tr>
-			<td></td>
-			<td>#(sec.name??)</td>
-		</tr>
-		#for(third:sec.children??)
-		<tr>
-			<td></td>
-			<td></td>
-			<td>#(third.name??)</td>
-		</tr>
-
-		#for(tab : third.children??)
-		<tr>
-			<td></td>
-			<td></td>
-			<td></td>
-			<td><a href="/getBtnsBytabId/#(tab.id??)">#(tab.name??)</a></td>
-		</tr>
-		#for(btn : tab.children??)
-		<tr>
-			<td></td>
-			<td></td>
-			<td></td>
-			<td></td>
-			<td>#(btn.name??)</td>
-		</tr>
-		#end #end #end #end #end
-
-	</table> -->
-
-
-
-	###@ztree?()
-
-	<!-- <script type="text/javascript">
-		var zTreeObj;
-		// zTree 的参数配置，深入使用请参考 API 文档（setting 配置详解）
-		var setting = {
-				
-		};
-		// zTree 的数据属性，深入使用请参考 API 文档（zTreeNode 节点数据详解）
-		var zNodes = [ 
-            #for(first :session.menuTree.children)          
-		               {
-			name : '#(first.name??)',
-			url:'https://www.baidu.com/',
-			open : true,
-			children : [ 
-			 #for(sec : first.children??)           
-			             {
-				name : '#(sec.name??)',
-				open : true,
-				children:[
-                      #for(third : sec.children??)
-				          {
-				        	  name:'#(third.name??)',
-				        	  open : false
-				          },
-				       #end
-				          ]
-			}, 
-			#end
-			]
-		},
-       #end		
-		];
-		
-		$(function() {
-			zTreeObj = $.fn.zTree.init($("#treeDemo"), setting, zNodes);
-		});
-		
-		
-		
-	</script> -->
 
 </body>
 </html>

@@ -1,0 +1,171 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>菜单权限</title>
+<style type="text/css">
+body{margin-left:20px !important;  }
+.org_stru{width: 350px;display: inline;}
+#userpan{width: 60%;display: inline;float: left;}
+td{vertical-align:top;}
+</style>
+<link rel="stylesheet" type="text/css" href="/js/ext-5.1.0\packages\ext-theme-neptune\build\resources\ext-theme-neptune-all.css">
+<script type="text/javascript" src='/js/ext-5.1.0/ext-all-debug.js'></script>
+</head>
+<body>
+<div id='menuper' style='width:1100px;'>
+
+</div>
+</body>
+<script type="text/javascript">
+Ext.onReady(function(){
+	var menudata;
+	Ext.Ajax.request({url:'/data/getMenu',
+	    success:function(resp,conf){
+	        //console.log(resp);
+	        menudata=JSON.parse(resp.responseText.toString());
+	function formToCon(item){
+		var atta={checked:false,leaf:true,expandable:false};
+		if(!item||JSON.stringify(item)=='{}')return atta;
+		var stritem=(JSON.stringify(atta)+JSON.stringify(item)).replace('}{',',');
+		return JSON.parse(stritem);
+		}
+	for(var i in menudata) menudata[i]=formToCon(menudata[i]);
+	function getLevelById(id){
+		for(var i in menudata){
+			if(menudata[i].id==id){
+				return menudata[i].level;
+			}
+		}
+	}
+	function getSubItemsById(id){
+		items=[];
+		for(var i in menudata){
+			if(menudata[i].pid==id){
+				//if(level!=4)
+					items.push(menudata[i]);
+			}
+		 }
+		return items;
+	 }    
+
+var mystore=new Ext.data.TreeStore({
+	root:{name:'menu',checked:false,
+		id:0,
+		//children:[{text:'smenu',leaf:true},{text:'2menu',id:'m2'}]
+		}
+});
+function formatbuttonstohtml(buttons){
+	var html='';
+	var x="<input type='checkbox' id='checkbox?' pid=? onchange='checkboxrelation(this)'>? &nbsp;|&nbsp; ";
+	for(var i in buttons){
+		html+=x.replace('?',buttons[i].id).replace('?',buttons[i].pid).replace('?',buttons[i].name);
+	}
+	return html;
+}
+function formtotree(node){
+	// 
+	if(getLevelById(node.id)==4){
+		subItems=getSubItemsById(node.id);
+		node.data.buttons=formatbuttonstohtml(subItems);
+		node.data.buttonsid=[];
+		for(var j in  subItems)
+			node.data.buttonsid.push(subItems[j].id);
+		return;
+	}
+	//node .children=getSubItemsById(node.id);
+	node.appendChild(getSubItemsById(node.id));
+	for(var i in node .childNodes){
+		formtotree(node.childNodes[i]);
+	 }
+} 
+formtotree(mystore.root);
+   
+treepan=new Ext.tree.Panel({
+	title:"菜单权限 ",
+	store:mystore,
+	//rootVisible:false,
+	//selModel:new Ext.selection.TreeModel(),
+    autoLoad : false,  
+    autoSync : false, 
+	columns:[{
+		text:'菜单名',dataIndex:'name',
+		xtype:'treecolumn',flex:1},
+		{text:'按钮',dataIndex:'buttons',flex:3}],
+    renderTo:'menuper'});
+treepan.expandAll();
+treepan.on('checkchange',function (node){
+	console.log(node.data);
+	checknoderelation(node);
+	});
+}
+});//ajax结束 
+
+	});
+//var mystore=treepan.getStore();
+//样式关联
+function changeUi(node,state){
+	//treepan.getView().getNode(treepan.store.getById(41))
+	ndom=treepan.view.getNode(node).getElementsByClassName(' x-tree-checkbox')[0];
+	if(state)ndom.className+='  x-tree-checkbox-checked ';
+	else ndom.className='x-tree-checkbox ';
+	
+}
+//数据处理部分
+function changeparent(node){
+	try{if(node.data.checked){node.parentNode.data.checked=true;
+	changeUi(node.parentNode,true);
+	changeparent(node.parentNode);}}
+	catch(e){return;}
+}
+function changesub(node){
+	if(node.data.level!=4)
+		for(var i in node.childNodes){
+			node.childNodes[i].data.checked=node.data.checked;
+			changeUi(node.childNodes[i],node.data.checked);
+			changesub(node.childNodes[i]);
+		}
+	else
+		for(var j in node.data.buttonsid){
+			try{
+			document.getElementById('checkbox'+node.data.buttonsid[j]).checked=node.data.checked;}
+			catch(e){}
+		}
+}
+function checknoderelation(node){
+	//勾选时上级被勾选
+	//!node.parentNode.data.checked;
+	changeparent(node);
+	//勾选或取消,下级全部保持同样的变化
+	changesub(node);
+}
+function checkboxrelation(dom){//debugger;
+	var checked=dom.checked;
+	if(!checked)return;
+	var pid=document.getElementById(dom.id).getAttribute('pid');
+	var node=treepan.store.getById(pid);
+	node.data.checked=checked;
+	changeUi(node,checked);
+	changeparent(node);
+}
+//treepan.on('checkchange',checknoderelation);
+
+function getAllChecked(){
+	//var mystore=treepan.store;
+	var checkednode=treepan.getChecked();
+	var checkedid=[];
+	for(var i in checkednode){
+		checkedid.push(checkednode[i].data.id);
+	}
+	var menuper=document.getElementById('menuper');
+	var inputs=menuper.getElementsByTagName('input');
+	for(var j in inputs){
+		if(inputs[j].type=='checkbox'&&inputs[j].checked)
+			try{var id=parseInt(inputs[j].id.match(/\d+/)[0]);
+				if(!checkedid.includes(id))checkedid.push(id);}
+			catch(e){}
+	}
+	return checkedid;
+}
+</script>
+</html>

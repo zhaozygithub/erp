@@ -62,6 +62,25 @@ public class SysOrg extends BaseModel<SysOrg> {
 		
 	}
 	
+	/**
+	* @author:zhaozhongyuan 
+	* @Description:获得id集合
+	* @return String   
+	* @date 2017年5月4日 上午11:26:26  
+	*/
+	public static String  getChildrenIds(int org_id) {
+		StringBuilder sb=new StringBuilder();
+		String sql = "select * from sys_org where belong_org_id = ?";
+		List<SysOrg> list=SysOrg.dao.find(sql,org_id);
+		if (list.size()>0) {
+			for (SysOrg sysOrg : list) {
+				sb.append(sysOrg.getInt("org_id")+",");
+			}
+		}
+		return sb.toString();
+		
+	}
+	
 	public static List<SysOrg> getChildren(int org_id) {
 		String sql = "select * from sys_org where belong_org_id = ?";
 		return SysOrg.dao.find(sql,org_id);

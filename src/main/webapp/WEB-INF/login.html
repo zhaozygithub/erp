@@ -4,11 +4,16 @@
 <meta charset="UTF-8">
 <title>dlcat login</title>
 <script type="text/javascript" src='#assets("/assets/assets.jjs")'></script>
-###<link rel="stylesheet" href='#assets("/assets/assets.jcss")'/>
+###
+<link rel="stylesheet" href='#assets("/assets/assets.jcss")' />
+<link href="js/bootstrap-3.3.7-dist/css/bootstrap.min.css"
+	rel="stylesheet">
+<link href="/css/login.css" rel="stylesheet">
+<script src="/js/bootstrap-3.3.7-dist/js/bootstrap.min.js"></script>
 </head>
-<body style="text-align:center;margin-top:200px">
-	<form id="loginForm" method="post" action="/doLogin">
-		用户名：<input type="text" name="userName" class="logininput blue" value="#(userName??)"><br>
+<body style="text-align: center; margin-top: 200px">
+	<!--<form id="loginForm" method="post" action="/doLogin">
+		 用户名：<input type="text" name="userName" class="logininput blue" value="#(userName??)"><br>
 		密&nbsp;&nbsp;&nbsp;码：<input type="password" name="pwd" value="#(pwd??)"><br> <span id="msg">#(msg??)</span>
 
 		<p>
@@ -19,16 +24,66 @@
 				<img src="/captcha" height="27" onclick="this.src='/captcha?'+Math.random()"
 				style="cursor: pointer; vertical-align: middle;" />
 		</p>
-		<input type="button" value="Submit" id="loginbtn">
-	</form>
+		<input type="button" value="Submit" id="loginbtn"> 
+	</form>-->
 
-#@nest?()
+		<div class="container text-center login-txt">
+			<div class="row">
+				<div class="h2">
+					<strong>登录</strong>
+				</div>
+				<form role="form" class="text-center" id="loginForm" method="post" action="/doLogin">
+					<div class="form-group">
+						<div class="col-lg-4 col-lg-offset-4">
+							<label for="userName" class="sr-only">用户名</label>
+							<div class="col-lg-12">
+								<input type="text" class="form-control" id="userName"
+									name="userName" placeholder="请输入用户名" value="#(userName ??)">
+							</div>
+						</div>
+						<br />
+					</div>
+					<div class="form-group">
+						<div class="col-lg-4 col-lg-offset-4">
+							<label for="userPassword" class="sr-only">密码</label>
+							<div class="col-lg-12">
+								<input type="password" class="form-control" id="userPassword"
+									name="pwd" placeholder="请输入密码"  value="#(pwd ??)">
+							</div>
+						</div>
+						<br />
+					</div>
+					<div class="form-group">
+						<div class="col-lg-3 col-lg-offset-4">
+							<label for="captcha" class="sr-only">用户名</label>
+							<div class="col-lg-12" style="padding-right: 0;">
+								<input type="text" class="form-control" id="captcha"
+									name="captcha" placeholder="请输入验证码" style="width:90%;">
+							</div>
+						</div>
+						<div class="col-lg-1 valicode-box">
+							<img alt="验证码图片" class="img-responsive" src="/captcha"
+								onclick="this.src='/captcha?'+Math.random()">
+						</div>
+						<span id="msg">#(msg??)</span>
+						<br />
+					</div>
+					<div class="col-lg-4 col-lg-offset-4">
+						<button type="button" class="btn btn-warning" id="loginbtn">登录</button>
+					</div>
+				</form>
+			</div>
+		</div>
+
+
+
+
+
+	#@nest?()
 
 	<script type="text/javascript">
 		$(function() {
-			//debugger;
-			//$("#msg").html("test");
-			$(".logininput").blur(function() {
+			$(".input").blur(function() {
 				if ($(this).val() == "") {
 					$(this).css("border-color", "red");
 				} else {
@@ -36,10 +91,10 @@
 				}
 			});
 
-			 $("#loginbtn").click(function() {
-				var k = 0;
+			$("#loginbtn").click(function() {
+				 var k = 0;
 				var ajaxhtml = "";
-				/*$(".logininput").each(function(i, obj) {
+				/*$("input").each(function(i, obj) {
 					if ($(obj).val().trim() == "") {
 						k++;
 						$(this).css("border-color", "red");
@@ -47,14 +102,15 @@
 						return false;
 					}
 				});
-				if (k != 0)
-					return;*/
+				if (k != 0){
+					return;
+				} */
 				ajaxhtml = $("#loginbtn").html();
 				$("#loginbtn").html("Loading....");
 				$("#loginbtn").attr("disabled", "disabled");
 				$("#loginForm").submit();
-			}) 
-			
+			})
+
 			//输完验证码直接按回车登录
 			$('#captcha').keyup(function(event) {
 				if (event.keyCode == 13) {

@@ -3,6 +3,9 @@ package com.dlcat.service.flow;
 import java.util.List;
 import java.util.Map;
 
+import com.dlcat.common.entity.FlowApproveDate;
+import com.dlcat.core.model.SysUser;
+
 
 /**
  * 流程相关接口
@@ -20,10 +23,18 @@ public interface FlowService {
 	public List<Map<String, Object>> flowNodeHandleInfo(String flowObjectNo );
 	/**
 	 * 流程数据初始化
-	 * @param flowModelNo
+	 * 注：业务员发起一笔流程时，进行流程初始化
+	 * @param approveDate	流程审批数据
 	 * @author masai
 	 * @time 2017年4月26日 下午5:07:32
 	 */
-	public void flowInit(String flowModelNo);
-	
+	public int flowInit(FlowApproveDate approveDate);
+	/**
+	 * 创建下一个流程任务
+	 * 注：完成当前流程任务后，随机创建下一个流程任务，并指定处理人
+	 * @param approveDate	流程审批数据
+	 * @author masai
+	 * @time 2017年5月3日 上午10:06:38
+	 */
+	public int createNextFlowTask(FlowApproveDate approveDate);
 }

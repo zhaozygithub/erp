@@ -224,14 +224,6 @@ public class DateUtil {
 		return newDate;
 	}
 	
-/*	public static void main(String[] args) {
-			System.out.println(getDateIntiTime(DateUtil.getCurrentTime()));
-			System.out.println(getDateLastTime(DateUtil.getCurrentTime()));
-
-		
-		System.out.println(dateTimeFormat(1483324263));
-	}*/
-
 	public static Date dateParse(String date) {
 		if (StringUtils.isBlank(date)) {
 			return null;
@@ -254,7 +246,7 @@ public class DateUtil {
 		}
 		return null;
 	}
-	
+
 	public static Long getCurrentTime() {
 		return System.currentTimeMillis()/1000;
 	}

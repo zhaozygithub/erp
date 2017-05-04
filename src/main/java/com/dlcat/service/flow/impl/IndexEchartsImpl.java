@@ -87,11 +87,11 @@ public class IndexEchartsImpl implements IndexEchartsService {
 		
 		String where=getWhere(user);
 		
-		String sql="";
+		String sql=""; 
 		String sql2="";
 		for (int i = 0; i < 12; i++) {
 			//统计每月的成交笔数
-			sql="SELECT COUNT(t.id) count " +
+			sql="SELECT COUNT(t.id) " +
 					"FROM loan_apply_approve t " +
 					"WHERE LEFT(FROM_UNIXTIME(t.apply_time),7)='"+year_month[i]+"' AND t.status='1'"+where;
 			//统计每个月的借款总额
@@ -142,14 +142,11 @@ public class IndexEchartsImpl implements IndexEchartsService {
 		//1为总部
 		if (level==1) {
 			//总部可以看任意数据
-			List<Integer> list=Db.query("select org_id from sys_org");
-			for (Integer integer : list) {
-				ids+=integer+",";
-			}
+			ids=SysOrg.getChildrenIds(org_id);
 		//2分部
 		}else if (level==2) {
 		//获取分部以及支部
-			  ids=SysOrg.getDeptAndChildren(org_id);
+			  ids=SysOrg.getChildrenIds(org_id);
 		//3支部
 		}else if (level==3) {
 			ids=org_id+"";
@@ -159,11 +156,19 @@ public class IndexEchartsImpl implements IndexEchartsService {
 		String sql="";
 		for (String id : arr) {
 			int id1=Integer.parseInt(id);
+			StringBuilder sb=new StringBuilder();
+			sb.append(id);
 			String orgName=SysOrg.getNameById(id1);
-			
+			List<SysOrg> children=SysOrg.getChildren(id1);
+			if (children.size()>0) {
+				for (SysOrg sysOrg : children) {
+					sb.append(","+sysOrg.getInt("org_id"));
+				}
+			}
+			//查出对应月数当前所有门店的月总额
 			sql="SELECT  SUM(t.amount)\n" +
 					"FROM loan_apply_approve t \n" +
-					"WHERE LEFT(FROM_UNIXTIME(t.apply_time),7)='"+defaultYear+"' AND t.apply_org_id="+id1;
+					"WHERE LEFT(FROM_UNIXTIME(t.apply_time),7)='"+defaultYear+"' AND t.apply_org_id in ("+sb.toString()+")";
 			Object object=Db.queryFirst(sql);
 			if (object!=null) {
 				map.put(orgName,Float.parseFloat(object.toString()));

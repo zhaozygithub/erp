@@ -1,0 +1,16 @@
+
+<script type="text/javascript" src='/js/vue/vue.js'></script>
+<div id='messagetip'>
+<ul>
+	<li v-for='item in msgs'><a href='{{item.anchor}}'>{{item.text}}</a></li>
+</ul>
+</div>
+<script type="text/javascript"  >
+var xd=new Vue({
+	el:'#messagetip',
+	data:{msgs:[
+	       {text:'待处理'} ,
+	       {text:'待处理2'}     
+	            ]}
+})
+</script>

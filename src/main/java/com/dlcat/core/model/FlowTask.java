@@ -37,12 +37,22 @@ public class FlowTask extends BaseModel<FlowTask> {
 	 * 根据流程对象编号和节点编号获取流程任务
 	 */
 	public static FlowTask getFlowTaskByObjectNoAndNodeNo(String objectNo,String nodeNo){
-		FlowTask tasks=FlowTask.dao.findFirst("select * from flow_task where flow_object_no=? and cur_node_no=? ",objectNo,nodeNo);
-		return tasks;
+		return (StringUtils.isNotBlank(objectNo)&&StringUtils.isNotBlank(nodeNo)) ?
+				FlowTask.dao.findFirst("select * from flow_task where flow_object_no=? and cur_node_no=? ",objectNo,nodeNo) : null;
+	}
+	/**
+	 * 根据流程对象获取首个流程任务
+	 * @param flowObjectNo 流程对象编号
+	 * @return
+	 * @author masai
+	 * @time 2017年5月4日 下午3:12:22
+	 */
+	public static FlowTask getFristFlowTaskByObjectNo(String flowObjectNo){
+		return StringUtils.isNotBlank(flowObjectNo) ? FlowTask.dao.findFirst("select * from flow_task where flow_object=?", flowObjectNo) : null;
 	}
 	/**
 	 * 生成流程任务流水号
-	 * 注：流程首个节点对应的流程任务流水号 eg:201705030001，不是首个节点则低增1
+	 * 注：流程首个节点对应的流程任务流水号 eg:201705030001，不是首个节点则递增1
 	 * @param flowObjectNo
 	 * @return
 	 * @author masai
@@ -60,6 +70,17 @@ public class FlowTask extends BaseModel<FlowTask> {
 			flowTaskNo = flowObjectNo + "0001";
 		}
 		return flowTaskNo;
+	}
+	/**
+	 * 根据用户id获取当前用户未审批的流程总数
+	 * @author liuran
+	 * @time 2017年5月5日 下午2:46:29
+	 * @param userId
+	 * @return int
+	 */
+	public static int getWaitFlowTaskCount(int userId){
+		List<FlowTask> tasks = FlowTask.dao.find("select * from flow_task where cur_approve_user_id = ? and is_approve = '2'",userId);		
+		return tasks.size();
 	}
 }
 

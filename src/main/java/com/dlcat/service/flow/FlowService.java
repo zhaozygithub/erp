@@ -30,11 +30,11 @@ public interface FlowService {
 	 */
 	public int flowInit(FlowApproveDate approveDate);
 	/**
-	 * 创建下一个流程任务
-	 * 注：完成当前流程任务后，随机创建下一个流程任务，并指定处理人
+	 * 处理流程任务（不包括流程任务）
+	 * 注：完成当前流程任务后，即创建下一个流程任务，并指定处理人
 	 * @param approveDate	流程审批数据
 	 * @author masai
 	 * @time 2017年5月3日 上午10:06:38
 	 */
-	public int createNextFlowTask(FlowApproveDate approveDate);
+	public int handleFlowTask(FlowApproveDate approveDate);
 }

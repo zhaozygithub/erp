@@ -5,159 +5,193 @@
 <meta charset="UTF-8">
 <title>index echarts</title>
 </head>
+<script type="text/javascript" src='#assets("/assets/assets.jjs")'></script>
+<script type="text/javascript" src="js/table2excel.js"></script>
 <body>
-	#@jquery() #@echarts() #@bootstrap()
-	<!-- <div >
-    <label>订单审批流程</label><br>
-    #for(flow:flowlist)
-        #for(x:flow)
-         #(x.key)
-             #for(node:x.value)
-                #(node.node_name)
-             #end
-             
-         #end
-    #end
-    </div> -->
+
+	
+	#@echarts() #@bootstrap()
+	
 	<!-- 为ECharts准备一个具备大小（宽高）的Dom -->
 	<div>
-		<div class="echart-box" id="pie">
-		</div>
-		<div class="echart-box" id="bar">
-		
-		</div>
+		<div class="echart-box" id="pie"></div>
+		<div class="echart-box" id="bar"></div>
 		<div class="echart-box" id="barMd"></div>
 		<div class="echart-box" id="barWy"></div>
 	</div>
 
-	<select class="select-box1" id="year"> #for(year:years)
-		<option value="#(year)">#(year)</option> #end
-	</select>
-
-	<select class="select-box2" id="barMds"> #for(year:years_month
-		??)
-		<option value="#(year)">#(year)</option> #end
-	</select>
-
-	<select class="select-box3" id="barWys"> #for(year:years)
-		<option value="#(year)">#(year)</option> #end
-	</select>
-
-	<div class="container-fluid play-box">
-		<div class="row">
-			<h4 class="play-h4">订单审批流程</h4>
-		</div>
-		<div class="row">
-			<div class="play-show">
-				<span class="color-w">新贷审批流程<i class="i-left"></i><a>新贷<br>审批流程
-				</a></span><span>订单录入<b></b></span><span>提交评估<b></b></span><span>提交面审<b></b></span><span>线下考察<b></b></span><span>风控组长审核<b></b></span><span>门店经理审核<b></b></span><span>区域经理审核<b></b></span><span>签订合同<b></b></span><span>抵押登记<b></b></span><span>总经理审核<b></b></span><span><i
-					class="i-right"></i>等待放款<b></b></span>
-			</div>
-			<div class="play-show">
-				<span class="color-w">解押再贷追加额度流程<i class="i-left"></i><a>解押再贷<br>追加额度<br>流程
-				</a></span><span>订单录入<b></b></span><span>提交评估<b></b></span><span>提交面审<b></b></span><span>线下考察<b></b></span><span>风控组长审核<b></b></span><span>门店经理审核<b></b></span><span>区域经理审核<b></b></span><span>签订合同<b></b></span><span>抵押登记<b></b></span><span><i
-					class="i-right"></i>等待放款<b></b></span>
-			</div>
-		</div>
-	</div>
+   
 
 
+    <select class="select-box1" id="year"> #for(year:years)
+        <option value="#(year)">#(year)</option> #end
+    </select>
+
+    <select class="select-box2" id="barMds"> #for(year:years_month
+        ??)
+        <option value="#(year)">#(year)</option> #end
+    </select>
+
+    <select class="select-box3" id="barWys"> #for(year:years)
+        <option value="#(year)">#(year)</option> #end
+    </select>
+
+    <div class="container-fluid play-box">
+        <div class="row">
+            <h4 class="play-h4">订单审批流程</h4>
+        </div>
+        <div class="row">
+        #for(flow:flowlist)   
+            <div class="play-show">
+                <span class="color-w">#(flow.modelName)<i class="i-left"></i><a>#(flow.modelName)
+                </a></span>#for(node:flow.nodes)<span>#(node.node_name)<b></b></span>#end<span><i
+                    class="i-right"></i>流程结束<b></b></span>
+            </div>
+            #end
+             <!--<div class="play-show">
+                <span class="color-w">解押再贷追加额度流程<i class="i-left"></i><a>解押再贷<br>追加额度<br>流程
+                </a></span><span>订单录入<b></b></span><span>提交评估<b></b></span><span>提交面审<b></b></span><span>线下考察<b></b></span><span>风控组长审核<b></b></span><span>门店经理审核<b></b></span><span>区域经理审核<b></b></span><span>签订合同<b></b></span><span>抵押登记<b></b></span><span><i
+                    class="i-right"></i>等待放款<b></b></span>
+            </div> -->
+        </div>
+    </div> 
 
 
-	<script type="text/javascript">
-	
-	$(function(){
+<div style="width: 400px;height: 400px;display: none;">
+ <table id="tab3" class="table table-bordered text-center">
+ <tr><td>门店名字</td><td>总销售额</td></tr>
+ #for(x:barMd)
+ <tr><td>#(x.key)</td><td>#(x.value)</td></tr>
+ #end
+ </table>
+
+</div>
+
+    <script type="text/javascript">
+    //下载数据按钮的功能: 将json数据传到后台,后台会回应一个excel文件 
+    function downloadExcelByData(op,mode){
+        //debugger;
+        var data=[];
+        try{
+        data.push([op.xAxis[0].name].concat(op.xAxis[0].data));}catch(e){}
+        for(var i in op.series){
+            if(mode==null)
+                data.push([op.series[i].name].concat(op.series[i].data));
+            if(mode=='p'){
+                var vs=[];
+                op.series[i].data.forEach(function(a){vs.push (a.name+':'+a.value)})
+                data.push([op.series[i].name].concat(vs));
+            }
+        }
+        var json=JSON.stringify( {title: op.title.text,data:data});
+        /* var xhr=new XMLHttpRequest();
+        xhr.open('post','/file/exportExcelFromJson');
+        xhr.send('json='+json);
+        //xhr.responseText
+        xhr.onload=null; */
+        location.href='/file/exportExcelFromJson?json='+json;
+    }
+    
+    $(function(){
         // 基于准备好的dom，初始化echarts图表
         var myChart = echarts.init($("#pie")[0],"infographic"); 
         
         option = {
-        	    title : {
-        	        text: '实时客户统计',
-        	        x:'center'
-        	    },
-        	    tooltip : {
-        	        trigger: 'item',
-        	        formatter: "{a} <br/>{b} : {c} ({d}%)"
-        	    },
-        	    legend: {
-        	        orient : 'vertical',
-        	        x : 'left',
-        	        data:[
-        	              #for(x:pie)
-        	              '#(x.key)',
-        	              #end
-        	              
-        	             ]
-        	    },
-        	    toolbox: {
-        	        show : true,
-        	        feature : {
-        	            mark : {show: true},
-        	            dataView : {show: true, readOnly: false},
-        	            magicType : {
-        	                show: true, 
-        	                type: ['pie', 'funnel'],
-        	                option: {
-        	                    funnel: {
-        	                        x: '25%',
-        	                        width: '50%',
-        	                        funnelAlign: 'left',
-        	                        max: 1548
-        	                    }
-        	                }
-        	            },
-        	            restore : {show: true},
-        	            saveAsImage : {show: true}
-        	        }
-        	    },
-        	    calculable : true,
-        	    series : [
-        	        {
-        	            name:'客户统计',
-        	            type:'pie',
-        	            radius : '55%',
-        	            center: ['50%', '60%'],
-        	            data:[
-        	                #for(x:pie)
-        	                {value:#(x.value), name:'#(x.key)'},
-        	                #end
-        	            ]
-        	        }
-        	    ]
-        	};
+                title : {
+                    text: '实时客户统计',
+                    x:'center'
+                },
+                tooltip : {
+                    trigger: 'item',
+                    formatter: "{a} <br/>{b} : {c} ({d}%)"
+                },
+                legend: {
+                    orient : 'vertical',
+                    x : 'left',
+                    data:[
+                          #for(x:pie)
+                          '#(x.key)',
+                          #end
+                          
+                         ]
+                },
+                toolbox: {
+                    show : true,
+                    feature : {
+                        mark : {show: true},
+                        dataView : {show: true, readOnly: false},
+                        magicType : {
+                            show: true, 
+                            type: ['pie', 'funnel'],
+                            option: {
+                                funnel: {
+                                    x: '25%',
+                                    width: '50%',
+                                    funnelAlign: 'left',
+                                    max: 1548
+                                }
+                            }
+                        },
+                        restore : {show: true},
+                        selfButtons:{
+                            show:true,
+                            title:'exportExcel',
+                            icon:'images/excel.png', //图标    
+                            onclick:function(op){
+                                downloadExcelByData(op,'p');
+                            }
+                        },
+                        saveAsImage : {show: true},
+                    }
+                },
+                calculable : true,
+                series : [
+                    {
+                        name:'客户统计',
+                        type:'pie',
+                        radius : '55%',
+                        center: ['50%', '60%'],
+                        data:[
+                            #for(x:pie)
+                            {value:#(x.value), name:'#(x.key)'},
+                            #end
+                        ]
+                    }
+                ]
+            };
 
         // 为echarts对象加载数据 
         myChart.setOption(option);
         
        var bar=echarts.init($("#bar")[0],"infographic");
         bar.setOption({
-       	 
-       	 title : {
-       	        text: '年度借款数据',
-       	       // subtext: '纯属虚构'
-       	    },
-       	    tooltip : {
-       	        trigger: 'axis'
-       	    },
-       	    legend: {
-       	        data:['成交笔数','借款总额']
-       	    },
-       	    toolbox: {
-       	        show : true,
-       	        feature : {
-       	            mark : {show: true},
-       	            dataView : {
-       	            	show: true, 
-       	            	readOnly: false,
-       	            	optionToContent: function (opt) {
-         	            	var axisData = opt.xAxis[0].data;
+         
+         title : {
+                text: '年度借款数据',
+               // subtext: '纯属虚构'
+            },
+            tooltip : {
+                trigger: 'axis'
+            },
+            legend: {
+                data:['成交笔数','借款总额']
+            },
+            toolbox: {
+                show : true,
+                feature : {
+                    mark : {show: true},
+                    dataView : {
+                        show: true, 
+                        readOnly: false,
+                        optionToContent: function (opt) {
+                            var axisData = opt.xAxis[0].data;
                             var series = opt.series;
                             console.log(axisData);
                             
                             var table = '<table class="table table-bordered text-center"><tbody>';
                             table += '<tr><td></td>'
                             for (var i = 0; i < 12; i++) {
-                            	 table +='<td>'+axisData[i]+'</td>'
+                                 table +='<td>'+axisData[i]+'</td>'
                             }
                             table +='</tr><tr><td>成交笔数</td>';
                             
@@ -175,79 +209,78 @@
                              
                             table += '</tr></tbody></table>';
                             return table;
-       	            	}
-       	            },
-       	            magicType : {show: true, type: ['line', 'bar']},
-       	            restore : {show: true},
-       	            saveAsImage : {show: true}
-       	        }
-       	    },
-       	    calculable : true,
-       	    xAxis : [
-       	        {
-       	            type : 'category',
-       	            data : ['1月','2月','3月','4月','5月','6月','7月','8月','9月','10月','11月','12月']
-       	        }
-       	    ],
-       	    yAxis : [
-       	        {
-       	            type : 'value'
-       	        }
-       	    ],
-       	    series : [
-       	           #for(x:bar ??)   
-       	        {
-       	            name:'#(x.key)',
-       	            type:'bar',
-       	            data:[
-       	                  #for(data:x.value)
-       	                  #(data),
-       	                  #end
-       	                  ]
-       	            
-       	        },
-       	        #end
-       	    ]
-       	
-       });
+                        }
+                    },
+                    magicType : {show: true, type: ['line', 'bar']},
+                    restore : {show: true},
+                    selfButtons:{
+                            show:true,
+                            title:'exportExcel',
+                            icon:'images/excel.png', //图标    
+                         onclick:function(op){
+                                downloadExcelByData(op);
+                            }
+                        },
+                        saveAsImage : {show: true},
+                }
+            },
+            calculable : true,
+            xAxis : [
+                {
+                    type : 'category',
+                    data : ['1月','2月','3月','4月','5月','6月','7月','8月','9月','10月','11月','12月']
+                }
+            ],
+            yAxis : [
+                {
+                    type : 'value'
+                }
+            ],
+            series : [
+                   #for(x:bar ??)   
+                {
+                    name:'#(x.key)',
+                    type:'bar',
+                    data:[
+                          #for(data:x.value)
+                          #(data),
+                          #end
+                          ]
+                    
+                },
+                #end
+            ]
         
-     // 文件下载
-        jQuery.download = function(url,filedir){
-            jQuery('<form action="'+url+'" method="post">' +  // action请求路径及推送方法
-                        '<input type="text" name="path" value="'+filedir+'"/>' + // 文件路径
-                        //'<input type="text" name="filename" value="'+filename+'"/>' + // 文件名称
-                    '</form>')
-            .appendTo('body').submit().remove();
-        };
+       });
         
         
         var barMd=echarts.init($("#barMd")[0],"infographic");
         barMd.setOption({
-       	 
-       	 title : {
-       	        text: '机构年度数据',
-       	       // subtext: '纯属虚构'
-       	    },
-       	    tooltip : {
-       	        trigger: 'axis',
-       	     axisPointer : {            // 坐标轴指示器，坐标轴触发有效
+         
+         title : {
+                text: '机构年度数据',
+               // subtext: '纯属虚构'
+            },
+            tooltip : {
+                trigger: 'axis',
+             axisPointer : {            // 坐标轴指示器，坐标轴触发有效
                  type : 'shadow'       // 默认为直线，可选为：'line' | 'shadow'
              }
-       	    },
-       	   // legend: {
-       	   //     data:['成交笔数','借款总额']
-       	   // },
-       	    toolbox: {
-       	        show : true,
-       	        feature : {
-       	            mark : {show: true},
-       	            dataView : {show: true, readOnly: false,
-       	            	optionToContent: function (opt) {
-       	            	  var axisData = opt.xAxis[0].data;
+            },
+           // legend: {
+           //     data:['成交笔数','借款总额']
+           // },
+            toolbox: {
+                show : true,
+                feature : {
+                    mark : {show: true},
+                    dataView : {show: true, readOnly: false,
+                        optionToContent: function (opt) {
+                          var axisData = opt.xAxis[0].data;
                           var series = opt.series;
-                          var table = '<table class="table table-bordered text-center"><tbody><tr>'
-                                       + '<td>门店名字</td>'
-                                       + '<td>销售总额</td>'
+                          var table = '<table id="md" class="table table-bordered text-center"><tbody><tr>'
+                                       + '<th>门店名字</th>'
+                                       + '<th>销售总额</th>'
                                        + '</tr>';
                           for (var i = 0, l = axisData.length; i < l; i++) {
                               table += '<tr>'
@@ -257,50 +290,38 @@
                           }
                           table += '</tbody></table>';
                           return table;
-       	            		
-       	            	}
-       	            },
-       	            magicType : {show: true, type: ['line', 'bar']},
-       	            restore : {show: true},
-       	            selfButtons:{//自定义按钮 danielinbiti,这里增加，selfbuttons可以随便取名字    
+                            
+                        }
+                    },
+                    magicType : {show: true, type: ['line', 'bar']},
+                    restore : {show: true},
+                    selfButtons:{//自定义按钮 danielinbiti,这里增加，selfbuttons可以随便取名字    
                      show:true,//是否显示    
                      title:'导出', //鼠标移动上去显示的文字    
                      icon:'images/excel.png', //图标    
                      option:{},    
                      onclick:function(opt) {//点击事件,这里的option1是chart的option信息    
-                    	 var year=$("#barMds").children('option:selected').val();
-                    	 $.ajax({
-                             type : 'POST',
-                             dataType : 'json',
-                             async : false,
-                             url : "/file/exportData", // 生成文件，保存在服务器
-                             data : {'data':year},
-                             success : function(data) {
-                                var result = data["success"];
-                                 if (result == "true") {
-                                     
-                                     $.download('/file',data["path"]); // 下载文件
-                                 } else {
-                                     alert("数据导出失败！");
-                                 } 
-                             },
-                             error : function(XMLHttpRequest, textStatus, e) {
-                                 console.log("oilDetection.js  method exportOilDetection" + e);
-                             }
-                     });
+                    	var year=$("#barMds").children('option:selected').val();
+                    	  $("#tab3").table2excel({
+         					exclude: ".noExl",
+         					name: year,
+         					filename: year+"机构年度数据",
+         					exclude_img: true,
+         					exclude_links: true,
+         					exclude_inputs: true
+         				});
                            
-                           
-                           }    
+                          }    
                       },
                        
-       	            saveAsImage : {show: true}
-       	        }
-       	    },
-       	    calculable : true,
-       	    xAxis : [
-       	        {
-       	            type : 'category',
-       	        axisLabel:{
+                    saveAsImage : {show: true}
+                }
+            },
+            calculable : true,
+            xAxis : [
+                {
+                    type : 'category',
+                axisLabel:{
                      interval:0,
                      rotate:45,
                      margin:2,
@@ -308,57 +329,65 @@
                      color:"#222"
                    }
                },
-       	            data : [
-       	                 #for(x:barMd)
-       	                    '#(x.key)',
-       	                  #end  
-       	                    ]
-       	        }
-       	    ],
-       	    yAxis : [
-       	        {
-       	            type : 'value'
-       	        }
-       	    ],
-       	    series : [
-       	        {
-       	            type:'bar',
-       	            data:[ #for(x:barMd) 
-       	                  #(x.value),
-       	                  #end
-       	                  ]
-       	        }
-       	        
-       	    ]
-       	
+                    data : [
+                         #for(x:barMd)
+                            '#(x.key)',
+                          #end  
+                            ]
+                }
+            ],
+            yAxis : [
+                {
+                    type : 'value'
+                }
+            ],
+            series : [
+                {
+                    type:'bar',
+                    data:[ #for(x:barMd) 
+                          #(x.value),
+                          #end
+                          ]
+                }
+                
+            ]
+        
        });
         
+       
         
         $("#barMds").change(function(){
-    		var select=$(this).children('option:selected').val();
-    		$.ajax({
-    			   type: "POST",
-    			   url: "/getDataByYearMonth",
-    			   data: "year="+select,
-    			   success: function(msg){
-			       debugger;
-    			   var obj=$.parseJSON(msg);
-    			   var option = barMd.getOption();
-    			   var count=0
-   				   
-    			   for (x in obj){
-    				   if(obj.hasOwnProperty(x)){ 
-			           //option.series[count].name = x;   
-			           option.series[0].data[count] = obj[x];   
-    	        	   count++;  
-    	        	   } 
-    			
-    			   } 
-			      barMd.setOption(option);
-    				   
-    			   }
-    		});
-        	
+            var select=$(this).children('option:selected').val();
+            $.ajax({
+                   type: "POST",
+                   url: "/getDataByYearMonth",
+                   data: "year="+select,
+                   success: function(msg){
+                // debugger;
+                	   
+                   var obj=$.parseJSON(msg);
+                   var option = barMd.getOption();
+                   var count=0
+                   var datas=[];
+                   for (x in obj){
+                       if(obj.hasOwnProperty(x)){ 
+                       option.series[0].data[count] = obj[x];
+                       datas.push(obj[x]);
+                       count++;  
+                       } 
+                
+                   } 
+                  barMd.setOption(option);
+                   
+                  var tableObj = document.getElementById("tab3");
+             	 for (var i = 0; i < tableObj.rows.length; i++) {
+             		 //从1开始赋值，因为0为th标头
+             	   tableObj.rows[i+1].cells[1].innerText=datas[i]; 
+             	 }
+                  
+                   }
+            });
+            
         });
         
         
@@ -367,79 +396,78 @@
         
         var barWy=echarts.init($("#barWy")[0],"infographic");
         barWy.setOption({
-       	 
-       	 title : {
-       	        text: '违约统计',
-       	       // subtext: '纯属虚构'
-       	    },
-       	    tooltip : {
-       	        trigger: 'axis'
-       	    },
-       	    toolbox: {
-       	        show : true,
-       	        feature : {
-       	            mark : {show: true},
-       	            dataView : {show: true, readOnly: false},
-       	            magicType : {show: true, type: ['line', 'bar']},
-       	            restore : {show: true},
-       	            saveAsImage : {show: true}
-       	        }
-       	    },
-       	    calculable : true,
-       	    xAxis : [
-       	        {
-       	            type : 'category',
-       	            data : ['1月','2月','3月','4月','5月','6月','7月','8月','9月','10月','11月','12月']
-       	        }
-       	    ],
-       	    yAxis : [
-       	        {
-       	            type : 'value'
-       	        }
-       	    ],
-       	    series : [
-       	            
-       	        {
-       	            name:'违约',
-       	            type:'bar',
-       	            data:[1,2,5,4,1,5,2,6,5,7,6,3
-       	                  
-       	                  ]
-       	            
-       	        },
-       	       
-       	    ]
-       	
+         
+         title : {
+                text: '违约统计',
+               // subtext: '纯属虚构'
+            },
+            tooltip : {
+                trigger: 'axis'
+            },
+            toolbox: {
+                show : true,
+                feature : {
+                    mark : {show: true},
+                    dataView : {show: true, readOnly: false},
+                    magicType : {show: true, type: ['line', 'bar']},
+                    restore : {show: true},
+                    saveAsImage : {show: true}
+                }
+            },
+            calculable : true,
+            xAxis : [
+                {
+                    type : 'category',
+                    data : ['1月','2月','3月','4月','5月','6月','7月','8月','9月','10月','11月','12月']
+                }
+            ],
+            yAxis : [
+                {
+                    type : 'value'
+                }
+            ],
+            series : [
+                    
+                {
+                    name:'违约',
+                    type:'bar',
+                    data:[1,2,5,4,1,5,2,6,5,7,6,3
+                          
+                          ]
+                    
+                },
+               
+            ]
+        
        });
         
         
-        
         $("#year").change(function(){
-    		var select=$(this).children('option:selected').val();
-    		$.ajax({
-    		
-    			   type: "POST",
-    			   url: "/initBarByYear",
-    			   data: "year="+select,
-    			   success: function(msg){
-    			   var obj=$.parseJSON(msg);
-   				   //更新数据
-			      var option = bar.getOption();
-			      option.series[0].data = obj["借款总额"];   
-			      option.series[1].data = obj["成交笔数"];   
-			      bar.setOption(option); 
-    				   
-    			   }
-    		});
-        	
+            var select=$(this).children('option:selected').val();
+            $.ajax({
+            
+                   type: "POST",
+                   url: "/initBarByYear",
+                   data: "year="+select,
+                   success: function(msg){
+                   var obj=$.parseJSON(msg);
+                   //更新数据
+                  var option = bar.getOption();
+                  option.series[0].data = obj["借款总额"];   
+                  option.series[1].data = obj["成交笔数"];   
+                  bar.setOption(option); 
+                       
+                   }
+            });
+            
         });
         
         
         
        
         
-	
-	});
+    
+    });
         
         
         

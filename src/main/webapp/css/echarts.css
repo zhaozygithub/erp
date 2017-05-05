@@ -24,12 +24,12 @@
 	left: 49%;
 	}
 	
-	.table>tbody>tr>td{
+table>tbody>tr>td{
 	height:76px !important;
 	line-height:76px  !important;
 	padding:0  !important;
 }
-table:first-child tr:first-child td{
+table tr:first-child td{
 	height:30px !important;
 	line-height:30px  !important;
 	padding:0  !important;

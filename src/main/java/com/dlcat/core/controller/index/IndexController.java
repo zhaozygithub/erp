@@ -9,6 +9,7 @@ import java.util.Map;
 import com.dlcat.core.model.FlowModel;
 import com.dlcat.core.model.FlowNode;
 import com.dlcat.core.model.SysMenu;
+import com.dlcat.core.model.SysOrg;
 import com.dlcat.core.model.SysRole;
 import com.dlcat.core.model.SysUser;
 import com.dlcat.service.echarts.IndexEchartsService;
@@ -47,6 +48,10 @@ public class IndexController extends Controller {
 	 * 去首页
 	 */
 	private void toIndex() {
+		SysUser user = (SysUser) getSessionAttr("user");
+		int userId = user.getInt("id");
+		setAttr("orgName", SysOrg.getNameByUserId(userId));
+		setAttr("roleName", SysRole.getRoleNameByUserId(userId));
 		render("/WEB-INF/index.html");
 	}
 	
@@ -256,7 +261,7 @@ public class IndexController extends Controller {
 		setAttr("columns", columns_);
 		setAttr("data", list);
 
-		render("views/table.html");
+		render("table.html");
 	}
 	
 	/**

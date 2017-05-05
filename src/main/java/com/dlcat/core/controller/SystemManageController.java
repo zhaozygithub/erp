@@ -10,4 +10,7 @@ public class SystemManageController extends BaseController {
 	public void orgManage(){
 		render("orgManage.html");
 	}
+	public void userManage(){
+		render("userManage.html");
+	}
 }

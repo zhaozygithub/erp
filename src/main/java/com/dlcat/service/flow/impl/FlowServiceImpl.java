@@ -62,31 +62,21 @@ public class FlowServiceImpl extends BaseService implements FlowService {
 	public int flowInit(FlowApproveDate approveDate) {
 		/*1.订单录入  2.订单评估   3.订单审核	4.区域风控	5.总部风控	6.签订合同	
 		  7.总部贷款中心审核（线上 or 线下）	8.若是线下则进行财务审核，否则借款申请流程结束*/
-		
-		//业务员录入借款申请之后，在提交下一步审核的时候先对借款申请信息进行校验，
-		//然后再创建流程对象和流程任务。
 		try {
-			//（1）.数据准备
-			//根据借款申请编号查询借款申请记录
-			//LoanApplyApprove loanApplyApprove = approveDate.getLoanApplyApprove();
-			//根据借款申请编号获取所有的借款申请数据资料
-			//List<LoanApplyApproveData> applyApproveDataList = LoanApplyApproveData.getLoanDateListByApplyId(loanApplyId);
-			//根据流程模型编号查询流程首个节点
-			//FlowNode flowNode = FlowNode.getFlowNodeFristByModelNo(flowModelNo);
-			//（2）.创建流程对象
+			//（1）.创建流程对象
 			insertFlowObject(approveDate.getLoanApplyApprove() , approveDate.getCurApproveUser());
-			//（3）.创建流程初始化任务
+			//（2）.创建流程初始化任务
 			insertFlowTask(approveDate);
-			//（4）更新流程对象（初始化更新）
-			
-			//（5）.创建流程下一个任务
+			//（3）更新流程对象（初始化更新）
+			updateFlowObject(approveDate);
+			//（4）.创建流程下一个任务
 				//修改链式流程节点
 			approveDate.setFlowNodeChainList(FlowNode.getFlowNodeChain(
 					approveDate.getFlowNodeChainList().get(1).getStr("node_no")));
-			createNextFlowTask(approveDate);
-			//（6）.更新流程对象（创建下一个更新）
-			
-			
+				//修改上一个流程任务
+			approveDate.setPreFlowTask(FlowTask.getFristFlowTaskByObjectNo(
+					approveDate.getLoanApplyApprove().getStr("id")));//流程对象编号=借款编号
+			insertFlowTask(approveDate);
 		} catch (Exception e) {
 			e.printStackTrace();
 			return 0;
@@ -94,22 +84,62 @@ public class FlowServiceImpl extends BaseService implements FlowService {
 		return 1;
 	}
 	
-	public int createNextFlowTask(FlowApproveDate approveDate) {
+	public int handleFlowTask(FlowApproveDate approveDate) {
 		//从页面获取下一个执行人、审批意见、
 		int result = -1;
 		try {
-			//（1）.更新上一个流程任务记录	审批意见+审批时间
-			
+			//（1）.更新上一个流程任务记录	审批意见+审批时间+下一个流程任务审批人信息(编号、名称)
+			updateCurFlowTask(approveDate);
 			//（2）.创建下一个流程记录
 			result = insertFlowTask(approveDate);
 			//（3）.更新流程对象表
-			
+			updateFlowObject(approveDate);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
 		return result;
 	}
 	
+	/**
+	 * 更新当前流程任务记录
+	 * @param approveDate
+	 * @return
+	 * @author masai
+	 * @time 2017年5月4日 下午4:17:49
+	 */
+	private int updateCurFlowTask(FlowApproveDate approveDate){
+		try {
+			FlowTask flowTask = approveDate.getCurFlowTask();
+			flowTask.set("cur_approve_time", approveDate.getApproveTime());	//当前流程任务审批时间
+			flowTask.set("cur_approve_opinion", approveDate.getOpinion());  //当前流程审批意见
+			flowTask.set("next_approve_user_id", approveDate.getNextApproveUser().get("id"));	//下一个审批人编号
+			flowTask.set("next_approve_user_name", approveDate.getNextApproveUser().get("name"));//下一个审批人名称
+			return baseModel.baseUpdate(FlowTask.class	, "task_no", flowTask.toRecord());
+		} catch (Exception e) {
+			e.printStackTrace();
+			return -1;
+		}
+	}
+	/**
+	 * 更新流程对象
+	 * @param approveDate
+	 * @return
+	 * @author masai
+	 * @time 2017年5月4日 下午4:30:28
+	 */
+	private int updateFlowObject(FlowApproveDate approveDate){
+		try {
+			FlowObject flowObject = approveDate.getFlowObject();
+			flowObject.set("current_node_no", approveDate.getFlowNodeChainList().get(1).getStr("node_no"));	//当前节点编号
+			flowObject.set("current_node_name", approveDate.getFlowNodeChainList().get(1).getStr("node_name"));//当前节点名称
+			flowObject.set("current_node_user_id", approveDate.getCurApproveUser().get("id"));//当前审批人编号
+			flowObject.set("current_node_user_name", approveDate.getCurApproveUser().get("name"));//当前审批人名称
+			return baseModel.baseUpdate(FlowObject.class, "object_no", flowObject.toRecord());
+		} catch (Exception e) {
+			e.printStackTrace();
+			return -1;
+		}
+	}
 	/**
 	 * 插入一条流程任务记录
 	 * 注意：流程任务初始化(创建第一条流程任务) 与 创建下一个流程任务 都走此方法
@@ -136,14 +166,14 @@ public class FlowServiceImpl extends BaseService implements FlowService {
 			columnsMap.put("pre_approve_time",approveDate.getPreFlowTask().get("cur_approve_time"));
 			//当前节点	上一节点不为空表示不是流程任务初始化
 			columnsMap.put("cur_node_no",flowNodes.get(1).get("node_no"));
-			columnsMap.put("cur_node_name",flowNodes.get(1).get("node_no"));
+			columnsMap.put("cur_node_name",flowNodes.get(1).get("node_name"));
 			columnsMap.put("cur_approve_user_id",approveDate.getNextApproveUser().get("id"));
 			columnsMap.put("cur_approve_user_name",approveDate.getNextApproveUser().get("name"));
 			columnsMap.put("is_approve",2);//未审批
 		}else{
 			//当前节点	上一节点为空表示为流程任务初始化
 			columnsMap.put("cur_node_no",flowNodes.get(1).get("node_no"));
-			columnsMap.put("cur_node_name",flowNodes.get(1).get("node_no"));
+			columnsMap.put("cur_node_name",flowNodes.get(1).get("node_name"));
 			columnsMap.put("cur_approve_user_id",approveDate.getCurApproveUser().get("id"));//当前审批人是当前用户
 			columnsMap.put("cur_approve_user_name",approveDate.getCurApproveUser().get("name"));
 			columnsMap.put("cur_approve_opinion",approveDate.getOpinion());
@@ -152,10 +182,12 @@ public class FlowServiceImpl extends BaseService implements FlowService {
 		}
 		//下一节点
 		if(flowNodes.get(2) != null){
-			columnsMap.put("next_node_no",approveDate.getPreFlowTask().get("next_node_no"));
-			columnsMap.put("next_node_name",approveDate.getPreFlowTask().get("next_node_name"));
-			columnsMap.put("next_approve_user_id",approveDate.getNextApproveUser().getInt("id"));
-			columnsMap.put("next_approve_user_name",approveDate.getNextApproveUser().getInt("name"));
+			columnsMap.put("next_node_no",flowNodes.get(2).get("node_no"));
+			columnsMap.put("next_node_name",flowNodes.get(2).get("node_name"));
+			/*if(approveDate.getNextApproveUser() != null){
+				columnsMap.put("next_approve_user_id",approveDate.getNextApproveUser().getInt("id"));
+				columnsMap.put("next_approve_user_name",approveDate.getNextApproveUser().getInt("name"));
+			}*/
 		}
 		record.setColumns(columnsMap);
 		return baseModel.baseInsert(FlowTask.class, "task_no", record);
@@ -175,7 +207,7 @@ public class FlowServiceImpl extends BaseService implements FlowService {
 		FlowModel flowModel = FlowModel.getFlowModelByFlowType(loanApplyApprove.getInt("category_id"));
 		Record record = new Record();
 		Map<String,Object> columnsMap = new HashMap<String, Object>();
-		columnsMap.put("object_no", loanApplyApprove.get("id"));
+		columnsMap.put("object_no", loanApplyApprove.get("id"));//业务编号=流程对象编号
 		columnsMap.put("object_name", loanApplyApprove.get("loan_name"));
 		columnsMap.put("flow_model_id", flowModel.get("id"));
 		columnsMap.put("flow_model_name", flowModel.get("name"));

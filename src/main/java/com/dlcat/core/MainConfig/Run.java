@@ -14,6 +14,7 @@ import com.dlcat.core.controller.UserController;
 import com.dlcat.core.controller.customer.PossibleCustomerController;
 import com.dlcat.core.controller.index.FileController;
 import com.dlcat.core.controller.index.IndexController;
+import com.dlcat.core.controller.indexMessage.MessageController;
 import com.dlcat.core.model._MappingKit;
 import com.jfinal.config.Constants;
 import com.jfinal.config.Handlers;
@@ -40,7 +41,7 @@ public class Run extends JFinalConfig {
 
 	@Override
 	public void configRoute(Routes me) {
-		//所有的html文件都放在web-inf下
+		//所有的html文件都放在WEB-INF下
 		me.setBaseViewPath("/WEB-INF/views");
 		
 		//控制台模块
@@ -52,6 +53,10 @@ public class Run extends JFinalConfig {
 		me.add("/form", CrudController.class);
 		//我的意向客户
 		me.add("/possibleCustomer",PossibleCustomerController.class,"/customer");
+		//个人信息设置
+		me.add("/set",UserController.class,"/user_set");
+		//首页消息统计
+		me.add("/message",MessageController.class,"/index_message");
 		
 		
 		
@@ -64,8 +69,9 @@ public class Run extends JFinalConfig {
 		me.add("/user",TestUserController.class,"/views");
 		me.add("/data",DataController.class);
 		
-		me.add("/set",UserController.class,"/views");
-		me.add("/systemManager",SystemManageController.class,"/views");
+		
+		me.add("/systemManage",SystemManageController.class);
+		
 	}
 
 	@Override

@@ -29,10 +29,6 @@ public class FlowApproveDate {
 	 */
 	private SysUser curApproveUser;
 	/**
-	 * 下一个审批人
-	 */
-	private SysUser nextApproveUser;
-	/**
 	 * 当前流程审批意见
 	 */
 	private String opinion;
@@ -41,6 +37,10 @@ public class FlowApproveDate {
 	 */
 	private Long approveTime;
 	/**
+	 * 下一个审批人
+	 */
+	private SysUser nextApproveUser;
+	/**
 	 * 流程审批节点链	上一个节点+当前节点+下一个节点
 	 */
 	private List<FlowNode> flowNodeChainList;
@@ -48,6 +48,10 @@ public class FlowApproveDate {
 	 * 上一个流程审批任务
 	 */
 	private FlowTask preFlowTask;
+	/**
+	 * 当前流程审批任务
+	 */
+	private FlowTask curFlowTask;
 	
 	public Long getApproveTime() {
 		return approveTime;
@@ -96,5 +100,11 @@ public class FlowApproveDate {
 	}
 	public void setLoanApplyApprove(LoanApplyApprove loanApplyApprove) {
 		this.loanApplyApprove = loanApplyApprove;
+	}
+	public FlowTask getCurFlowTask() {
+		return curFlowTask;
+	}
+	public void setCurFlowTask(FlowTask curFlowTask) {
+		this.curFlowTask = curFlowTask;
 	}
 }

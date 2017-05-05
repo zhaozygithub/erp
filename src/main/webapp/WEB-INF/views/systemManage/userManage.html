@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>用户管理</title>
+<script type="text/javascript" src='/js/vue/vue.js'></script>
+<style type="text/css">
+table tr:nth-child(even) {background:#DDF;}
+tr{border-style:solid;border-width:0.5px;}
+td{min-width:5px;}
+</style>
+</head>
+<body style='width: 98%;margin:1%;'>
+<div id='usertable'>
+<div id='condition'>
+用户名<input name='username'>
+<button onclick='seek()'>查找</button>
+</div>
+<table id='u_tb' style='overflow:auto;'>
+<tr><th >勾选</th> <th v-for='(v,key) in userdatas[0]'>{{key}}</th></tr>
+<tr  v-for='user in userdatas'><td><input type="checkbox" :id='user.name'></td>
+<td v-for=' item  in user'>  {{item}}</td></tr>
+</table>
+<p>总条数：{{userdatas.length}} 条 每页显示：20 条 总页数：1 页</p>
+</div>
+<script type="text/javascript">
+
+var xhr=new XMLHttpRequest();
+xhr.open('get','/data/getUser');
+xhr.send();
+xhr.onload=function(resp){
+	var userdata=JSON.parse( resp.target.responseText);
+	var xd=new Vue({
+		el:'#usertable',
+		data:{'userdatas':userdata}
+	});
+
+}
+function seek(){
+var conditionnode=document.getElementById('condition');
+var inputs=conditionnode.getElementsByTagName('input');
+var conditions='';
+for(var i in inputs){
+	if(inputs[i].value!=null&&inputs[i].value!='')
+	conditions+=inputs[i].name+':\''+inputs[i].value.trim()+'\', ';
+}
+var xhr=new XMLHttpRequest();
+xhr.open('get','/data/getUser');
+xhr.send('condition='+conditions);
+xhr.onload=function(resp){
+	var userdata=JSON.parse( resp.target.responseText);}
+}
+// seek();
+</script>
+</body>
+</html>

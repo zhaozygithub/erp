@@ -2,35 +2,42 @@
 <html>
 <head>
 <style type="text/css">
-.dropdown b{
-	position:absolute;
-	right:24px !important;
-	top:14px !important;
-}
-.slider-left li{
-    background-color: #505050 !important;
-    border-bottom: 1px solid #333;
-}
-.dropdown-menu li {
-    background-color: #211c20 !important;
+.dropdown b {
+	position: absolute;
+	right: 24px !important;
+	top: 14px !important;
 }
 
-.slider-left ul li a, .dropdown-menu ul li a{
+.slider-left li {
+	background-color: #505050 !important;
+	border-bottom: 1px solid #333;
+}
+
+.dropdown-menu li {
+	background-color: #211c20 !important;
+}
+
+.slider-left ul li a, .dropdown-menu ul li a {
 	color: #ffffff !important;
 }
-.dropdown-menu li a{
+
+.dropdown-menu li a {
 	color: #999999 !important;
 }
-#sidebar > ul > li.active > a, #sidebar > ul > li >a:hover, #sidebar > ul > li:hover>a {
-    background: #d38606 !important;
+
+#sidebar>ul>li.active>a, #sidebar>ul>li>a:hover, #sidebar>ul>li:hover>a
+	{
+	background: #d38606 !important;
 }
-.dropdown-menu li b{
-	position:absolute;
-	top:0 !important;
-	right:-10px !important;
-	display:none;
+
+.dropdown-menu li b {
+	position: absolute;
+	top: 0 !important;
+	right: -10px !important;
+	display: none;
 }
-.dropdown:hover,.slider-left li:hover{
+
+.dropdown:hover, .slider-left li:hover {
 	background-color: #d38606 !important;
 }
 </style>
@@ -38,127 +45,162 @@
 <title>dlcat index</title>
 <script type="text/javascript" src='#assets("/assets/assets.jjs")'></script>
 <script src="js/bootstrap-3.3.7-dist/js/bootstrap.min.js"></script>
-<link href="js/bootstrap-3.3.7-dist/css/bootstrap.min.css" rel="stylesheet">
+<link href="js/bootstrap-3.3.7-dist/css/bootstrap.min.css"
+	rel="stylesheet">
 <link href="css/index.css" rel="stylesheet">
 
 </head>
 <body style="text-align: center;">
-	
+
 	<div class="container-fluid">
-    <div class="row">
-        <div class="content-box clearfix col-lg-12">
-            <div class="row">
-                <div class="slider-left">
-                    <div><a href="#"><img alt="logo图片" src="images/logo.png"></a></div>
-                    <div id="myTabContent" class="tab-content">
-                     #for(first :session.menuTree.children)
-                    
-                        <div class="tab-pane fade in" id="#(first.id)">
-                            
-                            #for(sec : first.children??)
-                            <ul class="list-unstyled">
-                                
-                                #for(third:sec.children??)
-                                #set(size = for.size)
-                                #end
-                                
-                                #if(size!=null)
-                                <li class="dropdown">
-                                    <button type="button" class="btn dropdown-toggle" id="dropdownMenu1" 
-                                        data-toggle="dropdown" style="width:180px; height:54px; color:#fff; background-color:transparent !important; border:none; font-size:16px;">
-                                    <a href="##(sec.id ??)">#(sec.name??)</a>
-	                                     <b class="down-up"><img class="down-up-img" alt="向上箭头" src="images/up.png"></b>
-	                                     <b class="down-down"><img class="down-down-img" alt="向下箭头" src="images/down.png"></b>
-	                                </button>
-                                    
-                                    <ul class="dropdown-menu" role="menu" aria-labelledby="myTabDrop1">
-                                    
-                                    #for(third:sec.children??)
-                                        <li><a href="#" rel="#(third.url??)" tabindex="-1" data-toggle="tab">#(third.name??)</a><b class="triangle-box"><img alt="三角" src="images/triangle.png"></b></li>
-                                    #end
-                                    </ul>
-                                </li>
-                                 #set(size = null)
-                              #else
-                               <li><a href="#iframe_box" rel="#(sec.url??)">#(sec.name??)</a></li>
-                             #end
-                            </ul> 
-                            
-                            #end
-                        </div>
-                        #end
-                        
-                      
-                    </div>
-                </div>
-                
-                <div class="col-lg-12 slider-right"> 
-                    <div class="pull-left col-lg-9">
-                        <ul id="myTab" class="nav nav-tabs list-unstyled">
-                         #for(first :session.menuTree.children)
-                            <li><a href="##(first.id)" data-toggle="tab">#(first.name??)</a></li>
-                         #end
-                        </ul>
-                    </div>
-                    <div class="pull-right">
-                        <div class="media">
-                            <a class="pull-left" href="#">
-                                <img class="media-object" src="images/people.png" alt="用户头像">
-                            </a>
-                            <div class="media-body">
-                                <h4 class="media-heading">#(session.user.name)</h4>
-                            </div>
-                        </div>
-                        <div class="pull-right">
-                            <a href="#iframe_box" rel="/set" class="set-a"><img alt="设置图片" src="images/set.png"></a>
-                            <a href="#" class="news-a"><img alt="消息图片" src="images/news.png"></a>
-                            <a href="/doExit" class="close-a">退出</a>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-</div>
+		<div class="row">
+			<div class="content-box clearfix col-lg-12">
+				<div class="row">
+					<div class="slider-left">
+						<div>
+							<a href="#"><img alt="logo图片" src="images/logo.png"></a>
+						</div>
+						<div id="myTabContent" class="tab-content">
+							#for(first :session.menuTree.children)
 
-<div class="container-fluid body-box">
-    <div class="row">
-    <iframe src="/echarts" id="iframe_box" style="width: 100%; height: 900px;" frameborder="no" border="0" framespacing="0">
-	</iframe>
-    </div>
-</div>
-<script type="text/javascript">
-    $(function() {
-	
-    	$("a").click(function(){
-		//debugger;
-		if(this.rel!=""){
-		$("iframe").attr("src",this.rel);
-		}
-		
-	});
-	
+							<div class="tab-pane fade in" id="#(first.id)">
 
-	$("#myTabContent div:first-child").addClass("active");
-	$("#myTab li:first-child").addClass("active");
-	
-	$(".down-up").css("display","none");
-	
-	$(".dropdown-toggle").click(function(){
-		var down=$(this).attr("aria-expanded");
-		if(down==undefined||down=='false'){
-			$(this).find(".down-up").css("display","");
-			$(this).find(".down-down").css("display","none");
-		}else{
-			$(this).find(".down-up").css("display","none");
-			$(this).find(".down-down").css("display","");
-		}
-	}) 
-	
-	
-})
+								#for(sec : first.children??)
+								<ul class="list-unstyled">
 
-</script>
+									#for(third:sec.children??) #set(size = for.size) #end
+
+									#if(size!=null)
+									<li class="dropdown">
+										<button type="button" class="btn dropdown-toggle"
+											id="dropdownMenu1" data-toggle="dropdown"
+											style="width: 180px; height: 54px; color: #fff; background-color: transparent !important; border: none; font-size: 16px;">
+											<a href="##(sec.id ??)">#(sec.name??)</a> <b class="down-up"><img
+												class="down-up-img" alt="向上箭头" src="images/up.png"></b> <b
+												class="down-down"><img class="down-down-img" alt="向下箭头"
+												src="images/down.png"></b>
+										</button>
+
+										<ul class="dropdown-menu" role="menu"
+											aria-labelledby="myTabDrop1">
+
+											#for(third:sec.children??)
+											<li><a href="#" rel="#(third.url??)" tabindex="-1"
+												data-toggle="tab">#(third.name??)</a><b class="triangle-box"><img
+													alt="三角" src="images/triangle.png"></b></li> #end
+										</ul>
+									</li> #set(size = null) #else
+									<li><a href="#iframe_box" rel="#(sec.url??)">#(sec.name??)</a></li>
+									#end
+								</ul>
+
+								#end
+							</div>
+							#end
+
+
+						</div>
+					</div>
+
+					<div class="col-lg-12 slider-right">
+						<div class="pull-left col-lg-9">
+							<ul id="myTab" class="nav nav-tabs list-unstyled">
+								#for(first :session.menuTree.children)
+								<li><a href="##(first.id)" data-toggle="tab">#(first.name??)</a></li>
+								#end
+							</ul>
+						</div>
+						<div class="pull-right">
+							<div class="media">
+								<a class="pull-left" href="#"> <img class="media-object"
+									src="images/people.png" alt="用户头像">
+								</a>
+								<div class="media-body">
+									<h4 class="media-heading">#(session.user.name)</h4>
+								</div>
+							</div>
+							<div class="pull-right">
+								<a class="set-a" data-toggle="modal" data-target="#mymodal-data"><img
+									alt="设置图片" src="images/set.png"></a> <a href="/message"
+									class="news-a"><img alt="消息图片" src="images/news.png"></a>
+								<a href="/doExit" class="close-a">退出</a>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+			<div class="pull-right">
+				<label>当前部门职位：#(orgName ??)>#(roleName ??)</label>
+			</div>
+
+		</div>
+	</div>
+
+	<!-- data-target触发模态弹出窗元素 -->
+	<!-- <button class="btn btn-primary" data-toggle="modal" data-target="#mymodal-data" type="button">通过data-target触发</button>
+ -->
+	<!-- 模态弹出窗内容 -->
+	<div class="modal" id="mymodal-data" tabindex="-1" role="dialog"
+		aria-labelledby="mySmallModalLabel" aria-hidden="true">
+		<div class="modal-dialog"
+			style="position: fixed; top: 50%; left: 50%; background-color: #000; width: 50%; height: 50%; -webkit-transform: translateX(-50%) translateY(-50%); -moz-transform: translateX(-50%) translateY(-50%); -ms-transform: translateX(-50%) translateY(-50%);">
+			<div class="modal-content">
+				<div class="modal-header">
+					<button type="button" class="close" data-dismiss="modal">
+						<span aria-hidden="true">×</span><span class="sr-only">Close</span>
+					</button>
+					<h4 class="modal-title">模态弹出窗标题</h4>
+				</div>
+				<div class="modal-body">
+					
+               <iframe src="/table" style="width: 100%; height: 100%;" frameborder="no" border="0" framespacing="0"></iframe>
+				</div>
+				<div class="modal-footer">
+					<button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
+					<button type="button" class="btn btn-primary">保存</button>
+				</div>
+			</div>
+		</div>
+	</div>
+
+
+
+
+	<div class="container-fluid body-box">
+		<div class="row">
+			<iframe src="/echarts" id="iframe_box"
+				style="width: 100%; height: 900px;" frameborder="no" border="0"
+				framespacing="0"> </iframe>
+		</div>
+	</div>
+	<script type="text/javascript">
+		$(function() {
+
+			$("a").click(function() {
+				if (this.rel != "") {
+					$("iframe").attr("src", this.rel);
+				}
+
+			});
+
+			$("#myTabContent div:first-child").addClass("active");
+			$("#myTab li:first-child").addClass("active");
+
+			$(".down-up").css("display", "none");
+
+			$(".dropdown-toggle").click(function() {
+				var down = $(this).attr("aria-expanded");
+				if (down == undefined || down == 'false') {
+					$(this).find(".down-up").css("display", "");
+					$(this).find(".down-down").css("display", "none");
+				} else {
+					$(this).find(".down-up").css("display", "none");
+					$(this).find(".down-down").css("display", "");
+				}
+			})
+
+		})
+	</script>
 
 
 </body>

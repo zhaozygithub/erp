@@ -10974,3 +10974,745 @@ java.lang.OutOfMemoryError: PermGen space
 2017-05-04 16:19:32 [ INFO] - org.eclipse.jetty.server.handler.ContextHandler -ContextHandler.java(772) -started o.e.j.w.WebAppContext{/,file:/D:/eclipse/20170410/dlcat_erp/src/main/webapp/}
 2017-05-04 16:19:32 [ INFO] - org.eclipse.jetty.server.handler.ContextHandler -ContextHandler.java(772) -started o.e.j.w.WebAppContext{/,file:/D:/eclipse/20170410/dlcat_erp/src/main/webapp/}
 2017-05-04 16:19:33 [ INFO] - com.alibaba.druid.pool.DruidDataSource -DruidDataSource.java(721) -{dataSource-1} inited
+2017-05-04 17:25:41 [ INFO] - com.alibaba.druid.pool.DruidDataSource -DruidDataSource.java(1436) -{dataSource-1} closed
+2017-05-04 17:25:41 [ INFO] - org.eclipse.jetty.server.handler.ContextHandler -ContextHandler.java(829) -stopped o.e.j.w.WebAppContext{/,file:/D:/eclipse/20170410/dlcat_erp/src/main/webapp/}
+2017-05-04 17:25:41 [ INFO] - org.eclipse.jetty.webapp.StandardDescriptorProcessor -StandardDescriptorProcessor.java(282) -NO JSP Support for /, did not find org.apache.jasper.servlet.JspServlet
+2017-05-04 17:25:41 [ INFO] - org.eclipse.jetty.server.handler.ContextHandler -ContextHandler.java(772) -started o.e.j.w.WebAppContext{/,file:/D:/eclipse/20170410/dlcat_erp/src/main/webapp/}
+2017-05-04 17:25:41 [ INFO] - org.eclipse.jetty.server.handler.ContextHandler -ContextHandler.java(772) -started o.e.j.w.WebAppContext{/,file:/D:/eclipse/20170410/dlcat_erp/src/main/webapp/}
+2017-05-04 17:25:45 [ INFO] - org.eclipse.jetty.server.Server -Server.java(268) -jetty-8.1.8.v20121106
+2017-05-04 17:25:45 [ INFO] - org.eclipse.jetty.webapp.StandardDescriptorProcessor -StandardDescriptorProcessor.java(282) -NO JSP Support for /, did not find org.apache.jasper.servlet.JspServlet
+2017-05-04 17:25:45 [ INFO] - org.eclipse.jetty.server.handler.ContextHandler -ContextHandler.java(772) -started o.e.j.w.WebAppContext{/,file:/D:/eclipse/20170410/dlcat_erp/src/main/webapp/}
+2017-05-04 17:25:45 [ INFO] - org.eclipse.jetty.server.handler.ContextHandler -ContextHandler.java(772) -started o.e.j.w.WebAppContext{/,file:/D:/eclipse/20170410/dlcat_erp/src/main/webapp/}
+2017-05-04 17:25:47 [ INFO] - com.alibaba.druid.pool.DruidDataSource -DruidDataSource.java(721) -{dataSource-1} inited
+2017-05-04 17:25:47 [ INFO] - org.eclipse.jetty.server.AbstractConnector -AbstractConnector.java(338) -Started SelectChannelConnector@0.0.0.0:80
+2017-05-04 17:26:40 [ INFO] - com.alibaba.druid.pool.DruidDataSource -DruidDataSource.java(1436) -{dataSource-1} closed
+2017-05-04 17:26:40 [ INFO] - org.eclipse.jetty.server.handler.ContextHandler -ContextHandler.java(829) -stopped o.e.j.w.WebAppContext{/,file:/D:/eclipse/20170410/dlcat_erp/src/main/webapp/}
+2017-05-04 17:26:41 [ INFO] - org.eclipse.jetty.webapp.StandardDescriptorProcessor -StandardDescriptorProcessor.java(282) -NO JSP Support for /, did not find org.apache.jasper.servlet.JspServlet
+2017-05-04 17:26:41 [ INFO] - org.eclipse.jetty.server.handler.ContextHandler -ContextHandler.java(772) -started o.e.j.w.WebAppContext{/,file:/D:/eclipse/20170410/dlcat_erp/src/main/webapp/}
+2017-05-04 17:26:41 [ INFO] - org.eclipse.jetty.server.handler.ContextHandler -ContextHandler.java(772) -started o.e.j.w.WebAppContext{/,file:/D:/eclipse/20170410/dlcat_erp/src/main/webapp/}
+2017-05-04 17:26:42 [ INFO] - com.alibaba.druid.pool.DruidDataSource -DruidDataSource.java(721) -{dataSource-1} inited
+2017-05-04 17:27:36 [ INFO] - com.alibaba.druid.pool.DruidDataSource -DruidDataSource.java(1436) -{dataSource-1} closed
+2017-05-04 17:27:36 [ INFO] - org.eclipse.jetty.server.handler.ContextHandler -ContextHandler.java(829) -stopped o.e.j.w.WebAppContext{/,file:/D:/eclipse/20170410/dlcat_erp/src/main/webapp/}
+2017-05-04 17:27:36 [ INFO] - org.eclipse.jetty.webapp.StandardDescriptorProcessor -StandardDescriptorProcessor.java(282) -NO JSP Support for /, did not find org.apache.jasper.servlet.JspServlet
+2017-05-04 17:27:36 [ INFO] - org.eclipse.jetty.server.handler.ContextHandler -ContextHandler.java(772) -started o.e.j.w.WebAppContext{/,file:/D:/eclipse/20170410/dlcat_erp/src/main/webapp/}
+2017-05-04 17:27:36 [ INFO] - org.eclipse.jetty.server.handler.ContextHandler -ContextHandler.java(772) -started o.e.j.w.WebAppContext{/,file:/D:/eclipse/20170410/dlcat_erp/src/main/webapp/}
+2017-05-04 17:27:37 [ INFO] - com.alibaba.druid.pool.DruidDataSource -DruidDataSource.java(721) -{dataSource-1} inited
+2017-05-04 17:30:58 [ INFO] - com.alibaba.druid.pool.DruidDataSource -DruidDataSource.java(1436) -{dataSource-1} closed
+2017-05-04 17:30:58 [ INFO] - org.eclipse.jetty.server.handler.ContextHandler -ContextHandler.java(829) -stopped o.e.j.w.WebAppContext{/,file:/D:/eclipse/20170410/dlcat_erp/src/main/webapp/}
+2017-05-04 17:30:58 [ INFO] - org.eclipse.jetty.webapp.StandardDescriptorProcessor -StandardDescriptorProcessor.java(282) -NO JSP Support for /, did not find org.apache.jasper.servlet.JspServlet
+2017-05-04 17:30:58 [ INFO] - org.eclipse.jetty.server.handler.ContextHandler -ContextHandler.java(772) -started o.e.j.w.WebAppContext{/,file:/D:/eclipse/20170410/dlcat_erp/src/main/webapp/}
+2017-05-04 17:30:58 [ INFO] - org.eclipse.jetty.server.handler.ContextHandler -ContextHandler.java(772) -started o.e.j.w.WebAppContext{/,file:/D:/eclipse/20170410/dlcat_erp/src/main/webapp/}
+2017-05-04 17:30:59 [ INFO] - com.alibaba.druid.pool.DruidDataSource -DruidDataSource.java(721) -{dataSource-1} inited
+2017-05-04 17:44:41 [ INFO] - com.alibaba.druid.pool.DruidDataSource -DruidDataSource.java(1436) -{dataSource-1} closed
+2017-05-04 17:44:41 [ INFO] - org.eclipse.jetty.server.handler.ContextHandler -ContextHandler.java(829) -stopped o.e.j.w.WebAppContext{/,file:/D:/eclipse/20170410/dlcat_erp/src/main/webapp/}
+2017-05-04 17:44:41 [ INFO] - org.eclipse.jetty.webapp.StandardDescriptorProcessor -StandardDescriptorProcessor.java(282) -NO JSP Support for /, did not find org.apache.jasper.servlet.JspServlet
+2017-05-04 17:44:41 [ INFO] - org.eclipse.jetty.server.handler.ContextHandler -ContextHandler.java(772) -started o.e.j.w.WebAppContext{/,file:/D:/eclipse/20170410/dlcat_erp/src/main/webapp/}
+2017-05-04 17:44:41 [ INFO] - org.eclipse.jetty.server.handler.ContextHandler -ContextHandler.java(772) -started o.e.j.w.WebAppContext{/,file:/D:/eclipse/20170410/dlcat_erp/src/main/webapp/}
+2017-05-04 17:44:42 [ INFO] - com.alibaba.druid.pool.DruidDataSource -DruidDataSource.java(721) -{dataSource-1} inited
+2017-05-04 17:47:41 [ WARN] - com.jfinal.core.ActionHandler -ActionHandler.java(62) -404 Action Not Found: /views/console/echarts
+2017-05-04 17:48:59 [ INFO] - com.alibaba.druid.pool.DruidDataSource -DruidDataSource.java(1436) -{dataSource-1} closed
+2017-05-04 17:48:59 [ INFO] - org.eclipse.jetty.server.handler.ContextHandler -ContextHandler.java(829) -stopped o.e.j.w.WebAppContext{/,file:/D:/eclipse/20170410/dlcat_erp/src/main/webapp/}
+2017-05-04 17:48:59 [ INFO] - org.eclipse.jetty.webapp.StandardDescriptorProcessor -StandardDescriptorProcessor.java(282) -NO JSP Support for /, did not find org.apache.jasper.servlet.JspServlet
+2017-05-04 17:48:59 [ INFO] - org.eclipse.jetty.server.handler.ContextHandler -ContextHandler.java(772) -started o.e.j.w.WebAppContext{/,file:/D:/eclipse/20170410/dlcat_erp/src/main/webapp/}
+2017-05-04 17:48:59 [ INFO] - org.eclipse.jetty.server.handler.ContextHandler -ContextHandler.java(772) -started o.e.j.w.WebAppContext{/,file:/D:/eclipse/20170410/dlcat_erp/src/main/webapp/}
+2017-05-04 17:49:00 [ INFO] - com.alibaba.druid.pool.DruidDataSource -DruidDataSource.java(721) -{dataSource-1} inited
+2017-05-04 17:49:01 [ERROR] - com.jfinal.core.ActionHandler -ActionHandler.java(104) -/user
+com.jfinal.render.RenderException: java.lang.RuntimeException: File not found : D:\eclipse\20170410\dlcat_erp\src\main\webapp/WEB-INF/views/console/echarts
+	at com.jfinal.render.TemplateRender.render(TemplateRender.java:63)
+	at com.jfinal.core.ActionHandler.handle(ActionHandler.java:99)
+	at com.jfinal.plugin.druid.DruidStatViewHandler.handle(DruidStatViewHandler.java:75)
+	at com.jfinal.core.JFinalFilter.doFilter(JFinalFilter.java:74)
+	at org.eclipse.jetty.servlet.ServletHandler$CachedChain.doFilter(ServletHandler.java:1307)
+	at org.eclipse.jetty.servlet.ServletHandler.doHandle(ServletHandler.java:453)
+	at org.eclipse.jetty.server.handler.ScopedHandler.handle(ScopedHandler.java:137)
+	at org.eclipse.jetty.security.SecurityHandler.handle(SecurityHandler.java:560)
+	at org.eclipse.jetty.server.session.SessionHandler.doHandle(SessionHandler.java:231)
+	at org.eclipse.jetty.server.handler.ContextHandler.doHandle(ContextHandler.java:1072)
+	at org.eclipse.jetty.servlet.ServletHandler.doScope(ServletHandler.java:382)
+	at org.eclipse.jetty.server.session.SessionHandler.doScope(SessionHandler.java:193)
+	at org.eclipse.jetty.server.handler.ContextHandler.doScope(ContextHandler.java:1006)
+	at org.eclipse.jetty.server.handler.ScopedHandler.handle(ScopedHandler.java:135)
+	at org.eclipse.jetty.server.handler.HandlerWrapper.handle(HandlerWrapper.java:116)
+	at org.eclipse.jetty.server.Server.handle(Server.java:361)
+	at org.eclipse.jetty.server.AbstractHttpConnection.handleRequest(AbstractHttpConnection.java:485)
+	at org.eclipse.jetty.server.AbstractHttpConnection.headerComplete(AbstractHttpConnection.java:926)
+	at org.eclipse.jetty.server.AbstractHttpConnection$RequestHandler.headerComplete(AbstractHttpConnection.java:988)
+	at org.eclipse.jetty.http.HttpParser.parseNext(HttpParser.java:635)
+	at org.eclipse.jetty.http.HttpParser.parseAvailable(HttpParser.java:235)
+	at org.eclipse.jetty.server.AsyncHttpConnection.handle(AsyncHttpConnection.java:82)
+	at org.eclipse.jetty.io.nio.SelectChannelEndPoint.handle(SelectChannelEndPoint.java:628)
+	at org.eclipse.jetty.io.nio.SelectChannelEndPoint$1.run(SelectChannelEndPoint.java:52)
+	at org.eclipse.jetty.util.thread.QueuedThreadPool.runJob(QueuedThreadPool.java:608)
+	at org.eclipse.jetty.util.thread.QueuedThreadPool$3.run(QueuedThreadPool.java:543)
+	at java.lang.Thread.run(Thread.java:745)
+Caused by: java.lang.RuntimeException: File not found : D:\eclipse\20170410\dlcat_erp\src\main\webapp/WEB-INF/views/console/echarts
+	at com.jfinal.template.FileStringSource.loadFile(FileStringSource.java:75)
+	at com.jfinal.template.FileStringSource.getContent(FileStringSource.java:50)
+	at com.jfinal.template.Engine.buildTemplateByFileStringSource(Engine.java:150)
+	at com.jfinal.template.Engine.getTemplate(Engine.java:133)
+	at com.jfinal.render.TemplateRender.render(TemplateRender.java:61)
+	... 26 more
+2017-05-04 17:49:03 [ERROR] - com.jfinal.core.ActionHandler -ActionHandler.java(104) -/user
+com.jfinal.render.RenderException: java.lang.RuntimeException: File not found : D:\eclipse\20170410\dlcat_erp\src\main\webapp/WEB-INF/views/console/echarts
+	at com.jfinal.render.TemplateRender.render(TemplateRender.java:63)
+	at com.jfinal.core.ActionHandler.handle(ActionHandler.java:99)
+	at com.jfinal.plugin.druid.DruidStatViewHandler.handle(DruidStatViewHandler.java:75)
+	at com.jfinal.core.JFinalFilter.doFilter(JFinalFilter.java:74)
+	at org.eclipse.jetty.servlet.ServletHandler$CachedChain.doFilter(ServletHandler.java:1307)
+	at org.eclipse.jetty.servlet.ServletHandler.doHandle(ServletHandler.java:453)
+	at org.eclipse.jetty.server.handler.ScopedHandler.handle(ScopedHandler.java:137)
+	at org.eclipse.jetty.security.SecurityHandler.handle(SecurityHandler.java:560)
+	at org.eclipse.jetty.server.session.SessionHandler.doHandle(SessionHandler.java:231)
+	at org.eclipse.jetty.server.handler.ContextHandler.doHandle(ContextHandler.java:1072)
+	at org.eclipse.jetty.servlet.ServletHandler.doScope(ServletHandler.java:382)
+	at org.eclipse.jetty.server.session.SessionHandler.doScope(SessionHandler.java:193)
+	at org.eclipse.jetty.server.handler.ContextHandler.doScope(ContextHandler.java:1006)
+	at org.eclipse.jetty.server.handler.ScopedHandler.handle(ScopedHandler.java:135)
+	at org.eclipse.jetty.server.handler.HandlerWrapper.handle(HandlerWrapper.java:116)
+	at org.eclipse.jetty.server.Server.handle(Server.java:361)
+	at org.eclipse.jetty.server.AbstractHttpConnection.handleRequest(AbstractHttpConnection.java:485)
+	at org.eclipse.jetty.server.AbstractHttpConnection.headerComplete(AbstractHttpConnection.java:926)
+	at org.eclipse.jetty.server.AbstractHttpConnection$RequestHandler.headerComplete(AbstractHttpConnection.java:988)
+	at org.eclipse.jetty.http.HttpParser.parseNext(HttpParser.java:635)
+	at org.eclipse.jetty.http.HttpParser.parseAvailable(HttpParser.java:235)
+	at org.eclipse.jetty.server.AsyncHttpConnection.handle(AsyncHttpConnection.java:82)
+	at org.eclipse.jetty.io.nio.SelectChannelEndPoint.handle(SelectChannelEndPoint.java:628)
+	at org.eclipse.jetty.io.nio.SelectChannelEndPoint$1.run(SelectChannelEndPoint.java:52)
+	at org.eclipse.jetty.util.thread.QueuedThreadPool.runJob(QueuedThreadPool.java:608)
+	at org.eclipse.jetty.util.thread.QueuedThreadPool$3.run(QueuedThreadPool.java:543)
+	at java.lang.Thread.run(Thread.java:745)
+Caused by: java.lang.RuntimeException: File not found : D:\eclipse\20170410\dlcat_erp\src\main\webapp/WEB-INF/views/console/echarts
+	at com.jfinal.template.FileStringSource.loadFile(FileStringSource.java:75)
+	at com.jfinal.template.FileStringSource.getContent(FileStringSource.java:50)
+	at com.jfinal.template.Engine.buildTemplateByFileStringSource(Engine.java:150)
+	at com.jfinal.template.Engine.getTemplate(Engine.java:133)
+	at com.jfinal.render.TemplateRender.render(TemplateRender.java:61)
+	... 26 more
+2017-05-04 17:49:24 [ INFO] - com.alibaba.druid.pool.DruidDataSource -DruidDataSource.java(1436) -{dataSource-1} closed
+2017-05-04 17:49:24 [ INFO] - org.eclipse.jetty.server.handler.ContextHandler -ContextHandler.java(829) -stopped o.e.j.w.WebAppContext{/,file:/D:/eclipse/20170410/dlcat_erp/src/main/webapp/}
+2017-05-04 17:49:24 [ INFO] - org.eclipse.jetty.webapp.StandardDescriptorProcessor -StandardDescriptorProcessor.java(282) -NO JSP Support for /, did not find org.apache.jasper.servlet.JspServlet
+2017-05-04 17:49:24 [ INFO] - org.eclipse.jetty.server.handler.ContextHandler -ContextHandler.java(772) -started o.e.j.w.WebAppContext{/,file:/D:/eclipse/20170410/dlcat_erp/src/main/webapp/}
+2017-05-04 17:49:24 [ INFO] - org.eclipse.jetty.server.handler.ContextHandler -ContextHandler.java(772) -started o.e.j.w.WebAppContext{/,file:/D:/eclipse/20170410/dlcat_erp/src/main/webapp/}
+2017-05-04 17:49:26 [ INFO] - com.alibaba.druid.pool.DruidDataSource -DruidDataSource.java(721) -{dataSource-1} inited
+2017-05-04 17:51:55 [ INFO] - com.alibaba.druid.pool.DruidDataSource -DruidDataSource.java(1436) -{dataSource-1} closed
+2017-05-04 17:51:55 [ INFO] - org.eclipse.jetty.server.handler.ContextHandler -ContextHandler.java(829) -stopped o.e.j.w.WebAppContext{/,file:/D:/eclipse/20170410/dlcat_erp/src/main/webapp/}
+2017-05-04 17:51:56 [ INFO] - org.eclipse.jetty.webapp.StandardDescriptorProcessor -StandardDescriptorProcessor.java(282) -NO JSP Support for /, did not find org.apache.jasper.servlet.JspServlet
+2017-05-04 17:51:56 [ INFO] - org.eclipse.jetty.server.handler.ContextHandler -ContextHandler.java(772) -started o.e.j.w.WebAppContext{/,file:/D:/eclipse/20170410/dlcat_erp/src/main/webapp/}
+2017-05-04 17:51:56 [ INFO] - org.eclipse.jetty.server.handler.ContextHandler -ContextHandler.java(772) -started o.e.j.w.WebAppContext{/,file:/D:/eclipse/20170410/dlcat_erp/src/main/webapp/}
+2017-05-04 17:51:57 [ INFO] - com.alibaba.druid.pool.DruidDataSource -DruidDataSource.java(721) -{dataSource-1} inited
+2017-05-04 19:40:25 [ INFO] - com.alibaba.druid.pool.DruidDataSource -DruidDataSource.java(1436) -{dataSource-1} closed
+2017-05-04 19:40:25 [ INFO] - org.eclipse.jetty.server.handler.ContextHandler -ContextHandler.java(829) -stopped o.e.j.w.WebAppContext{/,file:/D:/eclipse/20170410/dlcat_erp/src/main/webapp/}
+2017-05-04 19:40:26 [ INFO] - org.eclipse.jetty.webapp.StandardDescriptorProcessor -StandardDescriptorProcessor.java(282) -NO JSP Support for /, did not find org.apache.jasper.servlet.JspServlet
+2017-05-04 19:40:26 [ INFO] - org.eclipse.jetty.server.handler.ContextHandler -ContextHandler.java(772) -started o.e.j.w.WebAppContext{/,file:/D:/eclipse/20170410/dlcat_erp/src/main/webapp/}
+2017-05-04 19:40:26 [ INFO] - org.eclipse.jetty.server.handler.ContextHandler -ContextHandler.java(772) -started o.e.j.w.WebAppContext{/,file:/D:/eclipse/20170410/dlcat_erp/src/main/webapp/}
+2017-05-04 19:40:28 [ INFO] - com.alibaba.druid.pool.DruidDataSource -DruidDataSource.java(721) -{dataSource-1} inited
+2017-05-04 19:40:44 [ INFO] - com.alibaba.druid.pool.DruidDataSource -DruidDataSource.java(1436) -{dataSource-1} closed
+2017-05-04 19:40:44 [ INFO] - org.eclipse.jetty.server.handler.ContextHandler -ContextHandler.java(829) -stopped o.e.j.w.WebAppContext{/,file:/D:/eclipse/20170410/dlcat_erp/src/main/webapp/}
+2017-05-04 19:40:45 [ INFO] - org.eclipse.jetty.webapp.StandardDescriptorProcessor -StandardDescriptorProcessor.java(282) -NO JSP Support for /, did not find org.apache.jasper.servlet.JspServlet
+2017-05-04 19:40:45 [ INFO] - org.eclipse.jetty.server.handler.ContextHandler -ContextHandler.java(772) -started o.e.j.w.WebAppContext{/,file:/D:/eclipse/20170410/dlcat_erp/src/main/webapp/}
+2017-05-04 19:40:45 [ INFO] - org.eclipse.jetty.server.handler.ContextHandler -ContextHandler.java(772) -started o.e.j.w.WebAppContext{/,file:/D:/eclipse/20170410/dlcat_erp/src/main/webapp/}
+2017-05-04 19:40:46 [ INFO] - com.alibaba.druid.pool.DruidDataSource -DruidDataSource.java(721) -{dataSource-1} inited
+2017-05-04 19:40:49 [ERROR] - com.jfinal.core.Config -Config.java(115) -Plugin start error: com.jfinal.plugin.activerecord.ActiveRecordPlugin. 
+java.sql.SQLException: Error
+com.jfinal.plugin.activerecord.ActiveRecordException: java.sql.SQLException: Error
+	at com.jfinal.plugin.activerecord.TableBuilder.build(TableBuilder.java:50)
+	at com.jfinal.plugin.activerecord.ActiveRecordPlugin.start(ActiveRecordPlugin.java:209)
+	at com.jfinal.core.Config.startPlugins(Config.java:107)
+	at com.jfinal.core.Config.configJFinal(Config.java:53)
+	at com.jfinal.core.JFinal.init(JFinal.java:63)
+	at com.jfinal.core.JFinalFilter.init(JFinalFilter.java:49)
+	at org.eclipse.jetty.servlet.FilterHolder.doStart(FilterHolder.java:119)
+	at org.eclipse.jetty.util.component.AbstractLifeCycle.start(AbstractLifeCycle.java:64)
+	at org.eclipse.jetty.servlet.ServletHandler.initialize(ServletHandler.java:724)
+	at org.eclipse.jetty.servlet.ServletContextHandler.startContext(ServletContextHandler.java:265)
+	at org.eclipse.jetty.webapp.WebAppContext.startContext(WebAppContext.java:1250)
+	at org.eclipse.jetty.server.handler.ContextHandler.doStart(ContextHandler.java:706)
+	at org.eclipse.jetty.webapp.WebAppContext.doStart(WebAppContext.java:492)
+	at org.eclipse.jetty.util.component.AbstractLifeCycle.start(AbstractLifeCycle.java:64)
+	at com.jfinal.server.JettyServer$1.onChange(JettyServer.java:117)
+	at com.jfinal.server.Scanner.compare(Scanner.java:88)
+	at com.jfinal.server.Scanner.working(Scanner.java:57)
+	at com.jfinal.server.Scanner.access$000(Scanner.java:31)
+	at com.jfinal.server.Scanner$1.run(Scanner.java:94)
+	at java.util.TimerThread.mainLoop(Timer.java:555)
+	at java.util.TimerThread.run(Timer.java:505)
+Caused by: java.sql.SQLException: Error
+	at com.alibaba.druid.pool.DruidDataSource.handleConnectionException(DruidDataSource.java:1246)
+	at com.alibaba.druid.pool.DruidPooledConnection.handleException(DruidPooledConnection.java:132)
+	at com.alibaba.druid.pool.DruidPooledStatement.checkException(DruidPooledStatement.java:68)
+	at com.alibaba.druid.pool.DruidPooledStatement.executeQuery(DruidPooledStatement.java:154)
+	at com.jfinal.plugin.activerecord.TableBuilder.doBuild(TableBuilder.java:66)
+	at com.jfinal.plugin.activerecord.TableBuilder.build(TableBuilder.java:42)
+	... 20 more
+Caused by: java.lang.OutOfMemoryError: PermGen space
+	at com.alibaba.druid.sql.dialect.mysql.parser.MySqlStatementParser.parseSelect(MySqlStatementParser.java:228)
+	at com.alibaba.druid.sql.parser.SQLStatementParser.parseStatementList(SQLStatementParser.java:180)
+	at com.alibaba.druid.sql.parser.SQLStatementParser.parseStatementList(SQLStatementParser.java:145)
+	at com.alibaba.druid.wall.WallProvider.checkInternal(WallProvider.java:620)
+	at com.alibaba.druid.wall.WallProvider.check(WallProvider.java:574)
+	at com.alibaba.druid.wall.WallFilter.check(WallFilter.java:713)
+	at com.alibaba.druid.wall.WallFilter.statement_executeQuery(WallFilter.java:511)
+	at com.alibaba.druid.filter.FilterChainImpl.statement_executeQuery(FilterChainImpl.java:2360)
+	at com.alibaba.druid.filter.FilterAdapter.statement_executeQuery(FilterAdapter.java:2481)
+	at com.alibaba.druid.filter.FilterEventAdapter.statement_executeQuery(FilterEventAdapter.java:302)
+	at com.alibaba.druid.filter.FilterChainImpl.statement_executeQuery(FilterChainImpl.java:2360)
+	at com.alibaba.druid.proxy.jdbc.StatementProxyImpl.executeQuery(StatementProxyImpl.java:211)
+	at com.alibaba.druid.pool.DruidPooledStatement.executeQuery(DruidPooledStatement.java:143)
+	at com.jfinal.plugin.activerecord.TableBuilder.doBuild(TableBuilder.java:66)
+	at com.jfinal.plugin.activerecord.TableBuilder.build(TableBuilder.java:42)
+	at com.jfinal.plugin.activerecord.ActiveRecordPlugin.start(ActiveRecordPlugin.java:209)
+	at com.jfinal.core.Config.startPlugins(Config.java:107)
+	at com.jfinal.core.Config.configJFinal(Config.java:53)
+	at com.jfinal.core.JFinal.init(JFinal.java:63)
+	at com.jfinal.core.JFinalFilter.init(JFinalFilter.java:49)
+	at org.eclipse.jetty.servlet.FilterHolder.doStart(FilterHolder.java:119)
+	at org.eclipse.jetty.util.component.AbstractLifeCycle.start(AbstractLifeCycle.java:64)
+	at org.eclipse.jetty.servlet.ServletHandler.initialize(ServletHandler.java:724)
+	at org.eclipse.jetty.servlet.ServletContextHandler.startContext(ServletContextHandler.java:265)
+	at org.eclipse.jetty.webapp.WebAppContext.startContext(WebAppContext.java:1250)
+	at org.eclipse.jetty.server.handler.ContextHandler.doStart(ContextHandler.java:706)
+	at org.eclipse.jetty.webapp.WebAppContext.doStart(WebAppContext.java:492)
+	at org.eclipse.jetty.util.component.AbstractLifeCycle.start(AbstractLifeCycle.java:64)
+	at com.jfinal.server.JettyServer$1.onChange(JettyServer.java:117)
+	at com.jfinal.server.Scanner.compare(Scanner.java:88)
+	at com.jfinal.server.Scanner.working(Scanner.java:57)
+	at com.jfinal.server.Scanner.access$000(Scanner.java:31)
+2017-05-04 19:40:49 [ WARN] - org.eclipse.jetty.util.component.AbstractLifeCycle -AbstractLifeCycle.java(204) -FAILED jfinal: java.lang.RuntimeException: Plugin start error: com.jfinal.plugin.activerecord.ActiveRecordPlugin. 
+java.sql.SQLException: Error
+java.lang.RuntimeException: Plugin start error: com.jfinal.plugin.activerecord.ActiveRecordPlugin. 
+java.sql.SQLException: Error
+	at com.jfinal.core.Config.startPlugins(Config.java:116)
+	at com.jfinal.core.Config.configJFinal(Config.java:53)
+	at com.jfinal.core.JFinal.init(JFinal.java:63)
+	at com.jfinal.core.JFinalFilter.init(JFinalFilter.java:49)
+	at org.eclipse.jetty.servlet.FilterHolder.doStart(FilterHolder.java:119)
+	at org.eclipse.jetty.util.component.AbstractLifeCycle.start(AbstractLifeCycle.java:64)
+	at org.eclipse.jetty.servlet.ServletHandler.initialize(ServletHandler.java:724)
+	at org.eclipse.jetty.servlet.ServletContextHandler.startContext(ServletContextHandler.java:265)
+	at org.eclipse.jetty.webapp.WebAppContext.startContext(WebAppContext.java:1250)
+	at org.eclipse.jetty.server.handler.ContextHandler.doStart(ContextHandler.java:706)
+	at org.eclipse.jetty.webapp.WebAppContext.doStart(WebAppContext.java:492)
+	at org.eclipse.jetty.util.component.AbstractLifeCycle.start(AbstractLifeCycle.java:64)
+	at com.jfinal.server.JettyServer$1.onChange(JettyServer.java:117)
+	at com.jfinal.server.Scanner.compare(Scanner.java:88)
+	at com.jfinal.server.Scanner.working(Scanner.java:57)
+	at com.jfinal.server.Scanner.access$000(Scanner.java:31)
+	at com.jfinal.server.Scanner$1.run(Scanner.java:94)
+	at java.util.TimerThread.mainLoop(Timer.java:555)
+	at java.util.TimerThread.run(Timer.java:505)
+Caused by: com.jfinal.plugin.activerecord.ActiveRecordException: java.sql.SQLException: Error
+	at com.jfinal.plugin.activerecord.TableBuilder.build(TableBuilder.java:50)
+	at com.jfinal.plugin.activerecord.ActiveRecordPlugin.start(ActiveRecordPlugin.java:209)
+	at com.jfinal.core.Config.startPlugins(Config.java:107)
+	... 18 more
+Caused by: java.sql.SQLException: Error
+	at com.alibaba.druid.pool.DruidDataSource.handleConnectionException(DruidDataSource.java:1246)
+	at com.alibaba.druid.pool.DruidPooledConnection.handleException(DruidPooledConnection.java:132)
+	at com.alibaba.druid.pool.DruidPooledStatement.checkException(DruidPooledStatement.java:68)
+	at com.alibaba.druid.pool.DruidPooledStatement.executeQuery(DruidPooledStatement.java:154)
+	at com.jfinal.plugin.activerecord.TableBuilder.doBuild(TableBuilder.java:66)
+	at com.jfinal.plugin.activerecord.TableBuilder.build(TableBuilder.java:42)
+	... 20 more
+Caused by: java.lang.OutOfMemoryError: PermGen space
+	at com.alibaba.druid.sql.dialect.mysql.parser.MySqlStatementParser.parseSelect(MySqlStatementParser.java:228)
+	at com.alibaba.druid.sql.parser.SQLStatementParser.parseStatementList(SQLStatementParser.java:180)
+	at com.alibaba.druid.sql.parser.SQLStatementParser.parseStatementList(SQLStatementParser.java:145)
+	at com.alibaba.druid.wall.WallProvider.checkInternal(WallProvider.java:620)
+	at com.alibaba.druid.wall.WallProvider.check(WallProvider.java:574)
+	at com.alibaba.druid.wall.WallFilter.check(WallFilter.java:713)
+	at com.alibaba.druid.wall.WallFilter.statement_executeQuery(WallFilter.java:511)
+	at com.alibaba.druid.filter.FilterChainImpl.statement_executeQuery(FilterChainImpl.java:2360)
+	at com.alibaba.druid.filter.FilterAdapter.statement_executeQuery(FilterAdapter.java:2481)
+	at com.alibaba.druid.filter.FilterEventAdapter.statement_executeQuery(FilterEventAdapter.java:302)
+	at com.alibaba.druid.filter.FilterChainImpl.statement_executeQuery(FilterChainImpl.java:2360)
+	at com.alibaba.druid.proxy.jdbc.StatementProxyImpl.executeQuery(StatementProxyImpl.java:211)
+	at com.alibaba.druid.pool.DruidPooledStatement.executeQuery(DruidPooledStatement.java:143)
+	at com.jfinal.plugin.activerecord.TableBuilder.doBuild(TableBuilder.java:66)
+	at com.jfinal.plugin.activerecord.TableBuilder.build(TableBuilder.java:42)
+	at com.jfinal.plugin.activerecord.ActiveRecordPlugin.start(ActiveRecordPlugin.java:209)
+	at com.jfinal.core.Config.startPlugins(Config.java:107)
+	at com.jfinal.core.Config.configJFinal(Config.java:53)
+	at com.jfinal.core.JFinal.init(JFinal.java:63)
+	at com.jfinal.core.JFinalFilter.init(JFinalFilter.java:49)
+	at org.eclipse.jetty.servlet.FilterHolder.doStart(FilterHolder.java:119)
+	at org.eclipse.jetty.util.component.AbstractLifeCycle.start(AbstractLifeCycle.java:64)
+	at org.eclipse.jetty.servlet.ServletHandler.initialize(ServletHandler.java:724)
+	at org.eclipse.jetty.servlet.ServletContextHandler.startContext(ServletContextHandler.java:265)
+	at org.eclipse.jetty.webapp.WebAppContext.startContext(WebAppContext.java:1250)
+	at org.eclipse.jetty.server.handler.ContextHandler.doStart(ContextHandler.java:706)
+	at org.eclipse.jetty.webapp.WebAppContext.doStart(WebAppContext.java:492)
+	at org.eclipse.jetty.util.component.AbstractLifeCycle.start(AbstractLifeCycle.java:64)
+	at com.jfinal.server.JettyServer$1.onChange(JettyServer.java:117)
+	at com.jfinal.server.Scanner.compare(Scanner.java:88)
+	at com.jfinal.server.Scanner.working(Scanner.java:57)
+	at com.jfinal.server.Scanner.access$000(Scanner.java:31)
+2017-05-04 19:40:49 [ WARN] - org.eclipse.jetty.webapp.WebAppContext -WebAppContext.java(501) -Failed startup of context o.e.j.w.WebAppContext{/,file:/D:/eclipse/20170410/dlcat_erp/src/main/webapp/}
+java.lang.RuntimeException: Plugin start error: com.jfinal.plugin.activerecord.ActiveRecordPlugin. 
+java.sql.SQLException: Error
+	at com.jfinal.core.Config.startPlugins(Config.java:116)
+	at com.jfinal.core.Config.configJFinal(Config.java:53)
+	at com.jfinal.core.JFinal.init(JFinal.java:63)
+	at com.jfinal.core.JFinalFilter.init(JFinalFilter.java:49)
+	at org.eclipse.jetty.servlet.FilterHolder.doStart(FilterHolder.java:119)
+	at org.eclipse.jetty.util.component.AbstractLifeCycle.start(AbstractLifeCycle.java:64)
+	at org.eclipse.jetty.servlet.ServletHandler.initialize(ServletHandler.java:724)
+	at org.eclipse.jetty.servlet.ServletContextHandler.startContext(ServletContextHandler.java:265)
+	at org.eclipse.jetty.webapp.WebAppContext.startContext(WebAppContext.java:1250)
+	at org.eclipse.jetty.server.handler.ContextHandler.doStart(ContextHandler.java:706)
+	at org.eclipse.jetty.webapp.WebAppContext.doStart(WebAppContext.java:492)
+	at org.eclipse.jetty.util.component.AbstractLifeCycle.start(AbstractLifeCycle.java:64)
+	at com.jfinal.server.JettyServer$1.onChange(JettyServer.java:117)
+	at com.jfinal.server.Scanner.compare(Scanner.java:88)
+	at com.jfinal.server.Scanner.working(Scanner.java:57)
+	at com.jfinal.server.Scanner.access$000(Scanner.java:31)
+	at com.jfinal.server.Scanner$1.run(Scanner.java:94)
+	at java.util.TimerThread.mainLoop(Timer.java:555)
+	at java.util.TimerThread.run(Timer.java:505)
+Caused by: com.jfinal.plugin.activerecord.ActiveRecordException: java.sql.SQLException: Error
+	at com.jfinal.plugin.activerecord.TableBuilder.build(TableBuilder.java:50)
+	at com.jfinal.plugin.activerecord.ActiveRecordPlugin.start(ActiveRecordPlugin.java:209)
+	at com.jfinal.core.Config.startPlugins(Config.java:107)
+	... 18 more
+Caused by: java.sql.SQLException: Error
+	at com.alibaba.druid.pool.DruidDataSource.handleConnectionException(DruidDataSource.java:1246)
+	at com.alibaba.druid.pool.DruidPooledConnection.handleException(DruidPooledConnection.java:132)
+	at com.alibaba.druid.pool.DruidPooledStatement.checkException(DruidPooledStatement.java:68)
+	at com.alibaba.druid.pool.DruidPooledStatement.executeQuery(DruidPooledStatement.java:154)
+	at com.jfinal.plugin.activerecord.TableBuilder.doBuild(TableBuilder.java:66)
+	at com.jfinal.plugin.activerecord.TableBuilder.build(TableBuilder.java:42)
+	... 20 more
+Caused by: java.lang.OutOfMemoryError: PermGen space
+	at com.alibaba.druid.sql.dialect.mysql.parser.MySqlStatementParser.parseSelect(MySqlStatementParser.java:228)
+	at com.alibaba.druid.sql.parser.SQLStatementParser.parseStatementList(SQLStatementParser.java:180)
+	at com.alibaba.druid.sql.parser.SQLStatementParser.parseStatementList(SQLStatementParser.java:145)
+	at com.alibaba.druid.wall.WallProvider.checkInternal(WallProvider.java:620)
+	at com.alibaba.druid.wall.WallProvider.check(WallProvider.java:574)
+	at com.alibaba.druid.wall.WallFilter.check(WallFilter.java:713)
+	at com.alibaba.druid.wall.WallFilter.statement_executeQuery(WallFilter.java:511)
+	at com.alibaba.druid.filter.FilterChainImpl.statement_executeQuery(FilterChainImpl.java:2360)
+	at com.alibaba.druid.filter.FilterAdapter.statement_executeQuery(FilterAdapter.java:2481)
+	at com.alibaba.druid.filter.FilterEventAdapter.statement_executeQuery(FilterEventAdapter.java:302)
+	at com.alibaba.druid.filter.FilterChainImpl.statement_executeQuery(FilterChainImpl.java:2360)
+	at com.alibaba.druid.proxy.jdbc.StatementProxyImpl.executeQuery(StatementProxyImpl.java:211)
+	at com.alibaba.druid.pool.DruidPooledStatement.executeQuery(DruidPooledStatement.java:143)
+	at com.jfinal.plugin.activerecord.TableBuilder.doBuild(TableBuilder.java:66)
+	at com.jfinal.plugin.activerecord.TableBuilder.build(TableBuilder.java:42)
+	at com.jfinal.plugin.activerecord.ActiveRecordPlugin.start(ActiveRecordPlugin.java:209)
+	at com.jfinal.core.Config.startPlugins(Config.java:107)
+	at com.jfinal.core.Config.configJFinal(Config.java:53)
+	at com.jfinal.core.JFinal.init(JFinal.java:63)
+	at com.jfinal.core.JFinalFilter.init(JFinalFilter.java:49)
+	at org.eclipse.jetty.servlet.FilterHolder.doStart(FilterHolder.java:119)
+	at org.eclipse.jetty.util.component.AbstractLifeCycle.start(AbstractLifeCycle.java:64)
+	at org.eclipse.jetty.servlet.ServletHandler.initialize(ServletHandler.java:724)
+	at org.eclipse.jetty.servlet.ServletContextHandler.startContext(ServletContextHandler.java:265)
+	at org.eclipse.jetty.webapp.WebAppContext.startContext(WebAppContext.java:1250)
+	at org.eclipse.jetty.server.handler.ContextHandler.doStart(ContextHandler.java:706)
+	at org.eclipse.jetty.webapp.WebAppContext.doStart(WebAppContext.java:492)
+	at org.eclipse.jetty.util.component.AbstractLifeCycle.start(AbstractLifeCycle.java:64)
+	at com.jfinal.server.JettyServer$1.onChange(JettyServer.java:117)
+	at com.jfinal.server.Scanner.compare(Scanner.java:88)
+	at com.jfinal.server.Scanner.working(Scanner.java:57)
+	at com.jfinal.server.Scanner.access$000(Scanner.java:31)
+2017-05-04 19:40:49 [ WARN] - org.eclipse.jetty.util.component.AbstractLifeCycle -AbstractLifeCycle.java(204) -FAILED o.e.j.w.WebAppContext{/,file:/D:/eclipse/20170410/dlcat_erp/src/main/webapp/}: java.lang.RuntimeException: Plugin start error: com.jfinal.plugin.activerecord.ActiveRecordPlugin. 
+java.sql.SQLException: Error
+java.lang.RuntimeException: Plugin start error: com.jfinal.plugin.activerecord.ActiveRecordPlugin. 
+java.sql.SQLException: Error
+	at com.jfinal.core.Config.startPlugins(Config.java:116)
+	at com.jfinal.core.Config.configJFinal(Config.java:53)
+	at com.jfinal.core.JFinal.init(JFinal.java:63)
+	at com.jfinal.core.JFinalFilter.init(JFinalFilter.java:49)
+	at org.eclipse.jetty.servlet.FilterHolder.doStart(FilterHolder.java:119)
+	at org.eclipse.jetty.util.component.AbstractLifeCycle.start(AbstractLifeCycle.java:64)
+	at org.eclipse.jetty.servlet.ServletHandler.initialize(ServletHandler.java:724)
+	at org.eclipse.jetty.servlet.ServletContextHandler.startContext(ServletContextHandler.java:265)
+	at org.eclipse.jetty.webapp.WebAppContext.startContext(WebAppContext.java:1250)
+	at org.eclipse.jetty.server.handler.ContextHandler.doStart(ContextHandler.java:706)
+	at org.eclipse.jetty.webapp.WebAppContext.doStart(WebAppContext.java:492)
+	at org.eclipse.jetty.util.component.AbstractLifeCycle.start(AbstractLifeCycle.java:64)
+	at com.jfinal.server.JettyServer$1.onChange(JettyServer.java:117)
+	at com.jfinal.server.Scanner.compare(Scanner.java:88)
+	at com.jfinal.server.Scanner.working(Scanner.java:57)
+	at com.jfinal.server.Scanner.access$000(Scanner.java:31)
+	at com.jfinal.server.Scanner$1.run(Scanner.java:94)
+	at java.util.TimerThread.mainLoop(Timer.java:555)
+	at java.util.TimerThread.run(Timer.java:505)
+Caused by: com.jfinal.plugin.activerecord.ActiveRecordException: java.sql.SQLException: Error
+	at com.jfinal.plugin.activerecord.TableBuilder.build(TableBuilder.java:50)
+	at com.jfinal.plugin.activerecord.ActiveRecordPlugin.start(ActiveRecordPlugin.java:209)
+	at com.jfinal.core.Config.startPlugins(Config.java:107)
+	... 18 more
+Caused by: java.sql.SQLException: Error
+	at com.alibaba.druid.pool.DruidDataSource.handleConnectionException(DruidDataSource.java:1246)
+	at com.alibaba.druid.pool.DruidPooledConnection.handleException(DruidPooledConnection.java:132)
+	at com.alibaba.druid.pool.DruidPooledStatement.checkException(DruidPooledStatement.java:68)
+	at com.alibaba.druid.pool.DruidPooledStatement.executeQuery(DruidPooledStatement.java:154)
+	at com.jfinal.plugin.activerecord.TableBuilder.doBuild(TableBuilder.java:66)
+	at com.jfinal.plugin.activerecord.TableBuilder.build(TableBuilder.java:42)
+	... 20 more
+Caused by: java.lang.OutOfMemoryError: PermGen space
+	at com.alibaba.druid.sql.dialect.mysql.parser.MySqlStatementParser.parseSelect(MySqlStatementParser.java:228)
+	at com.alibaba.druid.sql.parser.SQLStatementParser.parseStatementList(SQLStatementParser.java:180)
+	at com.alibaba.druid.sql.parser.SQLStatementParser.parseStatementList(SQLStatementParser.java:145)
+	at com.alibaba.druid.wall.WallProvider.checkInternal(WallProvider.java:620)
+	at com.alibaba.druid.wall.WallProvider.check(WallProvider.java:574)
+	at com.alibaba.druid.wall.WallFilter.check(WallFilter.java:713)
+	at com.alibaba.druid.wall.WallFilter.statement_executeQuery(WallFilter.java:511)
+	at com.alibaba.druid.filter.FilterChainImpl.statement_executeQuery(FilterChainImpl.java:2360)
+	at com.alibaba.druid.filter.FilterAdapter.statement_executeQuery(FilterAdapter.java:2481)
+	at com.alibaba.druid.filter.FilterEventAdapter.statement_executeQuery(FilterEventAdapter.java:302)
+	at com.alibaba.druid.filter.FilterChainImpl.statement_executeQuery(FilterChainImpl.java:2360)
+	at com.alibaba.druid.proxy.jdbc.StatementProxyImpl.executeQuery(StatementProxyImpl.java:211)
+	at com.alibaba.druid.pool.DruidPooledStatement.executeQuery(DruidPooledStatement.java:143)
+	at com.jfinal.plugin.activerecord.TableBuilder.doBuild(TableBuilder.java:66)
+	at com.jfinal.plugin.activerecord.TableBuilder.build(TableBuilder.java:42)
+	at com.jfinal.plugin.activerecord.ActiveRecordPlugin.start(ActiveRecordPlugin.java:209)
+	at com.jfinal.core.Config.startPlugins(Config.java:107)
+	at com.jfinal.core.Config.configJFinal(Config.java:53)
+	at com.jfinal.core.JFinal.init(JFinal.java:63)
+	at com.jfinal.core.JFinalFilter.init(JFinalFilter.java:49)
+	at org.eclipse.jetty.servlet.FilterHolder.doStart(FilterHolder.java:119)
+	at org.eclipse.jetty.util.component.AbstractLifeCycle.start(AbstractLifeCycle.java:64)
+	at org.eclipse.jetty.servlet.ServletHandler.initialize(ServletHandler.java:724)
+	at org.eclipse.jetty.servlet.ServletContextHandler.startContext(ServletContextHandler.java:265)
+	at org.eclipse.jetty.webapp.WebAppContext.startContext(WebAppContext.java:1250)
+	at org.eclipse.jetty.server.handler.ContextHandler.doStart(ContextHandler.java:706)
+	at org.eclipse.jetty.webapp.WebAppContext.doStart(WebAppContext.java:492)
+	at org.eclipse.jetty.util.component.AbstractLifeCycle.start(AbstractLifeCycle.java:64)
+	at com.jfinal.server.JettyServer$1.onChange(JettyServer.java:117)
+	at com.jfinal.server.Scanner.compare(Scanner.java:88)
+	at com.jfinal.server.Scanner.working(Scanner.java:57)
+	at com.jfinal.server.Scanner.access$000(Scanner.java:31)
+2017-05-04 19:40:49 [ERROR] - com.jfinal.kit.LogKit -LogKit.java(75) -Plugin start error: com.jfinal.plugin.activerecord.ActiveRecordPlugin. 
+java.sql.SQLException: Error
+java.lang.RuntimeException: Plugin start error: com.jfinal.plugin.activerecord.ActiveRecordPlugin. 
+java.sql.SQLException: Error
+	at com.jfinal.core.Config.startPlugins(Config.java:116)
+	at com.jfinal.core.Config.configJFinal(Config.java:53)
+	at com.jfinal.core.JFinal.init(JFinal.java:63)
+	at com.jfinal.core.JFinalFilter.init(JFinalFilter.java:49)
+	at org.eclipse.jetty.servlet.FilterHolder.doStart(FilterHolder.java:119)
+	at org.eclipse.jetty.util.component.AbstractLifeCycle.start(AbstractLifeCycle.java:64)
+	at org.eclipse.jetty.servlet.ServletHandler.initialize(ServletHandler.java:724)
+	at org.eclipse.jetty.servlet.ServletContextHandler.startContext(ServletContextHandler.java:265)
+	at org.eclipse.jetty.webapp.WebAppContext.startContext(WebAppContext.java:1250)
+	at org.eclipse.jetty.server.handler.ContextHandler.doStart(ContextHandler.java:706)
+	at org.eclipse.jetty.webapp.WebAppContext.doStart(WebAppContext.java:492)
+	at org.eclipse.jetty.util.component.AbstractLifeCycle.start(AbstractLifeCycle.java:64)
+	at com.jfinal.server.JettyServer$1.onChange(JettyServer.java:117)
+	at com.jfinal.server.Scanner.compare(Scanner.java:88)
+	at com.jfinal.server.Scanner.working(Scanner.java:57)
+	at com.jfinal.server.Scanner.access$000(Scanner.java:31)
+	at com.jfinal.server.Scanner$1.run(Scanner.java:94)
+	at java.util.TimerThread.mainLoop(Timer.java:555)
+	at java.util.TimerThread.run(Timer.java:505)
+Caused by: com.jfinal.plugin.activerecord.ActiveRecordException: java.sql.SQLException: Error
+	at com.jfinal.plugin.activerecord.TableBuilder.build(TableBuilder.java:50)
+	at com.jfinal.plugin.activerecord.ActiveRecordPlugin.start(ActiveRecordPlugin.java:209)
+	at com.jfinal.core.Config.startPlugins(Config.java:107)
+	... 18 more
+Caused by: java.sql.SQLException: Error
+	at com.alibaba.druid.pool.DruidDataSource.handleConnectionException(DruidDataSource.java:1246)
+	at com.alibaba.druid.pool.DruidPooledConnection.handleException(DruidPooledConnection.java:132)
+	at com.alibaba.druid.pool.DruidPooledStatement.checkException(DruidPooledStatement.java:68)
+	at com.alibaba.druid.pool.DruidPooledStatement.executeQuery(DruidPooledStatement.java:154)
+	at com.jfinal.plugin.activerecord.TableBuilder.doBuild(TableBuilder.java:66)
+	at com.jfinal.plugin.activerecord.TableBuilder.build(TableBuilder.java:42)
+	... 20 more
+Caused by: java.lang.OutOfMemoryError: PermGen space
+	at com.alibaba.druid.sql.dialect.mysql.parser.MySqlStatementParser.parseSelect(MySqlStatementParser.java:228)
+	at com.alibaba.druid.sql.parser.SQLStatementParser.parseStatementList(SQLStatementParser.java:180)
+	at com.alibaba.druid.sql.parser.SQLStatementParser.parseStatementList(SQLStatementParser.java:145)
+	at com.alibaba.druid.wall.WallProvider.checkInternal(WallProvider.java:620)
+	at com.alibaba.druid.wall.WallProvider.check(WallProvider.java:574)
+	at com.alibaba.druid.wall.WallFilter.check(WallFilter.java:713)
+	at com.alibaba.druid.wall.WallFilter.statement_executeQuery(WallFilter.java:511)
+	at com.alibaba.druid.filter.FilterChainImpl.statement_executeQuery(FilterChainImpl.java:2360)
+	at com.alibaba.druid.filter.FilterAdapter.statement_executeQuery(FilterAdapter.java:2481)
+	at com.alibaba.druid.filter.FilterEventAdapter.statement_executeQuery(FilterEventAdapter.java:302)
+	at com.alibaba.druid.filter.FilterChainImpl.statement_executeQuery(FilterChainImpl.java:2360)
+	at com.alibaba.druid.proxy.jdbc.StatementProxyImpl.executeQuery(StatementProxyImpl.java:211)
+	at com.alibaba.druid.pool.DruidPooledStatement.executeQuery(DruidPooledStatement.java:143)
+	at com.jfinal.plugin.activerecord.TableBuilder.doBuild(TableBuilder.java:66)
+	at com.jfinal.plugin.activerecord.TableBuilder.build(TableBuilder.java:42)
+	at com.jfinal.plugin.activerecord.ActiveRecordPlugin.start(ActiveRecordPlugin.java:209)
+	at com.jfinal.core.Config.startPlugins(Config.java:107)
+	at com.jfinal.core.Config.configJFinal(Config.java:53)
+	at com.jfinal.core.JFinal.init(JFinal.java:63)
+	at com.jfinal.core.JFinalFilter.init(JFinalFilter.java:49)
+	at org.eclipse.jetty.servlet.FilterHolder.doStart(FilterHolder.java:119)
+	at org.eclipse.jetty.util.component.AbstractLifeCycle.start(AbstractLifeCycle.java:64)
+	at org.eclipse.jetty.servlet.ServletHandler.initialize(ServletHandler.java:724)
+	at org.eclipse.jetty.servlet.ServletContextHandler.startContext(ServletContextHandler.java:265)
+	at org.eclipse.jetty.webapp.WebAppContext.startContext(WebAppContext.java:1250)
+	at org.eclipse.jetty.server.handler.ContextHandler.doStart(ContextHandler.java:706)
+	at org.eclipse.jetty.webapp.WebAppContext.doStart(WebAppContext.java:492)
+	at org.eclipse.jetty.util.component.AbstractLifeCycle.start(AbstractLifeCycle.java:64)
+	at com.jfinal.server.JettyServer$1.onChange(JettyServer.java:117)
+	at com.jfinal.server.Scanner.compare(Scanner.java:88)
+	at com.jfinal.server.Scanner.working(Scanner.java:57)
+	at com.jfinal.server.Scanner.access$000(Scanner.java:31)
+2017-05-04 19:41:13 [ INFO] - org.eclipse.jetty.server.Server -Server.java(268) -jetty-8.1.8.v20121106
+2017-05-04 19:41:13 [ INFO] - org.eclipse.jetty.webapp.StandardDescriptorProcessor -StandardDescriptorProcessor.java(282) -NO JSP Support for /, did not find org.apache.jasper.servlet.JspServlet
+2017-05-04 19:41:13 [ INFO] - org.eclipse.jetty.server.handler.ContextHandler -ContextHandler.java(772) -started o.e.j.w.WebAppContext{/,file:/D:/eclipse/20170410/dlcat_erp/src/main/webapp/}
+2017-05-04 19:41:13 [ INFO] - org.eclipse.jetty.server.handler.ContextHandler -ContextHandler.java(772) -started o.e.j.w.WebAppContext{/,file:/D:/eclipse/20170410/dlcat_erp/src/main/webapp/}
+2017-05-04 19:41:15 [ INFO] - com.alibaba.druid.pool.DruidDataSource -DruidDataSource.java(721) -{dataSource-1} inited
+2017-05-04 19:41:15 [ INFO] - org.eclipse.jetty.server.AbstractConnector -AbstractConnector.java(338) -Started SelectChannelConnector@0.0.0.0:80
+2017-05-04 19:42:34 [ INFO] - com.alibaba.druid.pool.DruidDataSource -DruidDataSource.java(1436) -{dataSource-1} closed
+2017-05-04 19:42:34 [ INFO] - org.eclipse.jetty.server.handler.ContextHandler -ContextHandler.java(829) -stopped o.e.j.w.WebAppContext{/,file:/D:/eclipse/20170410/dlcat_erp/src/main/webapp/}
+2017-05-04 19:42:34 [ INFO] - org.eclipse.jetty.webapp.StandardDescriptorProcessor -StandardDescriptorProcessor.java(282) -NO JSP Support for /, did not find org.apache.jasper.servlet.JspServlet
+2017-05-04 19:42:34 [ INFO] - org.eclipse.jetty.server.handler.ContextHandler -ContextHandler.java(772) -started o.e.j.w.WebAppContext{/,file:/D:/eclipse/20170410/dlcat_erp/src/main/webapp/}
+2017-05-04 19:42:34 [ INFO] - org.eclipse.jetty.server.handler.ContextHandler -ContextHandler.java(772) -started o.e.j.w.WebAppContext{/,file:/D:/eclipse/20170410/dlcat_erp/src/main/webapp/}
+2017-05-04 19:42:35 [ INFO] - com.alibaba.druid.pool.DruidDataSource -DruidDataSource.java(721) -{dataSource-1} inited
+2017-05-04 19:43:54 [ INFO] - com.alibaba.druid.pool.DruidDataSource -DruidDataSource.java(1436) -{dataSource-1} closed
+2017-05-04 19:43:54 [ INFO] - org.eclipse.jetty.server.handler.ContextHandler -ContextHandler.java(829) -stopped o.e.j.w.WebAppContext{/,file:/D:/eclipse/20170410/dlcat_erp/src/main/webapp/}
+2017-05-04 19:43:55 [ INFO] - org.eclipse.jetty.webapp.StandardDescriptorProcessor -StandardDescriptorProcessor.java(282) -NO JSP Support for /, did not find org.apache.jasper.servlet.JspServlet
+2017-05-04 19:43:55 [ INFO] - org.eclipse.jetty.server.handler.ContextHandler -ContextHandler.java(772) -started o.e.j.w.WebAppContext{/,file:/D:/eclipse/20170410/dlcat_erp/src/main/webapp/}
+2017-05-04 19:43:55 [ INFO] - org.eclipse.jetty.server.handler.ContextHandler -ContextHandler.java(772) -started o.e.j.w.WebAppContext{/,file:/D:/eclipse/20170410/dlcat_erp/src/main/webapp/}
+2017-05-04 19:43:56 [ INFO] - com.alibaba.druid.pool.DruidDataSource -DruidDataSource.java(721) -{dataSource-1} inited
+2017-05-04 19:48:02 [ INFO] - com.alibaba.druid.pool.DruidDataSource -DruidDataSource.java(1436) -{dataSource-1} closed
+2017-05-04 19:48:02 [ INFO] - org.eclipse.jetty.server.handler.ContextHandler -ContextHandler.java(829) -stopped o.e.j.w.WebAppContext{/,file:/D:/eclipse/20170410/dlcat_erp/src/main/webapp/}
+2017-05-04 19:48:02 [ INFO] - org.eclipse.jetty.webapp.StandardDescriptorProcessor -StandardDescriptorProcessor.java(282) -NO JSP Support for /, did not find org.apache.jasper.servlet.JspServlet
+2017-05-04 19:48:02 [ INFO] - org.eclipse.jetty.server.handler.ContextHandler -ContextHandler.java(772) -started o.e.j.w.WebAppContext{/,file:/D:/eclipse/20170410/dlcat_erp/src/main/webapp/}
+2017-05-04 19:48:02 [ INFO] - org.eclipse.jetty.server.handler.ContextHandler -ContextHandler.java(772) -started o.e.j.w.WebAppContext{/,file:/D:/eclipse/20170410/dlcat_erp/src/main/webapp/}
+2017-05-04 19:48:03 [ INFO] - com.alibaba.druid.pool.DruidDataSource -DruidDataSource.java(721) -{dataSource-1} inited
+2017-05-04 19:48:32 [ INFO] - com.alibaba.druid.pool.DruidDataSource -DruidDataSource.java(1436) -{dataSource-1} closed
+2017-05-04 19:48:32 [ INFO] - org.eclipse.jetty.server.handler.ContextHandler -ContextHandler.java(829) -stopped o.e.j.w.WebAppContext{/,file:/D:/eclipse/20170410/dlcat_erp/src/main/webapp/}
+2017-05-04 19:48:32 [ INFO] - org.eclipse.jetty.webapp.StandardDescriptorProcessor -StandardDescriptorProcessor.java(282) -NO JSP Support for /, did not find org.apache.jasper.servlet.JspServlet
+2017-05-04 19:48:32 [ INFO] - org.eclipse.jetty.server.handler.ContextHandler -ContextHandler.java(772) -started o.e.j.w.WebAppContext{/,file:/D:/eclipse/20170410/dlcat_erp/src/main/webapp/}
+2017-05-04 19:48:32 [ INFO] - org.eclipse.jetty.server.handler.ContextHandler -ContextHandler.java(772) -started o.e.j.w.WebAppContext{/,file:/D:/eclipse/20170410/dlcat_erp/src/main/webapp/}
+2017-05-04 19:48:34 [ INFO] - com.alibaba.druid.pool.DruidDataSource -DruidDataSource.java(721) -{dataSource-1} inited
+2017-05-04 19:49:38 [ INFO] - com.alibaba.druid.pool.DruidDataSource -DruidDataSource.java(1436) -{dataSource-1} closed
+2017-05-04 19:49:38 [ INFO] - org.eclipse.jetty.server.handler.ContextHandler -ContextHandler.java(829) -stopped o.e.j.w.WebAppContext{/,file:/D:/eclipse/20170410/dlcat_erp/src/main/webapp/}
+2017-05-04 19:49:38 [ INFO] - org.eclipse.jetty.webapp.StandardDescriptorProcessor -StandardDescriptorProcessor.java(282) -NO JSP Support for /, did not find org.apache.jasper.servlet.JspServlet
+2017-05-04 19:49:38 [ INFO] - org.eclipse.jetty.server.handler.ContextHandler -ContextHandler.java(772) -started o.e.j.w.WebAppContext{/,file:/D:/eclipse/20170410/dlcat_erp/src/main/webapp/}
+2017-05-04 19:49:38 [ INFO] - org.eclipse.jetty.server.handler.ContextHandler -ContextHandler.java(772) -started o.e.j.w.WebAppContext{/,file:/D:/eclipse/20170410/dlcat_erp/src/main/webapp/}
+2017-05-04 19:49:39 [ INFO] - com.alibaba.druid.pool.DruidDataSource -DruidDataSource.java(721) -{dataSource-1} inited
+2017-05-04 19:50:08 [ INFO] - com.alibaba.druid.pool.DruidDataSource -DruidDataSource.java(1436) -{dataSource-1} closed
+2017-05-04 19:50:08 [ INFO] - org.eclipse.jetty.server.handler.ContextHandler -ContextHandler.java(829) -stopped o.e.j.w.WebAppContext{/,file:/D:/eclipse/20170410/dlcat_erp/src/main/webapp/}
+2017-05-04 19:50:08 [ INFO] - org.eclipse.jetty.webapp.StandardDescriptorProcessor -StandardDescriptorProcessor.java(282) -NO JSP Support for /, did not find org.apache.jasper.servlet.JspServlet
+2017-05-04 19:50:08 [ INFO] - org.eclipse.jetty.server.handler.ContextHandler -ContextHandler.java(772) -started o.e.j.w.WebAppContext{/,file:/D:/eclipse/20170410/dlcat_erp/src/main/webapp/}
+2017-05-04 19:50:08 [ INFO] - org.eclipse.jetty.server.handler.ContextHandler -ContextHandler.java(772) -started o.e.j.w.WebAppContext{/,file:/D:/eclipse/20170410/dlcat_erp/src/main/webapp/}
+2017-05-04 19:50:10 [ INFO] - com.alibaba.druid.pool.DruidDataSource -DruidDataSource.java(721) -{dataSource-1} inited
+2017-05-04 19:50:13 [ERROR] - com.jfinal.core.ActionHandler -ActionHandler.java(104) -/
+com.jfinal.render.RenderException: java.lang.RuntimeException: File not found : D:\eclipse\20170410\dlcat_erp\src\main\webapp/login.html
+	at com.jfinal.render.TemplateRender.render(TemplateRender.java:63)
+	at com.jfinal.core.ActionHandler.handle(ActionHandler.java:99)
+	at com.jfinal.plugin.druid.DruidStatViewHandler.handle(DruidStatViewHandler.java:75)
+	at com.jfinal.core.JFinalFilter.doFilter(JFinalFilter.java:74)
+	at org.eclipse.jetty.servlet.ServletHandler$CachedChain.doFilter(ServletHandler.java:1307)
+	at org.eclipse.jetty.servlet.ServletHandler.doHandle(ServletHandler.java:453)
+	at org.eclipse.jetty.server.handler.ScopedHandler.handle(ScopedHandler.java:137)
+	at org.eclipse.jetty.security.SecurityHandler.handle(SecurityHandler.java:560)
+	at org.eclipse.jetty.server.session.SessionHandler.doHandle(SessionHandler.java:231)
+	at org.eclipse.jetty.server.handler.ContextHandler.doHandle(ContextHandler.java:1072)
+	at org.eclipse.jetty.servlet.ServletHandler.doScope(ServletHandler.java:382)
+	at org.eclipse.jetty.server.session.SessionHandler.doScope(SessionHandler.java:193)
+	at org.eclipse.jetty.server.handler.ContextHandler.doScope(ContextHandler.java:1006)
+	at org.eclipse.jetty.server.handler.ScopedHandler.handle(ScopedHandler.java:135)
+	at org.eclipse.jetty.server.handler.HandlerWrapper.handle(HandlerWrapper.java:116)
+	at org.eclipse.jetty.server.Server.handle(Server.java:361)
+	at org.eclipse.jetty.server.AbstractHttpConnection.handleRequest(AbstractHttpConnection.java:485)
+	at org.eclipse.jetty.server.AbstractHttpConnection.headerComplete(AbstractHttpConnection.java:926)
+	at org.eclipse.jetty.server.AbstractHttpConnection$RequestHandler.headerComplete(AbstractHttpConnection.java:988)
+	at org.eclipse.jetty.http.HttpParser.parseNext(HttpParser.java:635)
+	at org.eclipse.jetty.http.HttpParser.parseAvailable(HttpParser.java:235)
+	at org.eclipse.jetty.server.AsyncHttpConnection.handle(AsyncHttpConnection.java:82)
+	at org.eclipse.jetty.io.nio.SelectChannelEndPoint.handle(SelectChannelEndPoint.java:628)
+	at org.eclipse.jetty.io.nio.SelectChannelEndPoint$1.run(SelectChannelEndPoint.java:52)
+	at org.eclipse.jetty.util.thread.QueuedThreadPool.runJob(QueuedThreadPool.java:608)
+	at org.eclipse.jetty.util.thread.QueuedThreadPool$3.run(QueuedThreadPool.java:543)
+	at java.lang.Thread.run(Thread.java:745)
+Caused by: java.lang.RuntimeException: File not found : D:\eclipse\20170410\dlcat_erp\src\main\webapp/login.html
+	at com.jfinal.template.FileStringSource.loadFile(FileStringSource.java:75)
+	at com.jfinal.template.FileStringSource.getContent(FileStringSource.java:50)
+	at com.jfinal.template.Engine.buildTemplateByFileStringSource(Engine.java:150)
+	at com.jfinal.template.Engine.getTemplate(Engine.java:133)
+	at com.jfinal.render.TemplateRender.render(TemplateRender.java:61)
+	... 26 more
+2017-05-04 19:50:26 [ERROR] - com.jfinal.core.ActionHandler -ActionHandler.java(104) -/
+com.jfinal.render.RenderException: java.lang.RuntimeException: File not found : D:\eclipse\20170410\dlcat_erp\src\main\webapp/login.html
+	at com.jfinal.render.TemplateRender.render(TemplateRender.java:63)
+	at com.jfinal.core.ActionHandler.handle(ActionHandler.java:99)
+	at com.jfinal.plugin.druid.DruidStatViewHandler.handle(DruidStatViewHandler.java:75)
+	at com.jfinal.core.JFinalFilter.doFilter(JFinalFilter.java:74)
+	at org.eclipse.jetty.servlet.ServletHandler$CachedChain.doFilter(ServletHandler.java:1307)
+	at org.eclipse.jetty.servlet.ServletHandler.doHandle(ServletHandler.java:453)
+	at org.eclipse.jetty.server.handler.ScopedHandler.handle(ScopedHandler.java:137)
+	at org.eclipse.jetty.security.SecurityHandler.handle(SecurityHandler.java:560)
+	at org.eclipse.jetty.server.session.SessionHandler.doHandle(SessionHandler.java:231)
+	at org.eclipse.jetty.server.handler.ContextHandler.doHandle(ContextHandler.java:1072)
+	at org.eclipse.jetty.servlet.ServletHandler.doScope(ServletHandler.java:382)
+	at org.eclipse.jetty.server.session.SessionHandler.doScope(SessionHandler.java:193)
+	at org.eclipse.jetty.server.handler.ContextHandler.doScope(ContextHandler.java:1006)
+	at org.eclipse.jetty.server.handler.ScopedHandler.handle(ScopedHandler.java:135)
+	at org.eclipse.jetty.server.handler.HandlerWrapper.handle(HandlerWrapper.java:116)
+	at org.eclipse.jetty.server.Server.handle(Server.java:361)
+	at org.eclipse.jetty.server.AbstractHttpConnection.handleRequest(AbstractHttpConnection.java:485)
+	at org.eclipse.jetty.server.AbstractHttpConnection.headerComplete(AbstractHttpConnection.java:926)
+	at org.eclipse.jetty.server.AbstractHttpConnection$RequestHandler.headerComplete(AbstractHttpConnection.java:988)
+	at org.eclipse.jetty.http.HttpParser.parseNext(HttpParser.java:635)
+	at org.eclipse.jetty.http.HttpParser.parseAvailable(HttpParser.java:235)
+	at org.eclipse.jetty.server.AsyncHttpConnection.handle(AsyncHttpConnection.java:82)
+	at org.eclipse.jetty.io.nio.SelectChannelEndPoint.handle(SelectChannelEndPoint.java:628)
+	at org.eclipse.jetty.io.nio.SelectChannelEndPoint$1.run(SelectChannelEndPoint.java:52)
+	at org.eclipse.jetty.util.thread.QueuedThreadPool.runJob(QueuedThreadPool.java:608)
+	at org.eclipse.jetty.util.thread.QueuedThreadPool$3.run(QueuedThreadPool.java:543)
+	at java.lang.Thread.run(Thread.java:745)
+Caused by: java.lang.RuntimeException: File not found : D:\eclipse\20170410\dlcat_erp\src\main\webapp/login.html
+	at com.jfinal.template.FileStringSource.loadFile(FileStringSource.java:75)
+	at com.jfinal.template.FileStringSource.getContent(FileStringSource.java:50)
+	at com.jfinal.template.Engine.buildTemplateByFileStringSource(Engine.java:150)
+	at com.jfinal.template.Engine.getTemplate(Engine.java:133)
+	at com.jfinal.render.TemplateRender.render(TemplateRender.java:61)
+	... 26 more
+2017-05-04 19:51:24 [ INFO] - com.alibaba.druid.pool.DruidDataSource -DruidDataSource.java(1436) -{dataSource-1} closed
+2017-05-04 19:51:24 [ INFO] - org.eclipse.jetty.server.handler.ContextHandler -ContextHandler.java(829) -stopped o.e.j.w.WebAppContext{/,file:/D:/eclipse/20170410/dlcat_erp/src/main/webapp/}
+2017-05-04 19:51:24 [ INFO] - org.eclipse.jetty.webapp.StandardDescriptorProcessor -StandardDescriptorProcessor.java(282) -NO JSP Support for /, did not find org.apache.jasper.servlet.JspServlet
+2017-05-04 19:51:24 [ INFO] - org.eclipse.jetty.server.handler.ContextHandler -ContextHandler.java(772) -started o.e.j.w.WebAppContext{/,file:/D:/eclipse/20170410/dlcat_erp/src/main/webapp/}
+2017-05-04 19:51:24 [ INFO] - org.eclipse.jetty.server.handler.ContextHandler -ContextHandler.java(772) -started o.e.j.w.WebAppContext{/,file:/D:/eclipse/20170410/dlcat_erp/src/main/webapp/}
+2017-05-04 19:51:25 [ INFO] - com.alibaba.druid.pool.DruidDataSource -DruidDataSource.java(721) -{dataSource-1} inited
+2017-05-04 19:51:31 [ERROR] - com.jfinal.core.ActionHandler -ActionHandler.java(104) -/
+com.jfinal.render.RenderException: java.lang.RuntimeException: File not found : D:\eclipse\20170410\dlcat_erp\src\main\webapp/WEB-INF/views/index.html
+	at com.jfinal.render.TemplateRender.render(TemplateRender.java:63)
+	at com.jfinal.core.ActionHandler.handle(ActionHandler.java:99)
+	at com.jfinal.plugin.druid.DruidStatViewHandler.handle(DruidStatViewHandler.java:75)
+	at com.jfinal.core.JFinalFilter.doFilter(JFinalFilter.java:74)
+	at org.eclipse.jetty.servlet.ServletHandler$CachedChain.doFilter(ServletHandler.java:1307)
+	at org.eclipse.jetty.servlet.ServletHandler.doHandle(ServletHandler.java:453)
+	at org.eclipse.jetty.server.handler.ScopedHandler.handle(ScopedHandler.java:137)
+	at org.eclipse.jetty.security.SecurityHandler.handle(SecurityHandler.java:560)
+	at org.eclipse.jetty.server.session.SessionHandler.doHandle(SessionHandler.java:231)
+	at org.eclipse.jetty.server.handler.ContextHandler.doHandle(ContextHandler.java:1072)
+	at org.eclipse.jetty.servlet.ServletHandler.doScope(ServletHandler.java:382)
+	at org.eclipse.jetty.server.session.SessionHandler.doScope(SessionHandler.java:193)
+	at org.eclipse.jetty.server.handler.ContextHandler.doScope(ContextHandler.java:1006)
+	at org.eclipse.jetty.server.handler.ScopedHandler.handle(ScopedHandler.java:135)
+	at org.eclipse.jetty.server.handler.HandlerWrapper.handle(HandlerWrapper.java:116)
+	at org.eclipse.jetty.server.Server.handle(Server.java:361)
+	at org.eclipse.jetty.server.AbstractHttpConnection.handleRequest(AbstractHttpConnection.java:485)
+	at org.eclipse.jetty.server.AbstractHttpConnection.headerComplete(AbstractHttpConnection.java:926)
+	at org.eclipse.jetty.server.AbstractHttpConnection$RequestHandler.headerComplete(AbstractHttpConnection.java:988)
+	at org.eclipse.jetty.http.HttpParser.parseNext(HttpParser.java:635)
+	at org.eclipse.jetty.http.HttpParser.parseAvailable(HttpParser.java:235)
+	at org.eclipse.jetty.server.AsyncHttpConnection.handle(AsyncHttpConnection.java:82)
+	at org.eclipse.jetty.io.nio.SelectChannelEndPoint.handle(SelectChannelEndPoint.java:628)
+	at org.eclipse.jetty.io.nio.SelectChannelEndPoint$1.run(SelectChannelEndPoint.java:52)
+	at org.eclipse.jetty.util.thread.QueuedThreadPool.runJob(QueuedThreadPool.java:608)
+	at org.eclipse.jetty.util.thread.QueuedThreadPool$3.run(QueuedThreadPool.java:543)
+	at java.lang.Thread.run(Thread.java:745)
+Caused by: java.lang.RuntimeException: File not found : D:\eclipse\20170410\dlcat_erp\src\main\webapp/WEB-INF/views/index.html
+	at com.jfinal.template.FileStringSource.loadFile(FileStringSource.java:75)
+	at com.jfinal.template.FileStringSource.getContent(FileStringSource.java:50)
+	at com.jfinal.template.Engine.buildTemplateByFileStringSource(Engine.java:150)
+	at com.jfinal.template.Engine.getTemplate(Engine.java:133)
+	at com.jfinal.render.TemplateRender.render(TemplateRender.java:61)
+	... 26 more
+2017-05-04 19:52:50 [ INFO] - com.alibaba.druid.pool.DruidDataSource -DruidDataSource.java(1436) -{dataSource-1} closed
+2017-05-04 19:52:50 [ INFO] - org.eclipse.jetty.server.handler.ContextHandler -ContextHandler.java(829) -stopped o.e.j.w.WebAppContext{/,file:/D:/eclipse/20170410/dlcat_erp/src/main/webapp/}
+2017-05-04 19:52:50 [ INFO] - org.eclipse.jetty.webapp.StandardDescriptorProcessor -StandardDescriptorProcessor.java(282) -NO JSP Support for /, did not find org.apache.jasper.servlet.JspServlet
+2017-05-04 19:52:50 [ INFO] - org.eclipse.jetty.server.handler.ContextHandler -ContextHandler.java(772) -started o.e.j.w.WebAppContext{/,file:/D:/eclipse/20170410/dlcat_erp/src/main/webapp/}
+2017-05-04 19:52:50 [ INFO] - org.eclipse.jetty.server.handler.ContextHandler -ContextHandler.java(772) -started o.e.j.w.WebAppContext{/,file:/D:/eclipse/20170410/dlcat_erp/src/main/webapp/}
+2017-05-04 19:52:51 [ INFO] - com.alibaba.druid.pool.DruidDataSource -DruidDataSource.java(721) -{dataSource-1} inited
+2017-05-04 19:53:41 [ERROR] - com.jfinal.core.ActionHandler -ActionHandler.java(104) -/
+com.jfinal.render.RenderException: java.lang.RuntimeException: File not found : D:\eclipse\20170410\dlcat_erp\src\main\webapp/WEB-INF/views/index.html
+	at com.jfinal.render.TemplateRender.render(TemplateRender.java:63)
+	at com.jfinal.core.ActionHandler.handle(ActionHandler.java:99)
+	at com.jfinal.plugin.druid.DruidStatViewHandler.handle(DruidStatViewHandler.java:75)
+	at com.jfinal.core.JFinalFilter.doFilter(JFinalFilter.java:74)
+	at org.eclipse.jetty.servlet.ServletHandler$CachedChain.doFilter(ServletHandler.java:1307)
+	at org.eclipse.jetty.servlet.ServletHandler.doHandle(ServletHandler.java:453)
+	at org.eclipse.jetty.server.handler.ScopedHandler.handle(ScopedHandler.java:137)
+	at org.eclipse.jetty.security.SecurityHandler.handle(SecurityHandler.java:560)
+	at org.eclipse.jetty.server.session.SessionHandler.doHandle(SessionHandler.java:231)
+	at org.eclipse.jetty.server.handler.ContextHandler.doHandle(ContextHandler.java:1072)
+	at org.eclipse.jetty.servlet.ServletHandler.doScope(ServletHandler.java:382)
+	at org.eclipse.jetty.server.session.SessionHandler.doScope(SessionHandler.java:193)
+	at org.eclipse.jetty.server.handler.ContextHandler.doScope(ContextHandler.java:1006)
+	at org.eclipse.jetty.server.handler.ScopedHandler.handle(ScopedHandler.java:135)
+	at org.eclipse.jetty.server.handler.HandlerWrapper.handle(HandlerWrapper.java:116)
+	at org.eclipse.jetty.server.Server.handle(Server.java:361)
+	at org.eclipse.jetty.server.AbstractHttpConnection.handleRequest(AbstractHttpConnection.java:485)
+	at org.eclipse.jetty.server.AbstractHttpConnection.headerComplete(AbstractHttpConnection.java:926)
+	at org.eclipse.jetty.server.AbstractHttpConnection$RequestHandler.headerComplete(AbstractHttpConnection.java:988)
+	at org.eclipse.jetty.http.HttpParser.parseNext(HttpParser.java:635)
+	at org.eclipse.jetty.http.HttpParser.parseAvailable(HttpParser.java:235)
+	at org.eclipse.jetty.server.AsyncHttpConnection.handle(AsyncHttpConnection.java:82)
+	at org.eclipse.jetty.io.nio.SelectChannelEndPoint.handle(SelectChannelEndPoint.java:628)
+	at org.eclipse.jetty.io.nio.SelectChannelEndPoint$1.run(SelectChannelEndPoint.java:52)
+	at org.eclipse.jetty.util.thread.QueuedThreadPool.runJob(QueuedThreadPool.java:608)
+	at org.eclipse.jetty.util.thread.QueuedThreadPool$3.run(QueuedThreadPool.java:543)
+	at java.lang.Thread.run(Thread.java:745)
+Caused by: java.lang.RuntimeException: File not found : D:\eclipse\20170410\dlcat_erp\src\main\webapp/WEB-INF/views/index.html
+	at com.jfinal.template.FileStringSource.loadFile(FileStringSource.java:75)
+	at com.jfinal.template.FileStringSource.getContent(FileStringSource.java:50)
+	at com.jfinal.template.Engine.buildTemplateByFileStringSource(Engine.java:150)
+	at com.jfinal.template.Engine.getTemplate(Engine.java:133)
+	at com.jfinal.render.TemplateRender.render(TemplateRender.java:61)
+	... 26 more
+2017-05-04 19:55:16 [ INFO] - com.alibaba.druid.pool.DruidDataSource -DruidDataSource.java(1436) -{dataSource-1} closed
+2017-05-04 19:55:16 [ INFO] - org.eclipse.jetty.server.handler.ContextHandler -ContextHandler.java(829) -stopped o.e.j.w.WebAppContext{/,file:/D:/eclipse/20170410/dlcat_erp/src/main/webapp/}
+2017-05-04 19:55:17 [ INFO] - org.eclipse.jetty.webapp.StandardDescriptorProcessor -StandardDescriptorProcessor.java(282) -NO JSP Support for /, did not find org.apache.jasper.servlet.JspServlet
+2017-05-04 19:55:17 [ INFO] - org.eclipse.jetty.server.handler.ContextHandler -ContextHandler.java(772) -started o.e.j.w.WebAppContext{/,file:/D:/eclipse/20170410/dlcat_erp/src/main/webapp/}
+2017-05-04 19:55:17 [ INFO] - org.eclipse.jetty.server.handler.ContextHandler -ContextHandler.java(772) -started o.e.j.w.WebAppContext{/,file:/D:/eclipse/20170410/dlcat_erp/src/main/webapp/}
+2017-05-04 19:55:19 [ INFO] - com.alibaba.druid.pool.DruidDataSource -DruidDataSource.java(721) -{dataSource-1} inited
+2017-05-04 19:55:42 [ INFO] - org.eclipse.jetty.server.Server -Server.java(268) -jetty-8.1.8.v20121106
+2017-05-04 19:55:43 [ INFO] - org.eclipse.jetty.webapp.StandardDescriptorProcessor -StandardDescriptorProcessor.java(282) -NO JSP Support for /, did not find org.apache.jasper.servlet.JspServlet
+2017-05-04 19:55:43 [ INFO] - org.eclipse.jetty.server.handler.ContextHandler -ContextHandler.java(772) -started o.e.j.w.WebAppContext{/,file:/D:/eclipse/20170410/dlcat_erp/src/main/webapp/}
+2017-05-04 19:55:43 [ INFO] - org.eclipse.jetty.server.handler.ContextHandler -ContextHandler.java(772) -started o.e.j.w.WebAppContext{/,file:/D:/eclipse/20170410/dlcat_erp/src/main/webapp/}
+2017-05-04 19:55:44 [ INFO] - com.alibaba.druid.pool.DruidDataSource -DruidDataSource.java(721) -{dataSource-1} inited
+2017-05-04 19:55:45 [ INFO] - org.eclipse.jetty.server.AbstractConnector -AbstractConnector.java(338) -Started SelectChannelConnector@0.0.0.0:80
+2017-05-04 19:56:44 [ INFO] - org.eclipse.jetty.server.Server -Server.java(268) -jetty-8.1.8.v20121106
+2017-05-04 19:56:44 [ INFO] - org.eclipse.jetty.webapp.StandardDescriptorProcessor -StandardDescriptorProcessor.java(282) -NO JSP Support for /, did not find org.apache.jasper.servlet.JspServlet
+2017-05-04 19:56:44 [ INFO] - org.eclipse.jetty.server.handler.ContextHandler -ContextHandler.java(772) -started o.e.j.w.WebAppContext{/,file:/D:/eclipse/20170410/dlcat_erp/src/main/webapp/}
+2017-05-04 19:56:44 [ INFO] - org.eclipse.jetty.server.handler.ContextHandler -ContextHandler.java(772) -started o.e.j.w.WebAppContext{/,file:/D:/eclipse/20170410/dlcat_erp/src/main/webapp/}
+2017-05-04 19:56:46 [ INFO] - com.alibaba.druid.pool.DruidDataSource -DruidDataSource.java(721) -{dataSource-1} inited
+2017-05-04 19:56:46 [ INFO] - org.eclipse.jetty.server.AbstractConnector -AbstractConnector.java(338) -Started SelectChannelConnector@0.0.0.0:80
+2017-05-04 20:07:40 [ INFO] - com.alibaba.druid.pool.DruidDataSource -DruidDataSource.java(1436) -{dataSource-1} closed
+2017-05-04 20:07:40 [ INFO] - org.eclipse.jetty.server.handler.ContextHandler -ContextHandler.java(829) -stopped o.e.j.w.WebAppContext{/,file:/D:/eclipse/20170410/dlcat_erp/src/main/webapp/}
+2017-05-04 20:07:41 [ INFO] - org.eclipse.jetty.webapp.StandardDescriptorProcessor -StandardDescriptorProcessor.java(282) -NO JSP Support for /, did not find org.apache.jasper.servlet.JspServlet
+2017-05-04 20:07:41 [ INFO] - org.eclipse.jetty.server.handler.ContextHandler -ContextHandler.java(772) -started o.e.j.w.WebAppContext{/,file:/D:/eclipse/20170410/dlcat_erp/src/main/webapp/}
+2017-05-04 20:07:41 [ INFO] - org.eclipse.jetty.server.handler.ContextHandler -ContextHandler.java(772) -started o.e.j.w.WebAppContext{/,file:/D:/eclipse/20170410/dlcat_erp/src/main/webapp/}
+2017-05-04 20:07:42 [ INFO] - com.alibaba.druid.pool.DruidDataSource -DruidDataSource.java(721) -{dataSource-1} inited
+2017-05-04 20:13:19 [ INFO] - com.alibaba.druid.pool.DruidDataSource -DruidDataSource.java(1436) -{dataSource-1} closed
+2017-05-04 20:13:19 [ INFO] - org.eclipse.jetty.server.handler.ContextHandler -ContextHandler.java(829) -stopped o.e.j.w.WebAppContext{/,file:/D:/eclipse/20170410/dlcat_erp/src/main/webapp/}
+2017-05-04 20:13:19 [ INFO] - org.eclipse.jetty.webapp.StandardDescriptorProcessor -StandardDescriptorProcessor.java(282) -NO JSP Support for /, did not find org.apache.jasper.servlet.JspServlet
+2017-05-04 20:13:19 [ INFO] - org.eclipse.jetty.server.handler.ContextHandler -ContextHandler.java(772) -started o.e.j.w.WebAppContext{/,file:/D:/eclipse/20170410/dlcat_erp/src/main/webapp/}
+2017-05-04 20:13:19 [ INFO] - org.eclipse.jetty.server.handler.ContextHandler -ContextHandler.java(772) -started o.e.j.w.WebAppContext{/,file:/D:/eclipse/20170410/dlcat_erp/src/main/webapp/}
+2017-05-04 20:13:20 [ INFO] - com.alibaba.druid.pool.DruidDataSource -DruidDataSource.java(721) -{dataSource-1} inited
+2017-05-04 20:13:24 [ INFO] - com.alibaba.druid.pool.DruidDataSource -DruidDataSource.java(1436) -{dataSource-1} closed
+2017-05-04 20:13:24 [ INFO] - org.eclipse.jetty.server.handler.ContextHandler -ContextHandler.java(829) -stopped o.e.j.w.WebAppContext{/,file:/D:/eclipse/20170410/dlcat_erp/src/main/webapp/}
+2017-05-04 20:13:24 [ INFO] - org.eclipse.jetty.webapp.StandardDescriptorProcessor -StandardDescriptorProcessor.java(282) -NO JSP Support for /, did not find org.apache.jasper.servlet.JspServlet
+2017-05-04 20:13:24 [ INFO] - org.eclipse.jetty.server.handler.ContextHandler -ContextHandler.java(772) -started o.e.j.w.WebAppContext{/,file:/D:/eclipse/20170410/dlcat_erp/src/main/webapp/}
+2017-05-04 20:13:24 [ INFO] - org.eclipse.jetty.server.handler.ContextHandler -ContextHandler.java(772) -started o.e.j.w.WebAppContext{/,file:/D:/eclipse/20170410/dlcat_erp/src/main/webapp/}
+2017-05-04 20:13:26 [ INFO] - com.alibaba.druid.pool.DruidDataSource -DruidDataSource.java(721) -{dataSource-1} inited
+2017-05-04 20:13:54 [ INFO] - com.alibaba.druid.pool.DruidDataSource -DruidDataSource.java(1436) -{dataSource-1} closed
+2017-05-04 20:13:54 [ INFO] - org.eclipse.jetty.server.handler.ContextHandler -ContextHandler.java(829) -stopped o.e.j.w.WebAppContext{/,file:/D:/eclipse/20170410/dlcat_erp/src/main/webapp/}
+2017-05-04 20:13:55 [ INFO] - org.eclipse.jetty.webapp.StandardDescriptorProcessor -StandardDescriptorProcessor.java(282) -NO JSP Support for /, did not find org.apache.jasper.servlet.JspServlet
+2017-05-04 20:13:55 [ INFO] - org.eclipse.jetty.server.handler.ContextHandler -ContextHandler.java(772) -started o.e.j.w.WebAppContext{/,file:/D:/eclipse/20170410/dlcat_erp/src/main/webapp/}
+2017-05-04 20:13:55 [ INFO] - org.eclipse.jetty.server.handler.ContextHandler -ContextHandler.java(772) -started o.e.j.w.WebAppContext{/,file:/D:/eclipse/20170410/dlcat_erp/src/main/webapp/}
+2017-05-04 20:13:56 [ INFO] - com.alibaba.druid.pool.DruidDataSource -DruidDataSource.java(721) -{dataSource-1} inited
+2017-05-04 20:23:15 [ INFO] - com.alibaba.druid.pool.DruidDataSource -DruidDataSource.java(1436) -{dataSource-1} closed
+2017-05-04 20:23:15 [ INFO] - org.eclipse.jetty.server.handler.ContextHandler -ContextHandler.java(829) -stopped o.e.j.w.WebAppContext{/,file:/D:/eclipse/20170410/dlcat_erp/src/main/webapp/}
+2017-05-04 20:23:15 [ INFO] - org.eclipse.jetty.webapp.StandardDescriptorProcessor -StandardDescriptorProcessor.java(282) -NO JSP Support for /, did not find org.apache.jasper.servlet.JspServlet
+2017-05-04 20:23:15 [ INFO] - org.eclipse.jetty.server.handler.ContextHandler -ContextHandler.java(772) -started o.e.j.w.WebAppContext{/,file:/D:/eclipse/20170410/dlcat_erp/src/main/webapp/}
+2017-05-04 20:23:15 [ INFO] - org.eclipse.jetty.server.handler.ContextHandler -ContextHandler.java(772) -started o.e.j.w.WebAppContext{/,file:/D:/eclipse/20170410/dlcat_erp/src/main/webapp/}
+2017-05-04 20:23:16 [ INFO] - com.alibaba.druid.pool.DruidDataSource -DruidDataSource.java(721) -{dataSource-1} inited
+2017-05-04 20:23:45 [ INFO] - com.alibaba.druid.pool.DruidDataSource -DruidDataSource.java(1436) -{dataSource-1} closed
+2017-05-04 20:23:45 [ INFO] - org.eclipse.jetty.server.handler.ContextHandler -ContextHandler.java(829) -stopped o.e.j.w.WebAppContext{/,file:/D:/eclipse/20170410/dlcat_erp/src/main/webapp/}
+2017-05-04 20:23:45 [ INFO] - org.eclipse.jetty.webapp.StandardDescriptorProcessor -StandardDescriptorProcessor.java(282) -NO JSP Support for /, did not find org.apache.jasper.servlet.JspServlet
+2017-05-04 20:23:45 [ INFO] - org.eclipse.jetty.server.handler.ContextHandler -ContextHandler.java(772) -started o.e.j.w.WebAppContext{/,file:/D:/eclipse/20170410/dlcat_erp/src/main/webapp/}
+2017-05-04 20:23:45 [ INFO] - org.eclipse.jetty.server.handler.ContextHandler -ContextHandler.java(772) -started o.e.j.w.WebAppContext{/,file:/D:/eclipse/20170410/dlcat_erp/src/main/webapp/}
+2017-05-04 20:23:47 [ INFO] - com.alibaba.druid.pool.DruidDataSource -DruidDataSource.java(721) -{dataSource-1} inited
+2017-05-05 09:20:14 [ INFO] - org.eclipse.jetty.server.Server -Server.java(268) -jetty-8.1.8.v20121106
+2017-05-05 09:20:14 [ INFO] - org.eclipse.jetty.webapp.StandardDescriptorProcessor -StandardDescriptorProcessor.java(282) -NO JSP Support for /, did not find org.apache.jasper.servlet.JspServlet
+2017-05-05 09:20:14 [ INFO] - org.eclipse.jetty.server.handler.ContextHandler -ContextHandler.java(772) -started o.e.j.w.WebAppContext{/,file:/D:/eclipse/20170410/dlcat_erp/src/main/webapp/}
+2017-05-05 09:20:14 [ INFO] - org.eclipse.jetty.server.handler.ContextHandler -ContextHandler.java(772) -started o.e.j.w.WebAppContext{/,file:/D:/eclipse/20170410/dlcat_erp/src/main/webapp/}
+2017-05-05 09:20:16 [ INFO] - com.alibaba.druid.pool.DruidDataSource -DruidDataSource.java(721) -{dataSource-1} inited
+2017-05-05 09:20:16 [ INFO] - org.eclipse.jetty.server.AbstractConnector -AbstractConnector.java(338) -Started SelectChannelConnector@0.0.0.0:80
+2017-05-05 09:22:50 [ INFO] - com.alibaba.druid.pool.DruidDataSource -DruidDataSource.java(1436) -{dataSource-1} closed
+2017-05-05 09:22:50 [ INFO] - org.eclipse.jetty.server.handler.ContextHandler -ContextHandler.java(829) -stopped o.e.j.w.WebAppContext{/,file:/D:/eclipse/20170410/dlcat_erp/src/main/webapp/}
+2017-05-05 09:22:51 [ INFO] - org.eclipse.jetty.webapp.StandardDescriptorProcessor -StandardDescriptorProcessor.java(282) -NO JSP Support for /, did not find org.apache.jasper.servlet.JspServlet
+2017-05-05 09:22:51 [ INFO] - org.eclipse.jetty.server.handler.ContextHandler -ContextHandler.java(772) -started o.e.j.w.WebAppContext{/,file:/D:/eclipse/20170410/dlcat_erp/src/main/webapp/}
+2017-05-05 09:22:51 [ INFO] - org.eclipse.jetty.server.handler.ContextHandler -ContextHandler.java(772) -started o.e.j.w.WebAppContext{/,file:/D:/eclipse/20170410/dlcat_erp/src/main/webapp/}
+2017-05-05 09:22:52 [ INFO] - com.alibaba.druid.pool.DruidDataSource -DruidDataSource.java(721) -{dataSource-1} inited

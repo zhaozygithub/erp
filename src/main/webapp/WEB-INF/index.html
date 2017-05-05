@@ -1,6 +1,39 @@
 <!DOCTYPE html>
 <html>
 <head>
+<style type="text/css">
+.dropdown b{
+	position:absolute;
+	right:24px !important;
+	top:14px !important;
+}
+.slider-left li{
+    background-color: #505050 !important;
+    border-bottom: 1px solid #333;
+}
+.dropdown-menu li {
+    background-color: #211c20 !important;
+}
+
+.slider-left ul li a, .dropdown-menu ul li a{
+	color: #ffffff !important;
+}
+.dropdown-menu li a{
+	color: #999999 !important;
+}
+#sidebar > ul > li.active > a, #sidebar > ul > li >a:hover, #sidebar > ul > li:hover>a {
+    background: #d38606 !important;
+}
+.dropdown-menu li b{
+	position:absolute;
+	top:0 !important;
+	right:-10px !important;
+	display:none;
+}
+.dropdown:hover,.slider-left li:hover{
+	background-color: #d38606 !important;
+}
+</style>
 <meta charset="UTF-8">
 <title>dlcat index</title>
 <script type="text/javascript" src='#assets("/assets/assets.jjs")'></script>
@@ -31,15 +64,17 @@
                                 
                                 #if(size!=null)
                                 <li class="dropdown">
-                                    <a href="##(sec.id ??)" id="myTabDrop1" class="dropdown-toggle" data-toggle="dropdown">#(sec.name??)
-                                        <b class="down-down"><img class="down-down-img" alt="向下箭头" src="images/down.png"></b>
-                                         <b class="down-up"><img class="down-up-img" alt="向上箭头" src="images/up.png"></b>
-                                    </a>
+                                    <button type="button" class="btn dropdown-toggle" id="dropdownMenu1" 
+                                        data-toggle="dropdown" style="width:180px; height:54px; color:#fff; background-color:transparent !important; border:none; font-size:16px;">
+                                    <a href="##(sec.id ??)">#(sec.name??)</a>
+	                                     <b class="down-up"><img class="down-up-img" alt="向上箭头" src="images/up.png"></b>
+	                                     <b class="down-down"><img class="down-down-img" alt="向下箭头" src="images/down.png"></b>
+	                                </button>
                                     
                                     <ul class="dropdown-menu" role="menu" aria-labelledby="myTabDrop1">
                                     
                                     #for(third:sec.children??)
-                                        <li><a href="#" tabindex="-1" data-toggle="tab">#(third.name??)</a><b class="triangle-box"><img alt="三角" src="images/triangle.png"></b></li>
+                                        <li><a href="#" rel="#(third.url??)" tabindex="-1" data-toggle="tab">#(third.name??)</a><b class="triangle-box"><img alt="三角" src="images/triangle.png"></b></li>
                                     #end
                                     </ul>
                                 </li>
@@ -93,17 +128,23 @@
     </div>
 </div>
 <script type="text/javascript">
-$(function() {
-	$("a").click(function(){
+    $(function() {
+	
+    	$("a").click(function(){
+		//debugger;
+		if(this.rel!=""){
 		$("iframe").attr("src",this.rel);
+		}
+		
 	});
+	
+
 	$("#myTabContent div:first-child").addClass("active");
 	$("#myTab li:first-child").addClass("active");
 	
 	$(".down-up").css("display","none");
 	
 	$(".dropdown-toggle").click(function(){
-		//debugger;
 		var down=$(this).attr("aria-expanded");
 		if(down==undefined||down=='false'){
 			$(this).find(".down-up").css("display","");

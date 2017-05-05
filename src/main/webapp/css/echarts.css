@@ -1,0 +1,108 @@
+@CHARSET "UTF-8";
+
+.echart-box{
+	height: 400px;
+	 width: 40%; 
+	 float: left;
+	}
+	.echart-box:last-child,.echart-box:nth-child(2){
+	margin-left: 4%;
+	}
+	.select-box1,.select-box2,.select-box3{
+	position:absolute;
+	}
+	.select-box1{
+	top: 8px;
+	left: 51%;
+	}
+	.select-box2{
+	top: 408px;
+	left: 7%;
+	}
+	.select-box3{
+	top: 408px;
+	left: 49%;
+	}
+	
+	.table>tbody>tr>td{
+	height:76px !important;
+	line-height:76px  !important;
+	padding:0  !important;
+}
+table:first-child tr:first-child td{
+	height:30px !important;
+	line-height:30px  !important;
+	padding:0  !important;
+}
+
+/*订单审批流程*/
+.play-box{
+	clear:both;
+	padding-top:20px;
+
+}
+.play-h4{
+	margin-bottom:30px;
+	padding-left:20px;
+}
+.play-show{
+	padding-left:60px;
+}
+.play-show:first-child{
+	padding-bottom:44px;
+	padding-top:30px;
+}
+.play-show:last-child{
+	padding-bottom:106px;
+}
+.play-show span{
+	border-bottom:4px solid #dddddd;
+	position:relative;
+	display:inline-block;
+	padding-bottom:24px;
+	width:6%;
+	text-align:center;
+}
+.play-show .color-w{
+	color:#ffffff;
+}
+.play-show b{
+	position:absolute;
+	bottom:-8px;
+	left:50%;
+	margin-left:-8px;
+	width:16px;
+	height:16px;
+	background:url(../images/circle3.png) no-repeat 100%;
+}
+.play-show a{
+	width:72px;
+	height:88px;
+	background:url(../images/circle.png) no-repeat 100%;
+	color:#ffffff;
+	display:inline-block;
+	text-align:center;
+	padding-top:14px;
+	position:absolute;
+	bottom:-4px;
+	left:50%;
+	margin-left:-36px;
+}
+
+.play-show:last-child a{
+	background:url(../images/circle1.png) no-repeat 100%;
+}
+.play-show i{
+	position:absolute;
+	bottom:-4px;
+	width:50%;
+	height:4px;
+	background-color:#ffffff;
+}
+.play-show .i-left{
+	left:0;
+}
+.play-show .i-right{
+	right:0;
+}
+

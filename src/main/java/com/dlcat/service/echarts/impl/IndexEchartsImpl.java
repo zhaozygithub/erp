@@ -1,20 +1,21 @@
-package com.dlcat.service.flow.impl;
+package com.dlcat.service.echarts.impl;
 
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import com.dlcat.common.BaseService;
 import com.dlcat.core.model.CuObjectCustomer;
 import com.dlcat.core.model.FlowModel;
 import com.dlcat.core.model.FlowNode;
 import com.dlcat.core.model.SysOrg;
 import com.dlcat.core.model.SysUser;
-import com.dlcat.service.flow.IndexEchartsService;
+import com.dlcat.service.echarts.IndexEchartsService;
 import com.jfinal.plugin.activerecord.Db;
 import com.jfinal.plugin.activerecord.Record;
 
-public class IndexEchartsImpl implements IndexEchartsService {
+public class IndexEchartsImpl extends BaseService implements IndexEchartsService {
 
 	public Map<String, Integer> getPieData(SysUser user) {
 		// TODO Auto-generated method stub
@@ -224,15 +225,16 @@ public class IndexEchartsImpl implements IndexEchartsService {
 
 	public List<Map<String, Object>> flownodes() {
 		List<Map<String, Object>> list = new ArrayList<Map<String, Object>>();
-		
+		//获取model
 		String getflowmodelsql = "select * from flow_model"; 
 		List<FlowModel> models = FlowModel.getFlowModelsBySql(getflowmodelsql);
-
+		
 		for(FlowModel mode : models){
-			Map<String, Object> nodeMap= new HashMap<String, Object>();
+			Map<String, Object> flowMap= new HashMap<String, Object>();
 			List<FlowNode> nodes = FlowNode.getFlowNodeByModelId(mode.getInt("id"));
-			nodeMap.put(mode.getStr("name"), nodes);
-			list.add(nodeMap);
+			flowMap.put("modelName",mode.getStr("name"));
+			flowMap.put("nodes", nodes);
+			list.add(flowMap);
 		};
 		return list;
 	}

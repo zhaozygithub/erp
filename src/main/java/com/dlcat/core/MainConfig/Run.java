@@ -6,13 +6,14 @@ import com.alibaba.druid.wall.WallFilter;
 import com.dlcat.core.Interceptor.LoginInterceptor;
 import com.dlcat.core.controller.CrudController;
 import com.dlcat.core.controller.FlowController;
-import com.dlcat.core.controller.IndexController;
 import com.dlcat.core.controller.DataController;
-import com.dlcat.core.controller.FileController;
 import com.dlcat.core.controller.SystemManageController;
 import com.dlcat.core.controller.TestController;
 import com.dlcat.core.controller.TestUserController;
 import com.dlcat.core.controller.UserController;
+import com.dlcat.core.controller.customer.PossibleCustomerController;
+import com.dlcat.core.controller.index.FileController;
+import com.dlcat.core.controller.index.IndexController;
 import com.dlcat.core.model._MappingKit;
 import com.jfinal.config.Constants;
 import com.jfinal.config.Handlers;
@@ -40,20 +41,29 @@ public class Run extends JFinalConfig {
 	@Override
 	public void configRoute(Routes me) {
 		//所有的html文件都放在web-inf下
-		me.setBaseViewPath("/WEB-INF");
+		me.setBaseViewPath("/WEB-INF/views");
 		
+		//控制台模块
+		//登录，首页
 		me.add("/", IndexController.class);
+		//文件的上传下载
+		me.add("/file",FileController.class);
+		//有关form表单的展示
+		me.add("/form", CrudController.class);
+		//我的意向客户
+		me.add("/possibleCustomer",PossibleCustomerController.class,"/customer");
+		
+		
+		
+		
 		//测试路由
 		me.add("/test", TestController.class,"/views");
-		//有关form表单的展示
-		me.add("/form", CrudController.class,"/views");
 		//测试路由
 		me.add("/flow", FlowController.class,"/views");
 		//测试路由
 		me.add("/user",TestUserController.class,"/views");
 		me.add("/data",DataController.class);
-		//文件的上传下载
-		me.add("/file",FileController.class);
+		
 		me.add("/set",UserController.class,"/views");
 		me.add("/systemManager",SystemManageController.class,"/views");
 	}

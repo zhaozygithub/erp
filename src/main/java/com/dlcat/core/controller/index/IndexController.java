@@ -1,4 +1,4 @@
-package com.dlcat.core.controller;
+package com.dlcat.core.controller.index;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -11,8 +11,8 @@ import com.dlcat.core.model.FlowNode;
 import com.dlcat.core.model.SysMenu;
 import com.dlcat.core.model.SysRole;
 import com.dlcat.core.model.SysUser;
-import com.dlcat.service.flow.IndexEchartsService;
-import com.dlcat.service.flow.impl.IndexEchartsImpl;
+import com.dlcat.service.echarts.IndexEchartsService;
+import com.dlcat.service.echarts.impl.IndexEchartsImpl;
 import com.jfinal.captcha.CaptchaRender;
 import com.jfinal.core.Controller;
 import com.jfinal.kit.HashKit;
@@ -47,8 +47,7 @@ public class IndexController extends Controller {
 	 * 去首页
 	 */
 	private void toIndex() {
-
-		render("index.html");
+		render("/WEB-INF/index.html");
 	}
 	
 	
@@ -57,7 +56,7 @@ public class IndexController extends Controller {
 		initEchars(user);
 		flownodes();
 		
-		render("echarts.html");
+		render("console/echarts.html");
 	}
 	/**
 	 * 主页流程信息
@@ -117,7 +116,7 @@ public class IndexController extends Controller {
 	 * 滚到登录页面
 	 */
 	private void toLogin() {
-		render("login.html");
+		render("/WEB-INF/login.html");
 	}
 
 	/**
@@ -171,7 +170,7 @@ public class IndexController extends Controller {
 			roleMenus = roleMenus.substring(0, roleMenus.length() - 1);
 		}
 		// 查询当前角色的有效菜单
-		List<SysMenu> list = SysMenu.dao.find("select * from sys_menu where id in (" + roleMenus + ") and status='1'");
+		List<SysMenu> list = SysMenu.dao.find("select * from sys_menu where id in (" + roleMenus + ") and status='1' ORDER BY pid,sort_no,id");
 		Map<Integer, SysMenu> map = new HashMap<Integer, SysMenu>();
 
 		List<SysMenu> firstMenu = new ArrayList<SysMenu>();
@@ -235,7 +234,7 @@ public class IndexController extends Controller {
 		if (btns.size() > 0) {
 			setAttr("btns", btns);
 		}
-		render("index.html");
+		render("/WEB-INF/index.html");
 
 	}
 

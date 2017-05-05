@@ -12,9 +12,9 @@ import com.jfinal.plugin.activerecord.Db;
 
 public class TestUserController extends Controller {
 	public void index() {
-		List<SysUser> users = SysUser.dao.find("select * from sys_user where status=1");
-		setAttr("users", users);
-		render("testUser.html");
+		/*List<SysUser> users = SysUser.dao.find("select * from sys_user where status=1");
+		setAttr("users", users);*/
+		render("console/echarts.html");
 	}
 	
 

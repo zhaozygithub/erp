@@ -1,4 +1,4 @@
-package com.dlcat.core.controller;
+package com.dlcat.core.controller.index;
 
 import java.io.File;
 import java.io.FileOutputStream;
@@ -22,8 +22,8 @@ import org.apache.poi.ss.util.CellRangeAddress;
 
 import com.dlcat.common.BaseController;
 import com.dlcat.core.model.SysUser;
-import com.dlcat.service.flow.IndexEchartsService;
-import com.dlcat.service.flow.impl.IndexEchartsImpl;
+import com.dlcat.service.echarts.IndexEchartsService;
+import com.dlcat.service.echarts.impl.IndexEchartsImpl;
 
 /** 
 * @author zhaozhongyuan

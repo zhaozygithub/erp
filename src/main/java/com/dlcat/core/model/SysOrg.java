@@ -130,4 +130,16 @@ public class SysOrg extends BaseModel<SysOrg> {
 		return SysOrg.dao.findFirst(sql, org_id).getStr("name");
 	}
 	
+	/**
+	 * 根据用户编号获取 所属组织机构名称
+	 * @author liuran
+	 * @time 2017年5月4日 下午6:38:28
+	 * @param userId
+	 * @return String
+	 */
+	public static String getNameByUserId(int userId){
+		SysUser user = SysUser.dao.findById(userId);
+		return getNameById(user.getInt("belong_org_id"));
+	}
+	
 }

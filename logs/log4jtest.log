@@ -14115,3 +14115,9 @@ Caused by: com.jfinal.plugin.activerecord.ActiveRecordException: The table name:
 2017-05-08 16:40:03 [ INFO] - org.eclipse.jetty.server.handler.ContextHandler -ContextHandler.java(772) -started o.e.j.w.WebAppContext{/,file:/D:/eclipse/20170410/dlcat_erp/src/main/webapp/}
 2017-05-08 16:40:03 [ INFO] - org.eclipse.jetty.server.handler.ContextHandler -ContextHandler.java(772) -started o.e.j.w.WebAppContext{/,file:/D:/eclipse/20170410/dlcat_erp/src/main/webapp/}
 2017-05-08 16:40:04 [ INFO] - com.alibaba.druid.pool.DruidDataSource -DruidDataSource.java(721) -{dataSource-1} inited
+2017-05-08 17:07:28 [ INFO] - org.eclipse.jetty.server.Server -Server.java(268) -jetty-8.1.8.v20121106
+2017-05-08 17:07:28 [ INFO] - org.eclipse.jetty.webapp.StandardDescriptorProcessor -StandardDescriptorProcessor.java(282) -NO JSP Support for /, did not find org.apache.jasper.servlet.JspServlet
+2017-05-08 17:07:28 [ INFO] - org.eclipse.jetty.server.handler.ContextHandler -ContextHandler.java(772) -started o.e.j.w.WebAppContext{/,file:/D:/eclipse/20170410/dlcat_erp/src/main/webapp/}
+2017-05-08 17:07:28 [ INFO] - org.eclipse.jetty.server.handler.ContextHandler -ContextHandler.java(772) -started o.e.j.w.WebAppContext{/,file:/D:/eclipse/20170410/dlcat_erp/src/main/webapp/}
+2017-05-08 17:07:41 [ INFO] - com.alibaba.druid.pool.DruidDataSource -DruidDataSource.java(721) -{dataSource-1} inited
+2017-05-08 17:07:42 [ INFO] - org.eclipse.jetty.server.AbstractConnector -AbstractConnector.java(338) -Started SelectChannelConnector@0.0.0.0:80

@@ -14,7 +14,7 @@ import com.dlcat.core.model.SysUser;
  */
 public interface FlowService {
 	/**
-	 * 获取流程处理信息
+	 * 获取流程处理过程的所有信息
 	 * @param flowObjectNo	流程对象编号
 	 * @return
 	 * @author masai

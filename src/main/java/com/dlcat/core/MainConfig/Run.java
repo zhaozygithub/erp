@@ -58,11 +58,8 @@ public class Run extends JFinalConfig {
 		//首页消息统计
 		me.add("/message",MessageController.class,"/index_message");
 		
-		
-		
-		
 		//测试路由
-		me.add("/test", TestController.class,"/views");
+		me.add("/test", TestController.class,"/");
 		//测试路由
 		me.add("/flow", FlowController.class,"/views");
 		//测试路由

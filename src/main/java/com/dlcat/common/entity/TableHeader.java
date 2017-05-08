@@ -16,7 +16,7 @@ public class TableHeader implements Serializable {
 	/**
 	 * 列字段
 	 */
-	private String fildName;
+	private String fieldName;
 	/**
 	 * 列名称集合
 	 */
@@ -24,7 +24,7 @@ public class TableHeader implements Serializable {
 	/**
 	 * 列字段集合
 	 */
-	private String[] fildNames;
+	private String[] fieldNames;
 	
 	public String[] getNames() {
 		return names;
@@ -34,20 +34,20 @@ public class TableHeader implements Serializable {
 		this.names = names;
 	}
 
-	public String[] getFildNames() {
-		return fildNames;
+	public String[] getFieldNames() {
+		return fieldNames;
 	}
 
-	public void setFildNames(String[] fildNames) {
-		this.fildNames = fildNames;
+	public void setFieldNames(String[] fieldNames) {
+		this.fieldNames = fieldNames;
 	}
 
-	public String getFildName() {
-		return fildName;
+	public String getFieldName() {
+		return fieldName;
 	}
 
-	public void setFildName(String fildName) {
-		this.fildName = fildName;
+	public void setFieldName(String fieldName) {
+		this.fieldName = fieldName;
 	}
 
 	public String getName() {

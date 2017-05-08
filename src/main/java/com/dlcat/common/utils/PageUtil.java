@@ -261,8 +261,9 @@ public class PageUtil {
 	}
 
 	/**
-	 * 构造列表页面  结构+数据
+	 * 构造列表页面结构
 	 * 适用于单表数据显示
+	 * @param name	列表页面名称
 	 * @param isSingleTable		是否单表查询
 	 * @param strObj	单表查询时为表名称，多表查询时为sql语句
 	 * @param tableHeader	表头
@@ -274,18 +275,19 @@ public class PageUtil {
 	 * @author masai
 	 * @time 2017年4月17日 下午4:47:31
 	 */
-	public static DyResponse createTablePageStructure(boolean isSingleTable,String strObj, TableHeader tableHeader, Search search,String menuId,Map<Integer, com.dlcat.core.model.SysMenu> menus) throws Exception {
+	public static DyResponse createTablePageStructure(String dataUrl , String name , boolean isSingleTable,String strObj, TableHeader tableHeader, Search search,String menuId,Map<Integer, com.dlcat.core.model.SysMenu> menus) throws Exception {
 		if(StringUtils.isBlank(strObj)){
 			return null;
 		}
 		//获取列表数据sql语句
-		String querySql = StringUtils.getQuerySql(strObj, tableHeader.getFildNames());
-		return createTablePageStructure(querySql,tableHeader,search,menuId,menus);
+		//String querySql = StringUtils.getQuerySql(strObj, tableHeader.getFildNames());
+		return createTablePageStructure(dataUrl , name ,tableHeader,search,menuId,menus);
 	}
 	/**
-	 * 构造列表页面:结构+数据
-	 * sql语句需要自己写完整传入，适用于多表情况。
-	 * @param sql	页面数据sql
+	 * 构造列表页面结构
+	 * sql语句需要自己写完整传入，适用于多表情况
+	 * @param dataUrl	请求数据地址
+	 * @param name	列表页面名称
 	 * @param tableHeader	表头
 	 * @param search	查询框
 	 * @param menuId	Tab页的id	
@@ -296,21 +298,25 @@ public class PageUtil {
 	 * @time:2017年4月13日 下午7:30:28
 	 */
 	@SuppressWarnings("unchecked")
-	public static DyResponse createTablePageStructure(String sql, TableHeader tableHeader, Search search,String menuId,Map<Integer, SysMenu> menus) throws Exception {
-		if(StringUtils.isBlank(sql)){
+	public static DyResponse createTablePageStructure(String dataUrl , String name , TableHeader tableHeader, Search search,String menuId,Map<Integer, SysMenu> menus) throws Exception {
+		if(StringUtils.isBlank(dataUrl)){
 			return null;
 		}
 		PageStructure pageStructure = new PageStructure();
+		//列表数据请求地址
+		pageStructure.setDataUrl(dataUrl);
+		//列表名称
+		pageStructure.setName(name);
 		//表头
 		List<TableHeader> tableHeaderList = null;
-		if(tableHeader != null && tableHeader.getNames() != null && tableHeader.getFildNames() != null) {
+		if(tableHeader != null && tableHeader.getNames() != null && tableHeader.getFieldNames() != null) {
 			tableHeaderList = new ArrayList<TableHeader>();
 			for(int i=0;i<tableHeader.getNames().length;i++) {
 				if(tableHeader.getNames()[i] == null) continue;
 				
 				TableHeader temp = new TableHeader();
 				temp.setName(tableHeader.getNames()[i]);
-				temp.setFildName(tableHeader.getFildNames()[i]);
+				temp.setFieldName(tableHeader.getFieldNames()[i]);
 				tableHeaderList.add(temp);
 			}
 		}
@@ -337,11 +343,11 @@ public class PageUtil {
 		pageStructure.setButton(menuList);
 		
 		//数据
-		pageStructure.setDataList(Db.find(sql));
+		//pageStructure.setDataList(Db.find(sql));
 		
 		DyResponse response = new DyResponse();
 		response.setStatus(DyResponse.OK);
-		response.setDescription("OK");
+		response.setDescription("OK");//改为 存储 sql语句？
 		response.setData(pageStructure);
 		return response;
 	}

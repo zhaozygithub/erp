@@ -14,11 +14,13 @@ import com.dlcat.core.model.SysMenu;
 import com.dlcat.core.model.ToCodeLibrary;
 import com.dlcat.service.flow.FlowService;
 import com.dlcat.service.flow.impl.FlowServiceImpl;
+import com.jfinal.plugin.activerecord.Db;
+import com.jfinal.plugin.activerecord.Record;
 
 public class TestController extends BaseController{
 	public void index(){
 		TableHeader tableHeader = new TableHeader();
-		tableHeader.setFildNames(new String[]{"id","name","business_id","repay_type","remark","status"});
+		tableHeader.setFieldNames(new String[]{"id","name","business_id","repay_type","remark","status"});
 		tableHeader.setNames(new String []{"id","名称","业务类型编号","还款方式","备注","是否开启"});
 		
 		Search search = new Search();
@@ -31,14 +33,40 @@ public class TestController extends BaseController{
 		DyResponse response = null;
 		
 		try {
-			String sql = "select * from loan_product_category";
-			response = PageUtil.createTablePageStructure(sql, tableHeader, search,super.getLastPara().toString(),(Map<Integer, SysMenu>)this.getSessionAttr("menus"));
+			//String sql = "select * from loan_product_category";
+			response = PageUtil.createTablePageStructure("/test/data", "测试列表数据", tableHeader, search,super.getLastPara().toString(),(Map<Integer, SysMenu>)this.getSessionAttr("menus"));
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
 		this.setAttr("response", response);
+		//
+		//this.renderJson();
+		/*this.renderJson(object);
+		this.renderJson(jsonText);
+		this.renderJson(attrs);
+		this.renderJson(key, value);
+		this.render*/
+		//
 		this.render("test_table.html");
 	}
+   public void data(){
+	   String a = this.getPara("tableHeader");
+	   System.out.println("aaaaaaaaa");
+	   System.out.println("aaaaaaaaa");
+	   System.out.println("aaaaaaaaa");
+	   
+	   List<Record> res = Db.find("select * from loan_product_category");
+		
+	   /*  DyResponse dr = new DyResponse();
+	   dr.setData(res);
+	   dr.setStatus(200);
+	   dr.setDescription("OK");
+	   this.setAttr("dataResponse", dr);*/
+	   this.setAttr("status", 200);
+	   this.setAttr("name", "masai");
+	   this.setAttr("dataList", res);
+	   renderJson();
+   }
    public void getFild(){
 	   String a = super.getLastPara().toString();
 	   System.out.println(a);

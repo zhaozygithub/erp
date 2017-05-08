@@ -58,7 +58,6 @@ public class FlowServiceImpl extends BaseService implements FlowService {
 		}
 		return list;
 	}
-
 	public int flowInit(FlowApproveDate approveDate) {
 		/*1.订单录入  2.订单评估   3.订单审核	4.区域风控	5.总部风控	6.签订合同	
 		  7.总部贷款中心审核（线上 or 线下）	8.若是线下则进行财务审核，否则借款申请流程结束*/
@@ -83,7 +82,6 @@ public class FlowServiceImpl extends BaseService implements FlowService {
 		}
 		return 1;
 	}
-	
 	public int handleFlowTask(FlowApproveDate approveDate) {
 		//从页面获取下一个执行人、审批意见、
 		int result = -1;
@@ -99,7 +97,6 @@ public class FlowServiceImpl extends BaseService implements FlowService {
 		}
 		return result;
 	}
-	
 	/**
 	 * 更新当前流程任务记录
 	 * @param approveDate
@@ -184,10 +181,6 @@ public class FlowServiceImpl extends BaseService implements FlowService {
 		if(flowNodes.get(2) != null){
 			columnsMap.put("next_node_no",flowNodes.get(2).get("node_no"));
 			columnsMap.put("next_node_name",flowNodes.get(2).get("node_name"));
-			/*if(approveDate.getNextApproveUser() != null){
-				columnsMap.put("next_approve_user_id",approveDate.getNextApproveUser().getInt("id"));
-				columnsMap.put("next_approve_user_name",approveDate.getNextApproveUser().getInt("name"));
-			}*/
 		}
 		record.setColumns(columnsMap);
 		return baseModel.baseInsert(FlowTask.class, "task_no", record);

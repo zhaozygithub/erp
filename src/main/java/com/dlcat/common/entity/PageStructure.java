@@ -15,6 +15,14 @@ import com.jfinal.plugin.activerecord.Record;
 public class PageStructure implements Serializable {
 	private static final long serialVersionUID = 406270128258960210L;
 	/**
+	 * 名称
+	 */
+	private String name;
+	/**
+	 * 列表记录表示（适用于选中某条列表记录后，传到后台的参数）
+	 */
+	private String check;
+	/**
 	 * 搜索框
 	 */
 	private List<Search> search;
@@ -27,9 +35,9 @@ public class PageStructure implements Serializable {
 	 */
 	private List<TableHeader> tableHeader;
 	/**
-	 * 表格数据
+	 * 请求表格数据地址
 	 */
-	private List<Record> dataList;
+	private String dataUrl;
 	
 	public List<Search> getSearch() {
 		return search;
@@ -55,12 +63,28 @@ public class PageStructure implements Serializable {
 		this.button = button;
 	}
 
-	public List<Record> getDataList() {
-		return dataList;
+	public String getName() {
+		return name;
 	}
 
-	public void setDataList(List<Record> dataList) {
-		this.dataList = dataList;
+	public void setName(String name) {
+		this.name = name;
+	}
+
+	public String getDataUrl() {
+		return dataUrl;
+	}
+
+	public void setDataUrl(String dataUrl) {
+		this.dataUrl = dataUrl;
+	}
+
+	public String getCheck() {
+		return check;
+	}
+
+	public void setCheck(String check) {
+		this.check = check;
 	}
 
 }

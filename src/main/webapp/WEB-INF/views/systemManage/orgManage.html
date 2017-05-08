@@ -37,7 +37,7 @@ Ext.define('Org', {
 var menudata;
  //这一段主要是防止空节点发出AJAX请求导致响应很慢
 function formToCon(item){
-	var atta={checked:false,leaf:true,expandable:false};
+	var atta={leaf:true,expandable:true};//checked:false,
 	if(!item||JSON.stringify(item)=='{}')return atta;
 	var stritem=(JSON.stringify(atta)+JSON.stringify(item)).replace('}{',',');
 	return JSON.parse(stritem);
@@ -98,7 +98,7 @@ Ext.onReady(function(){
 		}
 	})
 	treepan=new Ext.tree.Panel({
-		title:'组织 ',
+		title:'机构 ',
 		store:mystore,
 		renderTo:treenode,
 		//selModel:new Ext.selection.CheckboxModel(),

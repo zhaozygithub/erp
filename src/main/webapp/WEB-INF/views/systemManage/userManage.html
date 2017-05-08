@@ -13,42 +13,69 @@ td{min-width:5px;}
 <body style='width: 98%;margin:1%;'>
 <div id='usertable'>
 <div id='condition'>
-用户名<input name='username'>
+用户名<input name='name'>
 <button onclick='seek()'>查找</button>
 </div>
-<table id='u_tb' style='overflow:auto;'>
-<tr><th >勾选</th> <th v-for='(v,key) in userdatas[0]'>{{key}}</th></tr>
-<tr  v-for='user in userdatas'><td><input type="checkbox" :id='user.name'></td>
+<div style='overflow:auto;' id='flow_tab'>
+<table id='u_tb'  style='width:98%;margin:1%;padding:1%;'>
+<tr> <th v-for='(v,key) in userdatas[0]'>{{key}}</th></tr>
+<tr  v-for='user in userdatas' v-on:click='get_select_name(user)'>
+<!-- <td><input type="checkbox" :id='user.name'></td> -->
 <td v-for=' item  in user'>  {{item}}</td></tr>
-</table>
-<p>总条数：{{userdatas.length}} 条 每页显示：20 条 总页数：1 页</p>
+</table></div>
+<p>总条数：{{userdatas.length}} 条 每页显示：20 条 总页数：#(total) 页</p>
+<ul>
+<li><a href='javascript:jumppage(1)'>首页</a></li>
+<li><a href='javascript:jumppage(p<=1?1:p-1)'>上页</a></li>
+<li><a href='javascript:jumppage(p>total-1?total:p+1)'>下页</a></li>
+<li><a href='javascript:jumppage(total)'>尾页</a></li></ul>
 </div>
 <script type="text/javascript">
-
+total= #(total);
+select_user=null;
+var vxd=new Vue({
+	el:'#usertable',
+	data:{'userdatas':[],
+		total:total},
+	methods:{
+		get_select_name:function(user){
+			//alert( user.id);
+			select_user=user;
+		}
+	}
+});;
+p=1;
+(function initdata(){
 var xhr=new XMLHttpRequest();
 xhr.open('get','/data/getUser');
 xhr.send();
 xhr.onload=function(resp){
 	var userdata=JSON.parse( resp.target.responseText);
-	var xd=new Vue({
-		el:'#usertable',
-		data:{'userdatas':userdata}
-	});
-
-}
+	vxd.userdatas=userdata;
+}})()
 function seek(){
 var conditionnode=document.getElementById('condition');
 var inputs=conditionnode.getElementsByTagName('input');
 var conditions='';
-for(var i in inputs){
+for(var i=0;i<inputs.length;i++ ){
 	if(inputs[i].value!=null&&inputs[i].value!='')
 	conditions+=inputs[i].name+':\''+inputs[i].value.trim()+'\', ';
 }
+console.log(conditions);
 var xhr=new XMLHttpRequest();
-xhr.open('get','/data/getUser');
+xhr.open('post','/data/getUser?condition='+conditions);
 xhr.send('condition='+conditions);
 xhr.onload=function(resp){
-	var userdata=JSON.parse( resp.target.responseText);}
+	 vxd.userdatas=JSON.parse( resp.target.responseText);}
+}
+function jumppage(p){
+	this.p=p;
+	var xhr=new XMLHttpRequest();
+	xhr.open('post','/data/getUser?p='+p);
+	xhr.send();
+	xhr.onload=function(resp){
+	vxd.userdatas=JSON.parse( resp.target.responseText);}
+	
 }
 // seek();
 </script>

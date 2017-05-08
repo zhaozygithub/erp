@@ -2,6 +2,8 @@ package com.dlcat.core.controller.index;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -106,6 +108,7 @@ public class IndexController extends Controller {
 	 * @time 2017年4月14日 下午6:49:23
 	 */
 	private List<SysMenu> getChildren(int pid) {
+		
 		List<SysMenu> list = new ArrayList<SysMenu>();
 		Map<Integer, SysMenu> map = getSessionAttr("menus");
 		Collection<SysMenu> values = map.values();
@@ -114,6 +117,15 @@ public class IndexController extends Controller {
 				list.add(sysMenu);
 			}
 		}
+		 Comparator<SysMenu> comparator=new Comparator<SysMenu>() {
+
+			public int compare(SysMenu s1, SysMenu s2) {
+				// TODO Auto-generated method stub
+				return s1.getInt("sort_no")-s2.getInt("sort_no");
+			}
+		};
+		Collections.sort(list, comparator);
+		
 		return list;
 	}
 

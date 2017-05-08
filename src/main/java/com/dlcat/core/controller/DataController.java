@@ -26,10 +26,10 @@ public class DataController extends BaseController{
 			p=getParaToInt("p");}
 		catch(Exception e){}
 		String condition=getPara("condition");
-		condition=condition==null?"1=1":condition.replaceAll("(^\\s*?,|,\\s*?$)", "")
+		condition=(condition==null||"".equals(condition))?"1=1":condition.replaceAll("(^\\s*?,|,\\s*?$)", "")
 				.replaceAll(",", " and ").replaceAll(":", " = ");
 		System.out.println(condition);
-		List<SysUser> users=SysUser.dao.find("select * from sys_user where ? limit ?,20;",condition,(p-1)*20);
+		List<SysUser> users=SysUser.dao.find("select id,img_url,name,real_name,role_id,belong_org_id,belong_org_name,phone,status,input_user_id,input_user_name,input_time,update_time,update_user_id,last_login_time,last_login_ip,login_count from sys_user where "+condition+" limit ?,20;",(p-1)*20);
 		renderJson(users);
 	}
 }

@@ -127,6 +127,7 @@ public class FileController extends BaseController {
     			e.printStackTrace();
     		}*/
 	}
+	
 	public void exportExcelFromJson() throws IOException{
 		String jsonstr=getPara("json");
 		jsonstr= java.net.URLDecoder.decode(jsonstr);
@@ -157,10 +158,10 @@ public class FileController extends BaseController {
         	row.createCell(j).setCellValue(al.get(i).get(j)==null?null:al.get(i).get(j).toString());//data[i][j](String)
         	}
 		}
-          // 自适应列宽
-     		for (int i = 0; i < colcount; i++) {
-     			sheet.autoSizeColumn(i, true);
-     		}
+        // 自适应列宽
+ 		for (int i = 0; i < colcount; i++) {
+ 			sheet.autoSizeColumn(i, true);
+ 		}
      	// 第六步，将文件存到指定位置
     	//renderFile(file);
     	//O

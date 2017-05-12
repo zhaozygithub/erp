@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-<meta charset="UTF-8">
+<meta charset="UTF-8" http-equiv="X-UA-Compatible" content="IE=edge">
 <title>dlcat login</title>
 <script type="text/javascript" src='#assets("/assets/assets.jjs")'></script>
 <link rel="stylesheet" href='#assets("/assets/assets.jcss")' />
@@ -47,7 +47,7 @@
 						</div>
 						<div class="col-lg-1 valicode-box">
 							<img alt="验证码图片" class="img-responsive" src="/captcha"
-								onclick="this.src='/captcha?'+Math.random()">
+								onclick="this.src='/captcha?'+Math.random()" style="margin-top: -4px;">
 						</div>
 						<span id="msg">#(msg??)</span>
 						<br />
@@ -63,13 +63,13 @@
 
 	<script type="text/javascript">
 		$(function() {
-			$(".input").blur(function() {
+			/* $(".input").blur(function() {
 				if ($(this).val() == "") {
 					$(this).css("border-color", "red");
 				} else {
 					$(this).css("border-color", "#D9D6C4");
 				}
-			});
+			}); */
 
 			$("#loginbtn").click(function() {
 				 var k = 0;

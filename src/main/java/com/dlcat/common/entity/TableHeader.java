@@ -12,7 +12,7 @@ public class TableHeader implements Serializable {
 	/**
 	 * 列名称
 	 */
-	private String name;
+	private String CNName;
 	/**
 	 * 列字段
 	 */
@@ -20,41 +20,34 @@ public class TableHeader implements Serializable {
 	/**
 	 * 列名称集合
 	 */
-	private String[] names;
+	private String[] CNNames;
 	/**
 	 * 列字段集合
 	 */
 	private String[] fieldNames;
 	
-	public String[] getNames() {
-		return names;
-	}
-
-	public void setNames(String[] names) {
-		this.names = names;
-	}
-
-	public String[] getFieldNames() {
-		return fieldNames;
-	}
-
-	public void setFieldNames(String[] fieldNames) {
-		this.fieldNames = fieldNames;
-	}
-
 	public String getFieldName() {
 		return fieldName;
 	}
-
 	public void setFieldName(String fieldName) {
 		this.fieldName = fieldName;
 	}
-
-	public String getName() {
-		return name;
+	public String[] getFieldNames() {
+		return fieldNames;
 	}
-
-	public void setName(String name) {
-		this.name = name;
+	public void setFieldNames(String[] fieldNames) {
+		this.fieldNames = fieldNames;
+	}
+	public String getCNName() {
+		return CNName;
+	}
+	public void setCNName(String cNName) {
+		CNName = cNName;
+	}
+	public String[] getCNNames() {
+		return CNNames;
+	}
+	public void setCNNames(String[] cNNames) {
+		CNNames = cNNames;
 	}
 }

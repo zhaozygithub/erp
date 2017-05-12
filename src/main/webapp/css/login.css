@@ -46,7 +46,9 @@ body{
 	line-height:34px;
 }
 .form-control{
-	padding:20px 12px;
+	padding:0 12px;
+	height:36px;
+	line-height:36px;
 }
 .valicode-box{
 	padding-left:0;

@@ -101,6 +101,17 @@ public class StringUtils {
 	}
 	
 	/**
+     * 判断是否含有特殊字符
+     * @param str
+     * @return true为包含，false为不包含
+     */
+    public static boolean isSpecialChar(String str) {
+        String regEx = "[ _`~!@#$%^&*()+=|{}':;',\\[\\].<>/?~！@#￥%……&*（）——+|{}【】‘；：”“’。，、？]|\n|\r|\t";
+        Pattern p = Pattern.compile(regEx);
+        Matcher m = p.matcher(str);
+        return m.find();
+    }
+	/**
 	 * 字符串按指定符号分割为数组
 	 * 
 	 * @param str
@@ -109,7 +120,7 @@ public class StringUtils {
 	 * @throws Exception 
 	 */
 	public static String[] split(String str, String symbol) throws Exception {
-		if (str.length() < 1 || symbol.length() < 1) {
+		if (str == null || symbol == null || str.length() < 1 || symbol.length() < 1) {
 			try {
 				throw new Exception("字符错误");
 			} catch (Exception e) {
@@ -170,7 +181,7 @@ public class StringUtils {
 	 * @param impStr
 	 * @return
 	 */
-	public static String importStr(List<?> objList, String impStr) {
+	public static String listToStr(List<?> objList, String impStr) {
 		String resultStr = "";
 		for (Object obj : objList) {
 			if (obj == null) {
@@ -180,6 +191,28 @@ public class StringUtils {
 				resultStr = obj.toString();
 			} else {
 				resultStr += impStr + obj.toString();
+			}
+		}
+		return resultStr;
+	}
+	/**
+	 * 将Arrary转成String,并按impStr进行分隔
+	 * @param arrayStr
+	 * @param impStr
+	 * @return
+	 * @author masai
+	 * @time 2017年5月10日 下午3:02:28
+	 */
+	public static String arrayToStr(String[] arrayStr , String impStr){
+		String resultStr = "";
+		for (String obj : arrayStr) {
+			if (obj == null) {
+				continue;
+			}
+			if ("".equals(resultStr)) {
+				resultStr = obj.toString();
+			} else {
+				resultStr += impStr + obj;
 			}
 		}
 		return resultStr;
@@ -202,7 +235,7 @@ public class StringUtils {
 		if(fields == null){
 			return sb.append(" * from ").append(tableName).toString();
 		}
-		return sb.append(importStr(Arrays.asList(fields),",")).append(" from ").append(tableName).toString();
+		return sb.append(listToStr(Arrays.asList(fields),",")).append(" from ").append(tableName).toString();
 	}
 	
 	/**

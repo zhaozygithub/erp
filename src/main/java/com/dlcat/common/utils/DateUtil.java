@@ -258,11 +258,21 @@ public class DateUtil {
 		}
 		return null;
 	}
-	
+	/**
+	 * 获取简化格式日期 ps:20170511
+	 * @return
+	 * @author masai
+	 * @time 2017年5月11日 下午4:18:58
+	 */
 	public static String getCurrentDateStr() {
 		return dateShortFormat.get().format(new Date());
 	}
-	
+	/**
+	 * 获取简化格式时间 ps:20170511162033
+	 * @return
+	 * @author masai
+	 * @time 2017年5月11日 下午4:20:07
+	 */
 	public static String getCurrentTimeStr(){
 		return TimeShortFormat.get().format(new Date());
 	}

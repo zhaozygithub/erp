@@ -1,4 +1,4 @@
-package com.dlcat.core.controller.indexMessage;
+package com.dlcat.core.controller.index;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -16,6 +16,6 @@ public class MessageController extends BaseController {
 		int userId = user.getInt("id");
 		Map<String, Integer> messageMap = messageStatisticService.messageStatistic(userId);
 		setAttr("message", messageMap);
-		render("index_message.html");
+		render("indexMessage.html");
 	}
 }

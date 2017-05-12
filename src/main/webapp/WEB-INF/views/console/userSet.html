@@ -1,0 +1,109 @@
+
+#@jquery()
+<script type="text/javascript">
+/* clear();
+function clear(){
+	$("#userNamelabel").text("") 
+} */
+ function check(){  
+	 var txt_userName = document.forms["setForm"]["userName"].value;
+	 var txt_oldpassword = document.forms["setForm"]["oldPassword"].value;
+	 var txt_newpassword = document.forms["setForm"]["newPassword"].value;
+	 var txt_newpassword2 = document.forms["setForm"]["newPassword2"].value;
+	 var txt_phone = document.forms["setForm"]["phone"].value;
+  //  debugger;
+   /*  $("#firstnameLabel").text("")  
+    $("#lastnameLabel").text("") */  
+    var pattern = /^1[34578]\d{9}$/;
+    var isSuccess = 1;  
+   // debugger;
+    if(txt_userName.length == 0){
+    	$("#userNamelabel").text(" 用户名不能为空！")  
+        /* $("#userNamelabel").css({"color":"red"}); */
+    	isSuccess = 0;
+    }
+    
+    if(txt_oldpassword == txt_newpassword && txt_oldpassword.length !=0)  
+    {  
+        $("#passwordlabel1").text("新密码不能和旧密码相同，请重新输入！")  
+        isSuccess = 0;  
+    }  
+    
+    if(txt_newpassword != txt_newpassword2)  
+    {  
+        $("#passwordlabel2").text("两次输入新密码不同，请重新输入！")  
+        isSuccess = 0;  
+    }  
+   // pattern.test(txt_phone) ||
+    if (! txt_phone.match("^1[3|4|5|7|8]([0-9])\\d{8}$") ) {
+    	$("#phonelabel").text("手机号码格式不正确 ，请重新输入！")  
+        isSuccess = 0;
+    } 
+    
+    if(isSuccess == 1){
+    	return true; 
+    }  
+    return false;
+    }  
+</script> 
+    <div class="modal-header">
+          <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+          <h4 class="modal-title" id="mySmallModalLabel">用户信息</h4>
+  	</div>
+    <div id="main" class="modal-body">
+	   <form class="form-horizontal" role="form" name="setForm" action="/set/submit"  method="post" onsubmit="return check()">
+		   <input type="hidden" name="user.id" value="#(user.id ??)">
+		   
+		    <div  class="form-group">
+			    <label class="col-md-2 control-label input-label" for="userName">用户名</label>
+			    <div class="col-md-8">
+			    	<input type="text" class="form-control"   id="userName" onfocus="$('#userNamelabel').text('')" name="userName" placeholder="用户名" value="#(user.name ??)">
+			     </div>
+			     <label class="col-md-8 control-label modal-label" id="userNamelabel">#(msguserName??)</label>
+		    </div>
+		    <br>
+		    
+		    <div class="form-group">
+			    <label class="col-md-2 control-label input-label" for="oldPassword">旧密码</label>
+			    <div class="col-md-8">
+			    	<input type="text" class="form-control"  id="oldPassword" name="oldPassword" placeholder="旧密码" >
+			     </div>
+		    </div>
+		    <br>
+		    
+		    <div class="form-group">
+		    	<label class="col-md-2 control-label input-label" for="newPassword">新密码</label>
+		    	<div class="col-md-8">
+		    		<input type="text"  class="form-control" id="newPassword" onfocus="$('#passwordlabel1').text('')" name="newPassword" placeholder="新密码" >
+		     	</div>
+		     	<label class="col-md-8 control-label modal-label" id="passwordlabel1">#(msgpassword1??)</label>
+		    </div>
+		    <br>
+		    
+		    <div class="form-group">
+		    	<label class="col-md-2 control-label input-label" for="newPassword2">重新输入</label>
+		    	<div class="col-md-8">
+		    		<input type="text" class="form-control"  id="newPassword2" onfocus="$('#passwordlabel2').text('')" name="newPassword2" placeholder="新密码" >
+		     	</div>
+		     	<label class="col-md-8 control-label modal-label" id="passwordlabel2">#(msgpassword2??)</label>
+		    </div> 
+		    <br>
+		    
+		    <div class="form-group"> 
+		    	<label class="col-md-2 control-label input-label" for="phone">手机</label>
+		    	<div class="col-md-8">
+		     		<input type="text" class="form-control"  id="phone" onfocus="$('#phonelabel').text('')" name="phone" placeholder="新手机" value="#(user.phone ??)">
+		     	</div>
+		     	<label class="col-md-8 control-label modal-label" id="phonelabel">#(msgphone??)</label>
+		    </div> 
+		    <br>
+		    <div class="form-group">
+		    	<div class="col-md-4 col-md-offset-8">
+		    	<button type="submit" class="btn btn-primary" style="padding:6px 12px;">更新</button>
+	   	        <button type="button"  class="btn btn-default" data-dismiss="modal" style="padding:6px 12px;">关闭</button>
+		    	</div>
+		    </div>  
+	   </form>  
+	</div>
+
+

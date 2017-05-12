@@ -4,6 +4,7 @@ import java.util.List;
 import java.util.Map;
 
 import com.dlcat.common.entity.FlowApproveDate;
+import com.dlcat.core.model.FlowTask;
 import com.dlcat.core.model.SysUser;
 
 
@@ -37,4 +38,15 @@ public interface FlowService {
 	 * @time 2017年5月3日 上午10:06:38
 	 */
 	public int handleFlowTask(FlowApproveDate approveDate);
+	/**
+	 * 流程数据数据处理
+	 * 注：在每一次流程处理的过程中，伴随着流程数据的产生
+	 * @param curFlowTask	当前流程任务
+	 * @param url	数据地址
+	 * @param dataType	数据类型
+	 * @return
+	 * @author masai
+	 * @time 2017年5月8日 下午4:29:09
+	 */
+	public int handleFlowDate(FlowTask curFlowTask , String url , String dataType);
 }

@@ -2,26 +2,26 @@
 
 .echart-box{
 	height: 400px;
-	 width: 40%; 
+	 width: 48%; 
 	 float: left;
 	}
 	.echart-box:last-child,.echart-box:nth-child(2){
-	margin-left: 4%;
+	margin-left: 2%;
 	}
 	.select-box1,.select-box2,.select-box3{
 	position:absolute;
 	}
 	.select-box1{
 	top: 8px;
-	left: 51%;
+	left: 59%;
 	}
 	.select-box2{
 	top: 408px;
-	left: 7%;
+	left: 10%;
 	}
 	.select-box3{
 	top: 408px;
-	left: 49%;
+	left: 60%;
 	}
 	
 table>tbody>tr>td{

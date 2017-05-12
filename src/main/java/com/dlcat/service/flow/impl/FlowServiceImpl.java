@@ -20,6 +20,7 @@ import com.dlcat.core.model.SysRole;
 import com.dlcat.core.model.SysUser;
 import com.dlcat.service.flow.FlowService;
 import com.jfinal.plugin.activerecord.Record;
+import com.sun.org.apache.regexp.internal.recompile;
 /**
  * 流程接口实现类
  * @author masai
@@ -66,13 +67,22 @@ public class FlowServiceImpl extends BaseService implements FlowService {
 			insertFlowObject(approveDate.getLoanApplyApprove() , approveDate.getCurApproveUser());
 			//（2）.创建流程初始化任务
 			insertFlowTask(approveDate);
-			//（3）更新流程对象（初始化更新）
+			//（3）.流程数据初始化
+			//查询借款申请数据
+			List<LoanApplyApproveData> applyApproveDatas = LoanApplyApproveData.getLoanDateListByApplyId(
+						approveDate.getLoanApplyApprove().getStr("loan_apply_id"));
+			FlowTask curFlowTask = FlowTask.getFristFlowTaskByObjectNo("");
+			for(LoanApplyApproveData approveData : applyApproveDatas){
+				//循环插入流程数据
+				insertFlowData(curFlowTask, approveData.getStr("data_url"), approveData.getStr("data_type"));
+			}
+			//（4）更新流程对象（初始化更新）
 			updateFlowObject(approveDate);
-			//（4）.创建流程下一个任务
-				//修改链式流程节点
+			//（5）.创建流程下一个任务
+			//修改链式流程节点
 			approveDate.setFlowNodeChainList(FlowNode.getFlowNodeChain(
 					approveDate.getFlowNodeChainList().get(1).getStr("node_no")));
-				//修改上一个流程任务
+			//修改上一个流程任务
 			approveDate.setPreFlowTask(FlowTask.getFristFlowTaskByObjectNo(
 					approveDate.getLoanApplyApprove().getStr("id")));//流程对象编号=借款编号
 			insertFlowTask(approveDate);
@@ -82,6 +92,7 @@ public class FlowServiceImpl extends BaseService implements FlowService {
 		}
 		return 1;
 	}
+	
 	public int handleFlowTask(FlowApproveDate approveDate) {
 		//从页面获取下一个执行人、审批意见、
 		int result = -1;
@@ -96,6 +107,46 @@ public class FlowServiceImpl extends BaseService implements FlowService {
 			e.printStackTrace();
 		}
 		return result;
+	}
+	
+	public int handleFlowDate(FlowTask curFlowTask , String url , String dataType){
+		try {
+			if(curFlowTask == null){
+				return -1;
+			}
+			//插入流程数据记录
+			return insertFlowData(curFlowTask , url , dataType);
+		} catch (Exception e) {
+			e.printStackTrace();
+			return -1;
+		}
+	}
+	/**
+	 * 插入流程数据记录
+	 * @param curFlowTask	当前流程任务
+	 * @param url	数据地址
+	 * @param dataType	数据类型
+	 * @return
+	 * @author masai
+	 * @time 2017年5月8日 下午4:53:35
+	 */
+	private int insertFlowData(FlowTask curFlowTask , String url , String dataType){
+		if(curFlowTask == null){
+			return -1;
+		}
+		Record record = new Record();
+		Map<String,Object> columnsMap = new HashMap<String, Object>();
+		columnsMap.put("flow_object_no", curFlowTask.get("flow_object_no"));
+		columnsMap.put("flow_node_no", curFlowTask.get("cur_node_no"));
+		columnsMap.put("flow_task_no", curFlowTask.get("task_no"));
+		columnsMap.put("data_type", dataType);
+		columnsMap.put("url", url);
+		columnsMap.put("status", "1");
+		columnsMap.put("add_time", DateUtil.getCurrentTime());
+		//columnsMap.put("update_time", "");
+		//columnsMap.put("remark", "");
+		record.setColumns(columnsMap);
+		return baseModel.baseInsert(FlowData.class, record);
 	}
 	/**
 	 * 更新当前流程任务记录

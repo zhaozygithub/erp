@@ -15,13 +15,13 @@ import com.dlcat.core.model.ToCodeLibrary;
 public class Search implements Serializable {
 	private static final long serialVersionUID = 1967564435044525324L;
 	/**
-	 * 搜索框名称
+	 * 搜索框名称（表中字段）
 	 */
-	private String name;
+	private String fieldName;
 	/**
-	 * 搜索框字段值
+	 * 搜索框字段值（字段汉译）
 	 */
-	private String filedName;
+	private String CNName;
 	/**
 	 * 搜索框类型
 	 */
@@ -29,11 +29,11 @@ public class Search implements Serializable {
 	/**
 	 * 搜索框名称集合
 	 */
-	private String[] names;
+	private String[] fieldNames;
 	/**
 	 * 搜索框字段值集合
 	 */
-	private String[] filedNames;
+	private String[] CNNames;
 	/**
 	 * 搜索框类型集合
 	 */
@@ -47,44 +47,12 @@ public class Search implements Serializable {
 	 */
 	private Map<String,List<ToCodeLibrary>> optionListMap;
 	
-	public String[] getNames() {
-		return names;
-	}
-
-	public void setNames(String[] names) {
-		this.names = names;
-	}
-
 	public String[] getTypes() {
 		return types;
 	}
 
 	public void setTypes(String[] types) {
 		this.types = types;
-	}
-
-	public String[] getFiledNames() {
-		return filedNames;
-	}
-
-	public void setFiledNames(String[] filedNames) {
-		this.filedNames = filedNames;
-	}
-
-	public String getName() {
-		return name;
-	}
-
-	public void setName(String name) {
-		this.name = name;
-	}
-
-	public String getFiledName() {
-		return filedName;
-	}
-
-	public void setFiledName(String filedName) {
-		this.filedName = filedName;
 	}
 
 	public String getType() {
@@ -110,4 +78,37 @@ public class Search implements Serializable {
 	public void setOptionListMap(Map<String,List<ToCodeLibrary>> optionListMap) {
 		this.optionListMap = optionListMap;
 	}
+
+	public String getCNName() {
+		return CNName;
+	}
+
+	public void setCNName(String cNName) {
+		CNName = cNName;
+	}
+
+	public String[] getCNNames() {
+		return CNNames;
+	}
+
+	public void setCNNames(String[] cNNames) {
+		CNNames = cNNames;
+	}
+
+	public String[] getFieldNames() {
+		return fieldNames;
+	}
+
+	public void setFieldNames(String[] fieldNames) {
+		this.fieldNames = fieldNames;
+	}
+
+	public String getFieldName() {
+		return fieldName;
+	}
+
+	public void setFieldName(String fieldName) {
+		this.fieldName = fieldName;
+	}
+
 }

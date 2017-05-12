@@ -240,19 +240,20 @@ public class IndexController extends Controller {
 
 	/**
 	* @author:zhaozhongyuan 
-	* @Description: 根据tabID获取按钮
+	* @Description: 根据三级菜单ID获取tab页
 	* @param 
 	* @return void
 	* @date 2017年4月17日 上午11:26:07  
 	*/
-	public void getBtnsBytabId() {
+	public void getTabsById() {
 		int id = getParaToInt(0);
-		List<SysMenu> btns = getChildren(id);
-		if (btns.size() > 0) {
-			setAttr("btns", btns);
+		List<SysMenu> tabs = getChildren(id);
+		if (tabs.size() > 0) {
+			renderJson(tabs);
+		}else {
+			renderNull();
 		}
-		render("/WEB-INF/index.html");
-
+		
 	}
 
 	/**

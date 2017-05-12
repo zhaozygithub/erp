@@ -1,4 +1,4 @@
-package com.dlcat.core.controller;
+package com.dlcat.core.controller.index;
 
 import com.dlcat.common.BaseController;
 import com.dlcat.common.utils.CommonUtils;
@@ -6,7 +6,7 @@ import com.dlcat.core.model.SysUser;
 import com.jfinal.kit.HashKit;
 import com.jfinal.plugin.activerecord.Db;
 
-public class UserController extends BaseController {
+public class SetController extends BaseController {
 	
 	/**
 	 * 个人信息设置

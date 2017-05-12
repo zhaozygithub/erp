@@ -1,64 +1,13 @@
 <!DOCTYPE html>
 <html>
 <head>
-<style type="text/css">
-.dropdown b {
-	position: absolute;
-	right: 24px !important;
-	top: 14px !important;
-}
-
-.slider-left li {
-	background-color: #505050 !important;
-	border-bottom: 1px solid #333;
-    text-align:left !important;
-}
-
-.dropdown-menu li {
-	background-color: #211c20 !important;
-}
-
-.slider-left ul li a, .dropdown-menu ul li a {
-	color: #ffffff !important;
-	text-align:left !important;
-	padding-left:30px;
-}
-
-.slider-left .btn,.slider-left .btn a{
-	text-align:left !important;
-}
-.slider-left .btn a{
-	padding-left:10px;
-}
-
-.dropdown-menu li a {
-	color: #999999 !important;
-}
-
-#sidebar>ul>li.active>a, #sidebar>ul>li>a:hover, #sidebar>ul>li:hover>a
-	{
-	background: #d38606 !important;
-}
-
-.dropdown-menu li b {
-	position: absolute;
-	top: 0 !important;
-	right: -10px !important;
-	display: none;
-}
-
-.dropdown:hover, .slider-left li:hover {
-	background-color: #d38606 !important;
-}
-</style>
-<meta charset="UTF-8">
+<meta charset="UTF-8" http-equiv="X-UA-Compatible" content="IE=edge">
 <title>dlcat index</title>
 <script type="text/javascript" src='#assets("/assets/assets.jjs")'></script>
 <script src="js/bootstrap-3.3.7-dist/js/bootstrap.min.js"></script>
 <link href="js/bootstrap-3.3.7-dist/css/bootstrap.min.css"
 	rel="stylesheet">
 <link href="css/index.css" rel="stylesheet">
-
 </head>
 <body style="text-align: center;">
 
@@ -78,14 +27,16 @@
 								#for(sec : first.children??)
 								<ul class="list-unstyled">
 
-									#for(third:sec.children??) #set(size = for.size) #end
+									#for(third:sec.children??)
+									 #set(level = third.level)
+									 #set(size = for.size) #end
 
-									#if(size!=null)
+									#if(size&&level==3)
 									<li class="dropdown">
-										<button type="button" class="btn dropdown-toggle"
+										<button type="button" class="btn dropdown-toggle" 
 											id="dropdownMenu1" data-toggle="dropdown"
 											style="width: 180px; height: 54px; color: #fff; background-color: transparent !important; border: none; font-size: 16px;">
-											<a href="##(sec.id ??)">#(sec.name??)</a> <b class="down-up"><img
+											<a href="##(sec.id ??)" onclick="$('#secName').text('>#(sec.name??)');$('#thirdName').text('')">#(sec.name??)</a> <b class="down-up"><img
 												class="down-up-img" alt="向上箭头" src="images/up.png"></b> <b
 												class="down-down"><img class="down-down-img" alt="向下箭头"
 												src="images/down.png"></b>
@@ -95,13 +46,17 @@
 											aria-labelledby="myTabDrop1">
 
 											#for(third:sec.children??)
-											<li><a href="#" rel="#(third.url??)" tabindex="-1"
-												data-toggle="tab">#(third.name??)</a><b class="triangle-box"><img
-													alt="三角" src="images/triangle.png"></b></li> #end
+											<li><a id="#(third.id??)"  class="hs" href="#" rel="#(third.url??)" tabindex="-1"
+												data-toggle="tab" onclick="$('#thirdName').text('>#(third.name??)')">#(third.name??)</a><b class="triangle-box"><img
+													alt="三角" src="images/triangle.png"></b></li>
+											#end
 										</ul>
-									</li> #set(size = null) #else
-									<li><a href="#iframe_box" rel="#(sec.url??)">#(sec.name??)</a></li>
-									#end
+									</li> #set(size = null) #elseif(level==4)
+									<li><button type="button" class="btn dropdown-toggle"
+											id="dropdownMenu1" data-toggle="dropdown"
+											style="width: 180px; height: 54px; color: #fff; background-color: transparent !important; border: none; font-size: 16px;">
+											<a href="#" class="hs" id="#(sec.id)" rel="#(sec.url??)" onclick="$('#secName').text('>#(sec.name??)');$('#thirdName').text('')">#(sec.name??)</a>
+										</button></li> #end
 								</ul>
 
 								#end
@@ -113,10 +68,10 @@
 					</div>
 
 					<div class="col-lg-12 slider-right">
-						<div class="pull-left col-lg-9">
+						<div class="pull-left col-lg-8">
 							<ul id="myTab" class="nav nav-tabs list-unstyled">
 								#for(first :session.menuTree.children)
-								<li><a href="##(first.id)" data-toggle="tab">#(first.name??)</a></li>
+								<li><a href="##(first.id)" data-toggle="tab" onclick="$('#firstName').text('#(first.name??)');$('#secName').text('');$('#thirdName').text('')">#(first.name??)</a></li>
 								#end
 							</ul>
 						</div>
@@ -130,46 +85,35 @@
 								</div>
 							</div>
 							<div class="pull-right">
-								<a class="set-a" data-toggle="modal" data-target="#mymodal-data"><img
-									alt="设置图片" src="images/set.png"></a> <a href="/message"
-									class="news-a"><img alt="消息图片" src="images/news.png"></a>
+								<a class="set-a"  href="/set" data-toggle="modal" data-target="#mymodal-data"><img alt="设置图片" src="images/set.png" ></a>
+								<a href="/message" class="news-a"><img alt="消息图片" src="images/news.png"></a>
 								<a href="/doExit" class="close-a">退出</a>
 							</div>
 						</div>
 					</div>
 				</div>
 			</div>
-			<div class="pull-right">
-				<label>当前部门职位：#(orgName ??)>#(roleName ??)</label>
+			
+            <!-- 部门位置 -->
+			<div class="pull-right" style="margin-right:20px;"> 
+				<label class="position-label">当前部门职位：#(orgName ??) > #(roleName ??)</label>
 			</div>
-
+			<!-- 当前位置 -->
+			<div class="pull-left" style="margin-left: 200px;"> 
+            <label class="position-label" id="firstName">控制台 </label>
+            <label class="position-label" id="secName">> 首页 </label>
+            <label class="position-label" id="thirdName"></label>
+            </div>	
 		</div>
 	</div>
 
-	<!-- data-target触发模态弹出窗元素 -->
-	<!-- <button class="btn btn-primary" data-toggle="modal" data-target="#mymodal-data" type="button">通过data-target触发</button>
- -->
+		
 	<!-- 模态弹出窗内容 -->
 	<div class="modal" id="mymodal-data" tabindex="-1" role="dialog"
 		aria-labelledby="mySmallModalLabel" aria-hidden="true">
-		<div class="modal-dialog"
-			style="position: fixed; top: 50%; left: 50%; background-color: #000; width: 50%; height: 50%; -webkit-transform: translateX(-50%) translateY(-50%); -moz-transform: translateX(-50%) translateY(-50%); -ms-transform: translateX(-50%) translateY(-50%);">
-			<div class="modal-content">
-				<div class="modal-header">
-					<button type="button" class="close" data-dismiss="modal">
-						<span aria-hidden="true">×</span><span class="sr-only">Close</span>
-					</button>
-					<h4 class="modal-title">模态弹出窗标题</h4>
-				</div>
-				<div class="modal-body">
-					
-               <iframe src="/table" style="width: 100%; height: 100%;" frameborder="no" border="0" framespacing="0"></iframe>
-				</div>
-				<div class="modal-footer">
-					<button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
-					<button type="button" class="btn btn-primary">保存</button>
-				</div>
-			</div>
+		<div class="modal-dialog" style="margin: 10% auto;">
+			<div class="modal-content">                          
+            </div>            
 		</div>
 	</div>
 
@@ -177,21 +121,47 @@
 
 
 	<div class="container-fluid body-box">
-		<div class="row">
-			<iframe src="/echarts" id="iframe_box"
-				style="width: 100%; height: 900px;" frameborder="no" border="0"
-				framespacing="0"> </iframe>
-		</div>
+	
+		<ul id="myTabs" class="nav nav-tabs body-tabs">
+	       <!--  <li class="active"><a href="#examine" data-toggle="tab" class="text-muted btn">审核列表</a></li> -->
+	        <!-- <li><a href="#examineDone" data-toggle="tab" class="text-muted btn">已审核</a></li>  -->
+	    </ul>
+	    
+	    <div id="myTabContents" class="tab-content body-box-tab-content">
+	        
+	       <!--  <div class="tab-pane fade in active" id="examine">
+	        	<div class="row" id="box" style="margin-left:0;">
+					<iframe src="/echarts" id="iframe_box"
+						style="width: 100%; height: 850px;background-color: #fff;"
+						frameborder="no" border="0" framespacing="0"> </iframe>
+				</div>
+	        </div> -->
+	        
+	       
+	   		<!-- <div class="tab-pane fade" id="examineDone">
+	            <p>iOS 是一个由苹果公司开发和发布的手机操作系统。最初是于 2007 年首次发布 iPhone、iPod Touch 和 Apple 
+	                TV。iOS 派生自 OS X，它们共享 Darwin 基础。OS X 操作系统是用在苹果电脑上，iOS 是苹果的移动版本。</p>
+	        </div> -->
+	       
+	    </div>             		
 	</div>
+	
+	 
+	
 	<script type="text/javascript">
 		$(function() {
-
-			$("a").click(function() {
+			
+			 $("#iframe_box").css("height",$(window).height()-149);
+			
+			//首页的背景处于活动状态
+			$("a[id='7']").parent().parent().css("background-color","#d38606");
+			//$("#box").load("/echarts");
+			/* $("a").click(function() {
 				if (this.rel != "") {
 					$("iframe").attr("src", this.rel);
 				}
 
-			});
+			}); */
 
 			$("#myTabContent div:first-child").addClass("active");
 			$("#myTab li:first-child").addClass("active");
@@ -199,6 +169,9 @@
 			$(".down-up").css("display", "none");
 
 			$(".dropdown-toggle").click(function() {
+				//debugger;
+				$(".down-up").css("display", "none");
+				$(".down-down").css("display", "");
 				var down = $(this).attr("aria-expanded");
 				if (down == undefined || down == 'false') {
 					$(this).find(".down-up").css("display", "");
@@ -209,7 +182,99 @@
 				}
 			})
 
+			
+			 //点击显示颜色
+			   $(".tab-pane li").click(function () {
+				// debugger;
+				$(".tab-pane li").css("background-color","");
+				$(this).css("background-color","#d38606");
+				
+				if ($(this).children("b").length>0) {
+				$(".triangle-box").css("display","");
+				$(this).children("b").css("display","inline");
+				
+				$(".hs").each(function() {
+					if($(this).css("color")=='rgb(211, 134, 6)'){
+						$(this).css("color","");
+					}
+				});
+				
+				$(this).children("a").css("color","#d38606");
+				$(".tab-pane li").css("background-color","");
+				$(this).parent().parent().css("background-color","#d38606");
+				}
+			}); 
+			 
+			
+			function getTabs(id) {
+				$.ajax({
+					type: "POST",
+	                url: "/getTabsById/"+id,
+	                success: function(tabs){
+	                	debugger;
+	                    $("#myTabs").empty();
+	                    if (tabs.length>0) {
+	                	for(var i=0;i<tabs.length;i++) {
+							$("#myTabs").append('<li><a href="#'+tabs[i].id+'" data-toggle="tab" class="text-muted btn">'+tabs[i].name+'</a></li>');
+							
+							$("#myTabContents").append('<div class="tab-pane fade in" id="'+tabs[i].id+'">'
+						        	+'<div class="row" id="box" style="margin-left:0;">'
+						        	+'<iframe src="'+tabs[i].url+'" id="iframe_box"'
+						        	+'	style="width: 100%; height: 850px;background-color: #fff;"'
+						        	+'	frameborder="no" border="0" framespacing="0"> </iframe>'
+						        	+'</div></div>');
+						
+	                	
+	                	}
+	                	//第一个设置为active
+	                	$("#myTabs li:first-child").addClass("active");
+	                	$("#myTabContents div:first-child").addClass("active");
+	                	
+						}
+	                	
+	                }
+				});
+			}
+			
+			//初始化首页tabs
+			getTabs(7);
+			
+			 //点击二级或者三级菜单事件
+			 $(".hs").click(function () {
+				 //debugger;
+				var id=$(this).attr("id");
+				getTabs(id);
+			  
+			 });
+			 
+			 
+			 
+			 
+			
+		 $(window).resize(function() {  
+			var height = $(this).height();  
+			 $("#iframe_box").css("height",height-149); 
+			  
+			});
+			
+			
+
 		})
+		/* function set_ifr_wid(){
+		var ifr_con=document.getElementsByClassName('ifr_con') ;
+		for(var i=0;i<ifr_con.length;i++){
+		ifr_con[i].style.width=window.innerWidth-200;}}
+		set_ifr_wid();
+		window.onresize=set_ifr_wid; */
+		
+		
+		 
+		
+		 
+		 
+		 
+		 
+
 	</script>
 
 

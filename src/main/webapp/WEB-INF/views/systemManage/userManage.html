@@ -3,6 +3,9 @@
 <head>
 <meta charset="UTF-8">
 <title>用户管理</title>
+<link rel="stylesheet" type="text/css" href="/js/bootstrap-3.3.7-dist/css/bootstrap.min.css">
+<script type="text/javascript" src='/js/jquery-3.2.0.min.js'></script>
+<script type="text/javascript" src='/js/bootstrap-3.3.7-dist/js/bootstrap.min.js'></script>
 <script type="text/javascript" src='/js/vue/vue.js'></script>
 <style type="text/css">
 table{border-style:solid;border-width:1px;border-color:cyan;}
@@ -10,6 +13,7 @@ table tr:nth-child(even) {background:#DDF;}
 tr{border-style:solid;border-width:0.5px;}
 td{min-width:5px;}
 #operations *{margin:3px;}
+#jumpul li{display:inline;margin:3px;}
 </style>
 </head>
 <body style='width: 98%;margin:1%;'>
@@ -19,29 +23,41 @@ td{min-width:5px;}
 <button onclick='seek()'>查找</button>
 </div>
 <div id='operations'>
-<button>修改用户</button>
-<button>增加用户</button>
-<button>分配客户</button>
+#include('dialog.html')
+<div id='operationsdia'>
+<button onclick='showwin(this)' data-toggle="modal" data-target="#mymodalData">修改用户</button>
+<button onclick='showwin(this)' data-toggle="modal" data-target="#mymodalData">增加用户</button>
+<button onclick='showwin(this)' >分配客户</button>
 </div>
+</div>
+<script type="text/javascript">
+function edituser(u){
+	var vxd=new Vue({
+		el:'#operationsdia',
+		template:'#tpl'
+	});
+}
+</script>
 <div style='overflow:auto;' id='flow_tab'>
-<table id='u_tb'  style='width:98%;margin:1%;padding:1%;'>
+<table class="table table-bordered table-hover" id='u_tb'  style='width:98%;margin:1%;padding:1%;'>
 <tr> <th v-for='(v,key) in userdatas[0]'>{{key}}</th></tr>
 <tr  v-for='user in userdatas' v-on:click='get_select_name(user)'>
 <!-- <td><input type="checkbox" :id='user.name'></td> -->
 <td v-for=' item  in user'>  {{item}}</td></tr>
-</table></div>
+</table>
 <p>总条数：{{userdatas.length}} 条 每页显示：20 条 总页数：#(total) 页</p>
-<ul>
+<ul id='jumpul'>
 <li><a href='javascript:jumppage(1)'>首页</a></li>
 <li><a href='javascript:jumppage(p<=1?1:p-1)'>上页</a></li>
 <li><a href='javascript:jumppage(p>total-1?total:p+1)'>下页</a></li>
 <li><a href='javascript:jumppage(total)'>尾页</a></li></ul>
 </div>
+</div>
 <script type="text/javascript">
 total= #(total);
 select_user=null;
 var vxd=new Vue({
-	el:'#usertable',
+	el:'#flow_tab',
 	data:{'userdatas':[],
 		total:total},
 	methods:{

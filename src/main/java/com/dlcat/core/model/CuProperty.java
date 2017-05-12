@@ -1,5 +1,7 @@
 package com.dlcat.core.model;
 
+import java.util.List;
+
 import com.dlcat.common.BaseModel;
 
 /**
@@ -8,4 +10,31 @@ import com.dlcat.common.BaseModel;
 @SuppressWarnings("serial")
 public class CuProperty extends BaseModel<CuProperty> {
 	public static final CuProperty dao = new CuProperty().dao();
+	
+	/**
+	 * 根据机构id获取机构下所有客户财产
+	 * @author liuran
+	 * @time 2017年5月8日 下午2:42:03
+	 * @return List<CuProperty>
+	 */
+	public static List<CuProperty> getCuProperties(int orgId){
+	List<CuProperty> properties = CuProperty.dao.find("select * from cu_property where cu_id in(select id from cu_object_customer where belong_org_id =  ?)",orgId);	
+	return properties;
+	}
+	
+	/**
+	 * 证件是否重复
+	 * @author liuran
+	 * @time 2017年5月9日 上午11:16:41
+	 * @param type
+	 * @param no
+	 * @return boolean
+	 */
+	public static boolean isRepeatCertificate(String type,String no){
+		List<CuProperty> property = CuProperty.dao.find("select * from cu_property where certificate_type = ? and certificate_no = ? ",type,no);
+		if(property.size() != 0){
+			return true;
+		}
+		return false;
+	}
 }

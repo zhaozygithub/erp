@@ -120,7 +120,15 @@ public final class CastUtil {
     public static Object cast(String s, Class<?> destClass) {
         return cast(s, destClass, "utf-8");
     }
-
+    /**
+     * Map 转 对象
+     * @param obj
+     * @param destClass
+     * @param charset
+     * @return
+     * @author masai
+     * @time 2017年5月11日 下午6:38:57
+     */
     @SuppressWarnings("unchecked")
 	private static Object cast(HashMap<Object, Object> obj, Class<?> destClass, String charset) {
         try {
@@ -176,7 +184,7 @@ public final class CastUtil {
         
         return obj;
     }
-
+  
     public static Object cast(Object obj, Class<?> destClass) {
         return cast(obj, destClass, "utf-8");
     }

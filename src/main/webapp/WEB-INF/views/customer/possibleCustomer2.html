@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>possibleCustomer</title>
+#@jquery() #@vue()
+</head>
+<body>
+<h1>possibleCustomer</h1>
+
+ <div id="app">
+            <fieldset>
+                <legend>
+                   Serch
+                </legend>
+                <form action="/possibleCustomer/serch" method="post">
+                 #for(h : heards)
+                <div class="form-group">
+                    <label>#(h):</label>
+                    <input type="text" name="#(h)"/>
+                </div>
+                #end
+                <input type="submit">
+                </form>
+        </fieldset> 
+        <table>
+           <thead>
+                <tr>
+                 #for(h : heards)
+                    <th>#(h)</th>
+                    #end
+                </tr>
+            </thead>
+            <tbody>
+                <tr v-for="x in people">
+                 <td v-for="(value,key) in x">{{value}}</td>
+                <!--  <td :class="'text-center'"><button @click="deletePerson($index)">Delete</button></td> -->
+                </tr>
+            </tbody>
+        </table>
+        </div>
+        
+ #(page)       
+        
+#for(i=1;i<=page.totalPage;i++)
+
+#if(i!=page.pageNumber)
+<a href="/possibleCustomer/page/#(i)">第#(i)页</a>
+#else
+第#(i)页
+#end
+#end
+	
+
+ <script>
+ 
+         var vm = new Vue({
+            el: '#app',
+            data: {
+                people: [
+
+#for(x : page.list)
+{
+    #for(h : heards)
+	#(h):'#(x.get(h))',
+	#end
+	},
+#end
+                        ]
+            },
+            methods:{
+                createPerson: function(){
+                    this.people.push(this.newPerson);
+                    // 添加完newPerson对象后，重置newPerson对象
+                    this.newPerson = {name: '', age: 0, sex: 'Male'}
+                },
+                deletePerson: function(index){
+                    // 删一个数组元素
+                    this.people.splice(index,1);
+                }
+            }
+        })
+         
+         
+         
+    </script>
+
+
+
+
+</body>
+</html>

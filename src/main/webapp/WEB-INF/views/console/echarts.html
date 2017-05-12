@@ -1,13 +1,14 @@
 <!DOCTYPE html>
 <html>
 <head>
+<meta charset="UTF-8" http-equiv="X-UA-Compatible" content="IE=edge">
 <link rel="stylesheet" href="/css/echarts.css" type="text/css">
 <meta charset="UTF-8">
 <title>index echarts</title>
 </head>
 <script type="text/javascript" src='#assets("/assets/assets.jjs")'></script>
 <script type="text/javascript" src="js/table2excel.js"></script>
-<body>
+
 
 	
 	#@echarts() #@bootstrap()
@@ -43,7 +44,7 @@
         <div class="row">
         #for(flow:flowlist)   
             <div class="play-show">
-                <span class="color-w">#(flow.modelName)<i class="i-left"></i><a>#(flow.modelName)
+                <span class="color-w">#(flow.modelName)<i class="i-left"></i><a style="text-decoration: none;color: #fff;">#(flow.modelName)
                 </a></span>#for(node:flow.nodes)<span>#(node.node_name)<b></b></span>#end<span><i
                     class="i-right"></i>流程结束<b></b></span>
             </div>
@@ -57,40 +58,67 @@
     </div> 
 
 
-<div style="width: 400px;height: 400px;display: none;">
+<div id="app" style="width: 800px;height: 400px;display: none;">
+ <table id="tab1" class="table table-bordered text-center">
+   #for(x:pie)
+ <tr>
+ <td>#(x.key)</td>
+ <td>#(x.value)</td>
+ </tr>
+   #end
+ </table>
+ 
+<!-- table2的数据 -->
+ <table id="tab2" class="table table-bordered text-center">
+  <tr ><td></td><td v-for="n in 12">{{n}}月</td></tr>
+ <tr v-for="obj in table2">
+ <td>{{obj.name}}</td>
+ <td v-for="n in obj.value">{{n}}</td>
+ </tr>
+ 
+ </table>
+<!-- table3的数据 -->
  <table id="tab3" class="table table-bordered text-center">
  <tr><td>门店名字</td><td>总销售额</td></tr>
- #for(x:barMd)
- <tr><td>#(x.key)</td><td>#(x.value)</td></tr>
- #end
+ <tr v-for="obj in table3">
+
+ <td>{{obj.name}}</td>
+ <td>{{obj.value}}</td>
+ </tr>
  </table>
-
 </div>
-
+#@vue()
     <script type="text/javascript">
-    //下载数据按钮的功能: 将json数据传到后台,后台会回应一个excel文件 
-    function downloadExcelByData(op,mode){
-        //debugger;
-        var data=[];
-        try{
-        data.push([op.xAxis[0].name].concat(op.xAxis[0].data));}catch(e){}
-        for(var i in op.series){
-            if(mode==null)
-                data.push([op.series[i].name].concat(op.series[i].data));
-            if(mode=='p'){
-                var vs=[];
-                op.series[i].data.forEach(function(a){vs.push (a.name+':'+a.value)})
-                data.push([op.series[i].name].concat(vs));
-            }
+    
+    
+    var vm = new Vue({
+        el: '#app',
+        data: {
+            table2:[
+                    #for(x:bar ??)   
+                    {
+                        name:'#(x.key)',
+                        value:[
+                              #for(data:x.value)
+                              #(data),
+                              #end
+                              ]
+                        
+                    },
+                    #end
+                    
+                    ],
+            table3:[
+                    #for(x:barMd)
+                    	{
+                    	 name:'#(x.key)',
+                    	 value:"#(x.value)"
+                    	},
+                    	 #end
+                    ]
         }
-        var json=JSON.stringify( {title: op.title.text,data:data});
-        /* var xhr=new XMLHttpRequest();
-        xhr.open('post','/file/exportExcelFromJson');
-        xhr.send('json='+json);
-        //xhr.responseText
-        xhr.onload=null; */
-        location.href='/file/exportExcelFromJson?json='+json;
-    }
+    })
+    
     
     $(function(){
         // 基于准备好的dom，初始化echarts图表
@@ -119,7 +147,21 @@
                     show : true,
                     feature : {
                         mark : {show: true},
-                        dataView : {show: true, readOnly: false},
+                        dataView : {show: true, readOnly: false,
+                            optionToContent: function (opt) {
+                                var series = opt.series[0].data;
+                                var table = '<table class="table table-bordered text-center"><tbody>';
+                                for (var i = 0, l = series.length; i < l; i++) {
+                                     table += '<tr>'
+                                             + '<td>' + series[i].name + '</td>'
+                                             + '<td>' + series[i].value + '</td>'
+                                             + '</tr>'; 
+                                }
+                                table += '</tbody></table>';
+                                return table; 
+                                  
+                              }
+                        },
                         magicType : {
                             show: true, 
                             type: ['pie', 'funnel'],
@@ -135,10 +177,18 @@
                         restore : {show: true},
                         selfButtons:{
                             show:true,
-                            title:'exportExcel',
+                            title:'导出Excel',
                             icon:'images/excel.png', //图标    
                             onclick:function(op){
-                                downloadExcelByData(op,'p');
+                                //downloadExcelByData(op,'p');
+                            	$("#tab1").table2excel({
+                 					exclude: ".noExl",
+                 					name: year,
+                 					filename: "客户统计",
+                 					exclude_img: true,
+                 					exclude_links: true,
+                 					exclude_inputs: true
+                            	  }); 
                             }
                         },
                         saveAsImage : {show: true},
@@ -215,10 +265,19 @@
                     restore : {show: true},
                     selfButtons:{
                             show:true,
-                            title:'exportExcel',
+                            title:'导出Excel',
                             icon:'images/excel.png', //图标    
                          onclick:function(op){
-                                downloadExcelByData(op);
+                                //downloadExcelByData(op);
+                          var year=$("#year").children('option:selected').val();
+                    	  $("#tab2").table2excel({
+         					exclude: ".noExl",
+         					name: year,
+         					filename: year+"年借款数据",
+         					exclude_img: true,
+         					exclude_links: true,
+         					exclude_inputs: true
+                    	  });   
                             }
                         },
                         saveAsImage : {show: true},
@@ -252,6 +311,31 @@
             ]
         
        });
+        
+        $("#year").change(function(){
+            var select=$(this).children('option:selected').val();
+            $.ajax({
+                   type: "POST",
+                   url: "/initBarByYear",
+                   data: "year="+select,
+                   success: function(msg){
+                   var obj=$.parseJSON(msg); 
+                   //更新数据
+                  var option = bar.getOption();
+                  option.series[0].data = obj["借款总额"];   
+                  option.series[1].data = obj["成交笔数"];   
+                  bar.setOption(option);
+                    
+                  vm.table2[0].value=obj["借款总额"];
+                  vm.table2[1].value=obj["成交笔数"];
+                  
+                   }
+            });
+            
+        });
+        
+        
+        
         
         
         var barMd=echarts.init($("#barMd")[0],"infographic");
@@ -297,7 +381,7 @@
                     restore : {show: true},
                     selfButtons:{//自定义按钮 danielinbiti,这里增加，selfbuttons可以随便取名字    
                      show:true,//是否显示    
-                     title:'导出', //鼠标移动上去显示的文字    
+                     title:'导出Excel', //鼠标移动上去显示的文字    
                      icon:'images/excel.png', //图标    
                      option:{},    
                      onclick:function(opt) {//点击事件,这里的option1是chart的option信息    
@@ -378,20 +462,17 @@
                 
                    } 
                   barMd.setOption(option);
-                   
                   var tableObj = document.getElementById("tab3");
-             	 for (var i = 0; i < tableObj.rows.length; i++) {
+             	 for (var i = 0; i < tableObj.rows.length-1; i++) {
              		 //从1开始赋值，因为0为th标头
-             	   tableObj.rows[i+1].cells[1].innerText=datas[i]; 
+             	   //tableObj.rows[i+1].cells[1].innerText=datas[i];
+             		vm.table3[i].value=datas[i];
              	 }
                   
                    }
             });
             
         });
-        
-        
-        
         
         
         var barWy=echarts.init($("#barWy")[0],"infographic");
@@ -440,39 +521,16 @@
             ]
         
        });
-        
-        
-        $("#year").change(function(){
-            var select=$(this).children('option:selected').val();
-            $.ajax({
-            
-                   type: "POST",
-                   url: "/initBarByYear",
-                   data: "year="+select,
-                   success: function(msg){
-                   var obj=$.parseJSON(msg);
-                   //更新数据
-                  var option = bar.getOption();
-                  option.series[0].data = obj["借款总额"];   
-                  option.series[1].data = obj["成交笔数"];   
-                  bar.setOption(option); 
-                       
-                   }
-            });
-            
-        });
-        
-        
-        
        
         
-    
+        window.onresize = function(){
+        	myChart.resize();
+        	barMd.resize();
+        	barWy.resize();
+        	bar.resize();
+         }
     });
-        
-        
-        
-       
     </script>
 
-</body>
+
 </html>

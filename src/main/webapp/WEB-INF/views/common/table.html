@@ -1,0 +1,289 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>测试表格模板</title>
+<style type="text/css">
+#jumpul li{display:inline;margin:3px;}
+table tr:nth-child(even){background:#EEE;}
+tbody tr:hover{background:#DDD;}
+</style>
+<link rel="stylesheet" type="text/css" href="/js/bootstrap-3.3.7-dist/css/bootstrap.min.css">
+<link rel="stylesheet" type="text/css" href="/css/examine.css">
+<link rel="stylesheet" type="text/css" href="/js/My97DatePicker/skin/WdatePicker.css">
+<script type="text/javascript" src='/js/jquery-3.2.0.min.js'></script>
+<script type="text/javascript" src='/js/bootstrap-3.3.7-dist/js/bootstrap.min.js'></script>
+<script type="text/javascript" src='/js/vue/vue.js'></script>
+<script language="javascript" type="text/javascript" src="/js/My97DatePicker/WdatePicker.js"></script>
+</head>
+###@jquery?()
+<body>
+	#include('./dialog.html')
+	#set(tableHeaderList = response.data.tableHeader)
+	#set(searchList = response.data.search)
+	###set(dataList = response.data.dataList)
+	#set(btnList = response.data.button)
+	#set(tableName = response.data.name)
+	#set(dataUrl = response.data.dataUrl)
+	<div class="container-fluid" style="padding-top:20px;">
+        <div id='conditions'>
+			<form class="form-inline" role="form" style="padding-top:20px;">
+			#if(searchList)
+				#for(search:searchList)
+					#if(search.type == "select")
+					 <div class="form-group" style="margin-bottom:12px;    margin-right: 20px;">
+		                    <label for="examine-select">#(search.CNName):</label>
+		                    <select class="form-control" name="#(search.fieldName)">
+			                    <option value="">--请选择--</option>
+								#for(option:search.optionList)
+									<option value="#(option.item_no)">#(option.item_name)</option>
+								#end
+		                    </select>
+		                </div>
+						
+					#elseif(search.type == "date")
+						<div class="form-group" style="margin-bottom:12px;    margin-right: 20px;">
+		                    <label for="examineTime1">#(search.CNName):</label>
+		                    <input class="Wdate form-control" type="text" name='#(search.fieldName)' id="examineTime1" onClick="WdatePicker()">
+		                </div>         
+		           
+					#else
+						<div class="form-group" style="margin-bottom:12px;    margin-right: 20px;">
+		                    <label for="examineKeytxt">#(search.CNName):</label>
+		                    <input  name="#(search.fieldName)" type="text" class="form-control" id="examineKeytxt" placeholder="请输入关键字">
+		                </div>
+					#end
+				#end
+				#if(searchList.size()>0)
+				<div class="form-group" style="padding-left:10px;margin-bottom:12px;" onclick='seek()'><a></a></div>
+				#end
+			#end
+			</form>
+		</div>
+		<!--<p>按钮区域</p>  -->
+		<div class="examine-table">
+	         <div class="examine-btn"  style="padding-top:20px; padding-bottom:6px;" id='operations'>
+	             	#if(btnList)
+						#for(btn:btnList)
+							<button type="button" class="btn btn-warning" onclick=" showwin(this,'#(btn.url)')"  usetype='#(btn.useType)'>#(btn.name)</button>
+						#end
+					#end
+	         </div>
+	
+		<div id='table_and_page'>
+		<!-- <p>表格数据</p> -->
+		<div id='datatable' style='max-width:100%;overflow:auto;'>
+		    <table class="table text-center" style='min-width:1000px;'>
+		             <thead style='background-color: #7bF;'>
+					#if(tableHeaderList)
+						<tr id='datafieldname'>
+							#for(header:tableHeaderList)
+								<th field='#(header.fieldName)' class="text-center">#(header.CNName)</th>
+							#end
+						</tr>
+					#end
+					</thead>
+					<!-- v-if='userdatas.response.status==200' -->
+		            <tbody v-if='userdatas.response.status==200'>
+					#--
+					#for(data:dataList)
+						<tr>
+						#for(header:tableHeaderList)	
+							#for(rec:data.columns)
+								#if(header.fildName == rec.key)
+								<td>#(rec.value)</td>		
+								#end
+							#end	
+						#end
+						</tr>
+					#end--#
+					<tr  v-for='user in userdatas.response.data.dataList' v-on:click='get_select_name(user)'
+						:style='(user!=null&&select_user!=null&&user.id==select_user.id)?"background:#a5d8f7;color:white;":""'>
+						<td  v-for=' i  in ths.length' v-text='user[ths[i-1]]'>  </td>
+					</tr>
+					</tbody>
+					<!-- <tbody v-else >{{userdatas.response.description}}</tbody> -->
+		         </table>
+	         </div>
+			<!-- 跳转页面 -->
+			<div class="container-fluid clearfix" id='pgnum'>	
+				<ul id='jumpul' class="pull-left pagination">
+					<li><a href='javascript:jumppage(1)'>首页</a></li>
+					<li><a href='javascript:jumppage(p<=1?1:p-1)'>上页</a></li>
+					<!--<div id='pagenum' style='display:inline;'>
+					 <script type='x-template' id='pnumtpl'> -->
+					<li v-for='p in ps'><a v-bind:href='"javascript:jumppage("+p+")"' :style='p==this.p?"background: #f5c46c;color:white;":""'>{{p}}</a></li>
+					<li><a href='javascript:jumppage(p>total-1?total:p+1)'>下页</a></li>
+					<li><a href='javascript:jumppage(total)'>尾页</a></li>
+				</ul>
+				<div class="pull-right" style="line-height:74px;">总条数：{{datacount}} 条 每页显示：{{page}} 条 总页数：{{total}} 页</div>
+			</div>
+			</div>
+	     </div>  
+	</div>
+</body>
+
+			<script type="text/javascript">
+			/* function settablesty(){
+			$("tbody tr:nth-child(even)").attr("bgcolor","#ddd");
+			$("tbody tr:nth-child(odd)").attr("bgcolor","#eee");
+			$("tbody tr").click(function() {
+				//debugger;
+				$("tbody tr[bgcolor='#fdc26f']").removeAttr("bgcolor");
+				
+				$("tbody tr:nth-child(even)").attr("bgcolor","#ddd").css({"color":"#333"});
+				$("tbody tr:nth-child(odd)").attr("bgcolor","#eee").css({"color":"#333"});
+				
+				$(this).attr("bgcolor",'#fdc26f').css({"color":"#fff"});
+			});}
+			setTimeout(settablesty,1000); */
+			</script>
+						
+<script type="text/javascript">
+//total= #(total??1);
+p=1;
+page=20;
+datacount=#(datacount??0);
+total=Math.max(Math.ceil(datacount/page),1);
+select_user=null;
+function getfields(){
+	/*var datafieldname=document.getElementById('datafieldname');
+	var thnodes=datafieldname.getElementsByTagName('th');
+	ths=[];
+	for (var i=0;i<thnodes.length;i++){
+		ths.push(thnodes[i].getAttribute('field'));
+	}
+	thslength=ths.length;*/
+	//vxd.ths =ths ;
+	ths=[];
+	#for(header:tableHeaderList)
+		ths.push('#(header.fieldName)');
+	#end;
+	cnths=[];
+	#for(header:tableHeaderList)
+		cnths.push('#(header.CNName)');
+	#end;
+	return ths;
+}
+var vxd=new Vue({
+	el:'#table_and_page',
+	data:{
+		ths:getfields(),
+		//thslength:6,//ths.length,
+		'userdatas':[],
+		total:total,
+		datacount:datacount,
+		p:p,
+		ps:getps(this.p),
+		select_user:null
+		//sta:this.userdatas!=null&&this.userdatas.response!=null&&this.userdatas.response.status==200
+	},
+	methods:{
+		get_select_name:function(user){
+			//alert( user.id);
+			vxd.select_user=select_user=user;			
+		}
+	},
+	watch:{
+		p:function(v){//debugger;
+			this.ps=getps(v);},
+		userdatas:function(v){
+			this.ps=getps(this.p);},
+		datacount:function(v){
+			this.total=Math.max(Math.ceil(v/page),1);}
+	}
+});;
+//p=1;
+function getps(p){
+		var i,ps=[];
+		if(p>5&&p<total-5)for(i=0;i<11;i++ ){ps.push(p-5+i);}
+		else if(p<=5)for(i=1;i<=Math.min(11,total);i++){ps.push(i);}
+		else for(i=Math.max(total-10,1);i<=total;i++){ps.push(i);}
+		return ps;
+}
+	/*	var vpnum=new Vue({
+			el:'#pgnum',
+			data:{
+				p:p,
+				ps:getps(this.p),
+				total:total,
+				datacount:datacount
+				},
+			watch:{
+				p:function(v){//debugger;
+					this.ps=getps(v);},
+				datacount:function(v){
+					this.total=Math.max(Math.ceil(v/20),1);}
+			}
+			//template:'#pnumtpl'
+		});*/
+function setdatacountandtotal(resp){
+	datacount=JSON.parse( resp.target.responseText)['response']['data']['dataCount'];
+	vxd.page=page=JSON.parse( resp.target.responseText)['response']['data']['page'];
+	total=Math.max(Math.ceil(datacount/page),1);
+	//vpnum.datacount=datacount;
+	vxd.datacount=datacount;
+}
+(function initdata(){
+	var xhr=new XMLHttpRequest();
+	xhr.open('get','#(dataUrl)');
+	xhr.send();
+	xhr.onload=function(resp){
+		var userdata=JSON.parse( resp.target.responseText);
+		vxd.userdatas=userdata;
+		setdatacountandtotal(resp);
+}})()
+function getconditions(){
+	var conditionnode=document.getElementById('conditions');
+	var inputs=[];
+	/*inputs=inputs.concat(conditionnode.getElementsByTagName('input'))
+		.concat(conditionnode.getElementsByTagName('select'));*/
+	var inp=conditionnode.getElementsByTagName('input');
+	var sel=conditionnode.getElementsByTagName('select');
+	for(var i=0;i<inp.length;i++){
+		 inputs.push(inp[i]);
+	}
+	for(var j=0;j<sel.length;j++){
+		 inputs.push(sel[j]);
+	}
+	var conditions='';
+	for(var i=0;i<inputs.length;i++ ){
+		if(inputs[i].value!=null&&inputs[i].value!='')
+			conditions+=inputs[i].name+':\''+inputs[i].value.trim()+'\',';
+	}
+	if(conditions != ''){
+		conditions = conditions.substring(0,conditions.length-1);
+	}
+	console.log(conditions);
+	return conditions;
+	}
+function seek(p){
+	var conditions=getconditions();
+	var xhr=new XMLHttpRequest();
+	xhr.open('get','#(dataUrl)?'+((conditions==null||conditions=='')?'':'condition='+conditions)
+			+(p==null?'':"page="+p));
+	xhr.send();//'condition='+conditions);
+	xhr.onload=function(resp){
+		if(JSON.parse( resp.target.responseText)['response']['status']==200){
+		 	vxd.userdatas=JSON.parse( resp.target.responseText);
+			setdatacountandtotal(resp);
+		}
+		else
+			alert(JSON.parse( resp.target.responseText)['response']['description']);
+	}
+}
+function jumppage(p){
+	this.p=p;
+	vxd.p=p;
+	/*var xhr=new XMLHttpRequest();
+	xhr.open('post','#(dataUrl)?p='+p);
+	xhr.send();
+	xhr.onload=function(resp){
+	vxd.userdatas=JSON.parse( resp.target.responseText);}*/
+	seek(p);
+	
+}
+//}
+</script>
+	
+</html>

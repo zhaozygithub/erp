@@ -1,7 +1,10 @@
 package com.dlcat.common;
 
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Hashtable;
 import java.util.List;
+import java.util.Map;
 
 import com.dlcat.common.utils.StringUtils;
 import com.jfinal.plugin.activerecord.Db;
@@ -18,6 +21,8 @@ import com.jfinal.plugin.activerecord.TableMapping;
 */
 public class BaseModel<M extends Model<M>> extends Model<M> implements IBean {
 	private static final long serialVersionUID = 1L;
+	
+	
 	
 	/**
 	 * 根据sql查询第一条记录	Db方式
@@ -58,8 +63,45 @@ public class BaseModel<M extends Model<M>> extends Model<M> implements IBean {
 			}else{
 				recordList = Db.find(sql, paras);
 			}
+		}else{
+			try {
+				throw new Exception("参数错误");
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
 		}
 		return recordList;
+	}
+	/**
+	 * 根据sql语句查询 Db方式
+	 * @param clazz	此处仅仅支持Map和Record，传空则默认为Record
+	 * @param sql
+	 * @param paras
+	 * @return
+	 * @author masai
+	 * @time 2017年5月11日 下午8:32:31
+	 */
+	public <T> List<T> baseFind(Class<T> clazz , String sql , Object[] paras){
+		List<Record> resultList = baseFind(sql , paras);
+		if(resultList != null){
+			if(clazz == null || clazz == Record.class){
+				return (List<T>) resultList;
+			}
+			else if(clazz == Map.class || clazz == HashMap.class || clazz == Hashtable.class){
+				List<Map> mapList = new ArrayList<Map>();
+				for(Record rc : resultList){
+					mapList.add(rc.getColumns());
+				}
+				return (List<T>) mapList;
+			}else{
+				try {
+					throw new Exception("类型转化错误");
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
+			}
+		}
+		return null;
 	}
 	/**
 	 * 根据sql语句查询 Db方式
@@ -68,8 +110,8 @@ public class BaseModel<M extends Model<M>> extends Model<M> implements IBean {
 	 * @return
 	 * @author masai
 	 * @time 2017年4月28日 上午11:06:09
-	 */
-	public  <T extends Model>List<T> baseQuery(Class<T> clazz , String sql , Object[] paras){
+	 *//*
+	public  <T> List<T> baseQuery(String sql , Object[] paras){
 		List<T> objects = null;
 		if(StringUtils.isNotBlank(sql)){
 			try {
@@ -84,18 +126,18 @@ public class BaseModel<M extends Model<M>> extends Model<M> implements IBean {
 		}
 		return  objects;
 	}
-	/**
+	*//**
 	 * 根据sql语句查询第一条记录
 	 * @param sql	sql语句
 	 * @param paras		参数列表 如果为null表示无参数
 	 * @return
 	 * @author masai
 	 * @time 2017年4月28日 上午11:07:15
-	 */
-	public <T extends Model> T  baseQueryFrist(Class<T> clazz , String sql , Object[] paras){
-		List<T> objects = baseQuery(clazz , sql , paras);
+	 *//*
+	public <T> T  baseQueryFrist(String sql , Object[] paras){
+		List<T> objects = baseQuery(sql , paras);
 		return (objects != null && objects.size()>0) ? objects.get(0) : null;
-	}
+	}*/
 	/**
 	 * 根据sql语句更新记录
 	 * @param sql	

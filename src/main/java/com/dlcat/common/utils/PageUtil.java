@@ -309,13 +309,14 @@ public class PageUtil {
 		pageStructure.setName(name);
 		//表头
 		List<TableHeader> tableHeaderList = null;
-		if(tableHeader != null && tableHeader.getNames() != null && tableHeader.getFieldNames() != null) {
+		String headerName = "";
+		if(tableHeader != null && tableHeader.getCNNames() != null && tableHeader.getFieldNames() != null) {
 			tableHeaderList = new ArrayList<TableHeader>();
-			for(int i=0;i<tableHeader.getNames().length;i++) {
-				if(tableHeader.getNames()[i] == null) continue;
+			for(int i=0;i<tableHeader.getCNNames().length;i++) {
+				if(tableHeader.getCNNames()[i] == null) continue;
 				
 				TableHeader temp = new TableHeader();
-				temp.setName(tableHeader.getNames()[i]);
+				temp.setCNName(tableHeader.getCNNames()[i]);
 				temp.setFieldName(tableHeader.getFieldNames()[i]);
 				tableHeaderList.add(temp);
 			}
@@ -324,16 +325,16 @@ public class PageUtil {
 		
 		//查询框
 		List<Search> searchList = null;
-		if(search != null && search.getNames() != null && search.getTypes() != null) {
+		if(search != null && search.getFieldNames() != null && search.getTypes() != null) {
 			searchList = new ArrayList<Search>();
 			Map<String, List<ToCodeLibrary>> optionListMap = search.getOptionListMap();
 			if(optionListMap == null) optionListMap = new HashMap<String, List<ToCodeLibrary>>();
-			for(int i=0;i<search.getNames().length;i++) {
+			for(int i=0;i<search.getFieldNames().length;i++) {
 				Search temp = new Search();
-				temp.setName(search.getNames()[i]);
+				temp.setFieldName(search.getFieldNames()[i]);
 				temp.setType(search.getTypes()[i]);
-				temp.setFiledName(search.getFiledNames()[i]);
-				temp.setOptionList(optionListMap.get(temp.getName()));
+				temp.setCNName(search.getCNNames()[i]);
+				temp.setOptionList(optionListMap.get(temp.getFieldName()));
 				searchList.add(temp);
 			}
 		}
@@ -341,9 +342,6 @@ public class PageUtil {
 		//按钮
 		List<SysMenu> menuList = SysMenu.getFristChildNode(menuId, menus);
 		pageStructure.setButton(menuList);
-		
-		//数据
-		//pageStructure.setDataList(Db.find(sql));
 		
 		DyResponse response = new DyResponse();
 		response.setStatus(DyResponse.OK);

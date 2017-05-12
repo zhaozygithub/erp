@@ -17,18 +17,18 @@ import org.apache.poi.hssf.util.HSSFColor;
 /**
  * 利用开源组件POI3.9动态导出EXCEL文档
  */
-public class ExportExcelUtil<T> {
+public class ExportExcelUtil{
 
 
 	/**
 	 * @param sheetName sheet名字
 	 * @param headers 表格属性列名数组
-	 * @param map 需要显示的数据集合          
+	 * @param resMapList 需要显示的数据集合
 	 * @param filedNames 对应列明的实体字段名字
 	 * @param out 与输出设备关联的流对象，可以将EXCEL文档导出到本地文件或者网络中
 	 */
 	@SuppressWarnings({ "unchecked", "deprecation" })
-	public void exportExcel(String sheetName, String[] headers,List<Map> map, String[] filedNames, OutputStream out) {
+	public void exportExcel(String sheetName, String[] headers,List<Map> resMapList, String[] filedNames, OutputStream out) {
 		// 声明一个工作薄
 		HSSFWorkbook workbook = new HSSFWorkbook();
 		// 生成一个表格
@@ -80,9 +80,8 @@ public class ExportExcelUtil<T> {
 			cell.setCellValue(text);
 		}
 		// 遍历集合数据，产生数据行		
-		List<Map> it=map;
 		int index = 0;
-		for (Map itMap : it) {
+		for (Map itMap : resMapList) {
 			index++;
 			row = sheet.createRow(index);
 			int i=0;

@@ -1,6 +1,6 @@
 package com.dlcat.common;
 /**
- * service类通用方法
+ * service基础类
  * @author masai
  * @time 2017年4月26日 下午5:31:36
  */

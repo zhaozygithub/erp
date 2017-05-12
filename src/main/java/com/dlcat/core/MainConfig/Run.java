@@ -4,17 +4,20 @@ import com.alibaba.druid.filter.stat.StatFilter;
 import com.alibaba.druid.util.JdbcUtils;
 import com.alibaba.druid.wall.WallFilter;
 import com.dlcat.core.Interceptor.LoginInterceptor;
+import com.dlcat.core.controller.CommonController;
 import com.dlcat.core.controller.CrudController;
 import com.dlcat.core.controller.FlowController;
 import com.dlcat.core.controller.DataController;
 import com.dlcat.core.controller.SystemManageController;
 import com.dlcat.core.controller.TestController;
 import com.dlcat.core.controller.TestUserController;
-import com.dlcat.core.controller.UserController;
-import com.dlcat.core.controller.customer.PossibleCustomerController;
+import com.dlcat.core.controller.index.SetController;
+import com.dlcat.core.controller.customer.TemplateController;
+import com.dlcat.core.controller.customer.customerSaleManager.PossibleCustomerController;
+import com.dlcat.core.controller.collateral.CollateralController;
 import com.dlcat.core.controller.index.FileController;
 import com.dlcat.core.controller.index.IndexController;
-import com.dlcat.core.controller.indexMessage.MessageController;
+import com.dlcat.core.controller.index.MessageController;
 import com.dlcat.core.model._MappingKit;
 import com.jfinal.config.Constants;
 import com.jfinal.config.Handlers;
@@ -52,11 +55,20 @@ public class Run extends JFinalConfig {
 		//有关form表单的展示
 		me.add("/form", CrudController.class);
 		//我的意向客户
-		me.add("/possibleCustomer",PossibleCustomerController.class,"/customer");
+		me.add("/possibleCustomer",PossibleCustomerController.class,"/");
 		//个人信息设置
-		me.add("/set",UserController.class,"/user_set");
+		me.add("/set",SetController.class,"/console");
 		//首页消息统计
-		me.add("/message",MessageController.class,"/index_message");
+		me.add("/message",MessageController.class,"/console");
+		
+
+		me.add("/template", TemplateController.class,"/customer");
+
+		//押品管理模块
+		me.add("/collateral",CollateralController.class,"/common");
+
+		//通用路由
+		me.add("/common",CommonController.class);
 		
 		//测试路由
 		me.add("/test", TestController.class,"/");

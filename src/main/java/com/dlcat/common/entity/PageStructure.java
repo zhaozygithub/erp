@@ -39,6 +39,26 @@ public class PageStructure implements Serializable {
 	 */
 	private String dataUrl;
 	
+	//private boolean multiple;
+	//此处存放的是原来的TableHeader,其中的 Multiple和主键会被用到.
+	private TableHeader tableHeaderData;
+	
+	public TableHeader getTableHeaderData() {
+		return tableHeaderData;
+	}
+
+	public void setTableHeaderData(TableHeader tableHeaderData) {
+		this.tableHeaderData = tableHeaderData;
+	}
+
+	/*public boolean isMultiple() {
+		return multiple;
+	}
+
+	public void setMultiple(boolean multiple) {
+		this.multiple = multiple;
+	}*/
+
 	public List<Search> getSearch() {
 		return search;
 	}

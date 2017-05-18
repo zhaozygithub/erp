@@ -1,8 +1,13 @@
 package com.dlcat.core.controller;
 
-import java.util.Arrays;
+import java.util.*;
 
 import com.dlcat.common.BaseController;
+import com.dlcat.common.entity.DyResponse;
+import com.dlcat.common.entity.FormBuilder;
+import com.dlcat.common.entity.FormField;
+import com.dlcat.common.utils.PageUtil;
+import com.dlcat.core.model.SysMenu;
 import com.dlcat.core.model.SysUser;
 import com.jfinal.core.Controller;
 //系统管理菜单下的功能
@@ -19,26 +24,16 @@ public class SystemManageController extends BaseController {
 		setAttr("itemcount",c);
 		render("userManage.html");
 	}
-	public void adduser(){
-		SysUser sysUser=getBean(SysUser.class, "");
-		try {
-			sysUser.save();
-		} catch (Exception e) {
-			// TODO: handle exception
-			e.printStackTrace();
-			renderText(Arrays.toString(e.getStackTrace()));
-			return;
-		}
-		renderText("seccess");
+	public void addsubmenu() {
+		SysMenu sysMenu=getModel(SysMenu.class ,"");//getBean(SysMenu.class ,"");
+		renderText(  sysMenu.save()?"成功":"失败");
 	}
-	public void updateuser() {
-		SysUser sysUser=getBean(SysUser.class, "");
-		try {
-			//SysUser.dao.findFirst("").
-			//sysUser.update();
-		} catch (Exception e) {
-			// TODO: handle exception
-			e.printStackTrace();
-		}
+	public void delmenu() {
+		SysMenu sysMenu=getBean(SysMenu.class ,"");
+		renderText(  SysMenu.dao.deleteById(sysMenu.get("id")) ?"成功":"失败");
 	}
+	/*public void addsubmenuform(){
+		List<FormField> formFieldGroup=new ArrayList<FormField>();
+		formFieldGroup.add(new FormField("菜单名字","name","text",""));
+	}*/
 }

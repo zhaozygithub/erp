@@ -60,7 +60,8 @@ table tr:first-child td{
 	position:relative;
 	display:inline-block;
 	padding-bottom:24px;
-	width:6%;
+	padding-left: 4px;
+	width:10%;
 	text-align:center;
 }
 .play-show .color-w{

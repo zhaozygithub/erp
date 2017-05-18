@@ -54,8 +54,10 @@ public class SysOrg extends BaseModel<SysOrg> {
 	* @date 2017年4月24日 下午2:44:10  
 	*/
 	public static int getLevel(int org_id){
-		if (SysOrg.dao.findById(org_id) != null) {
-			return SysOrg.dao.findById(org_id).getInt("org_level");
+		SysOrg sysOrg=SysOrg.dao.findById(org_id);
+		
+		if (sysOrg!= null) {
+			return sysOrg.getInt("org_level");
 		}else {
 			return -1;
 		}

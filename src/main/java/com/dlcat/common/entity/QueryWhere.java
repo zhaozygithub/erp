@@ -5,6 +5,7 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
+import com.dlcat.common.BaseController;
 import com.dlcat.common.utils.StringUtils;
 
 /**
@@ -13,20 +14,24 @@ import com.dlcat.common.utils.StringUtils;
  * @time 2017年5月9日 下午9:04:00
  */
 public class QueryWhere {
-	public static final String EQ = "=";
-	public static final String GT = ">";
-	public static final String GE = ">=";
-	public static final String LT = "<";
-	public static final String LE = "<=";
-	public static final String NEQ = "<>";
-	public static final String IN = "in";
-	public static final String NOT_IN = "not in";
-	public static final String LIKE_LEFT = "like_left";
-	public static final String LIKE_RIGHT = "like_right";
-	public static final String LIKE_ALL = "like_all";
-	public static final String NULL = "is null";
-	public static final String NOT_NULL = "is not null";
-	
+	private static Map<String, String> conditationMap;
+	static{
+		conditationMap = new HashMap<String, String>();
+		conditationMap.put(BaseController.EQ, "=");
+		conditationMap.put(BaseController.GT, ">");
+		conditationMap.put(BaseController.GE, ">=");
+		conditationMap.put(BaseController.LT, "<");
+		conditationMap.put(BaseController.LE, "<=");
+		conditationMap.put(BaseController.NEQ, "<>");
+		conditationMap.put(BaseController.IN, "in");
+		conditationMap.put(BaseController.NOT_IN, "not_in");
+		conditationMap.put(BaseController.OR, "or");
+		conditationMap.put(BaseController.LIKE_LEFT, "like_left");
+		conditationMap.put(BaseController.LIKE_RIGHT, "like_right");
+		conditationMap.put(BaseController.LIKE_ALL, "like_all");
+		conditationMap.put(BaseController.NULL, "is_null");
+		conditationMap.put(BaseController.NOT_NULL, "is_not_null");
+	}
 	/**
 	 * 字段名称
 	 */
@@ -39,7 +44,16 @@ public class QueryWhere {
 	 * 条件
 	 */
 	private String condition;
-	
+	/**
+	 * 校验条件是否合法	合法返回trus，反之返回false
+	 * @param conditation
+	 * @return
+	 * @author masai
+	 * @time 2017年5月12日 下午4:47:35
+	 */
+	public static Boolean checkOutWhereConditation(String conditation){
+		return conditationMap.containsKey(conditation);
+	}
 	/**
 	 * 获取查询条件 
 	 * @param whereList
@@ -50,28 +64,39 @@ public class QueryWhere {
 	public static String getWhereConditation(List<QueryWhere> whereList){
 		StringBuffer whereCondiation = new StringBuffer(" ");
 		for(QueryWhere where:whereList){
-			if(where.getCondition() == null || (EQ.equals(where.getCondition()) && where.getValue() == null)){
+			if(where.getCondition() == null || (!checkOutWhereConditation(where.getCondition())) ||
+							(BaseController.EQ.equals(where.getCondition()) && where.getValue() == null) ||
+							(where.getCondition().startsWith("like") && where.getValue() == null)){
 				continue;
 			}
 			whereCondiation.append(" and ");
-			if(NULL.equals (where.getCondition())||NOT_NULL .equals (where.getCondition())){
-				whereCondiation.append(" " + where.getName() + " ")
-							   .append(" " + where.getCondition() + " ");
+			if(BaseController.NULL.equals (where.getCondition())||BaseController.NOT_NULL .equals (where.getCondition())){
+				whereCondiation.append(" " + where.getName() + " ");
+				if(BaseController.NULL.equals (where.getCondition())){
+					whereCondiation.append(" is null ");
+				}else{
+					whereCondiation.append(" is not null ");
+				}
 			}else if(where.getCondition().startsWith("like") && where.getValue() != null){
-				String tempValue = where.getValue().toString().substring(1, where.getValue().toString().length()-1);
-				if(LIKE_LEFT.equals (where.getCondition())){
+				String tempValue = where.getValue().toString().trim();
+				tempValue = tempValue.replaceAll("'", "");
+				if(BaseController.LIKE_LEFT.equals (where.getCondition())){
 					whereCondiation.append(" " + where.getName() + " ")
 								   .append(" like ")
 								   .append(" '%" + tempValue + "' ");
-				}else if(LIKE_RIGHT.equals (where.getCondition())){
+				}else if(BaseController.LIKE_RIGHT.equals (where.getCondition())){
 					whereCondiation.append(" " + where.getName() + " ")
 								   .append(" like ")
 							       .append(" '" + tempValue + "%' ");
-				}else if(LIKE_ALL.equals (where.getCondition())){
+				}else if(BaseController.LIKE_ALL.equals (where.getCondition())){
 					whereCondiation.append(" " + where.getName() + " ")
 								   .append(" like ")
 								   .append(" '%" + tempValue + "%' ");
 				}
+			}else if(BaseController.NOT_IN.equals(where.getCondition())){
+				whereCondiation.append(" " + where.getName() + " ")
+				   .append(" not in ")
+				   .append(" " + where.getValue() + " ");
 			}else{
 				whereCondiation.append(" " + where.getName() + " ")
 							   .append(" " + where.getCondition() + " ")
@@ -121,7 +146,7 @@ public class QueryWhere {
 	}
 
 	public static QueryWhere notIn(String name, Object value) {
-		return new QueryWhere(name, "not in",value);
+		return new QueryWhere(name, "not_in",value);
 	}
 	
 	public static QueryWhere like(String name, Object value) {
@@ -135,11 +160,11 @@ public class QueryWhere {
 	}
 
 	public static QueryWhere isNull(String name) {
-		return new QueryWhere(name , "is null" , null);
+		return new QueryWhere(name , "is_null" , null);
 	}
 
 	public static QueryWhere isNotNull(String name) {
-		return new QueryWhere(name , "is not null" , null);
+		return new QueryWhere(name , "is_not_null" , null);
 	}
 	
 	public String getName() {
@@ -165,5 +190,11 @@ public class QueryWhere {
 	public void setCondition(String condition) {
 		this.condition = condition;
 	}
+	
+	@Override
+	public String toString() {
+		return "QueryWhere [name=" + name + ", value=" + value + ", condition=" + condition + "]";
+	}
+	
 
 }

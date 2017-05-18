@@ -7,7 +7,7 @@
 <title>index echarts</title>
 </head>
 <script type="text/javascript" src='#assets("/assets/assets.jjs")'></script>
-<script type="text/javascript" src="js/table2excel.js"></script>
+<script type="text/javascript" src="/js/table2excel.js"></script>
 
 
 	
@@ -44,7 +44,7 @@
         <div class="row">
         #for(flow:flowlist)   
             <div class="play-show">
-                <span class="color-w">#(flow.modelName)<i class="i-left"></i><a style="text-decoration: none;color: #fff;">#(flow.modelName)
+                <span class="color-w">#(flow.modelName)<i class="i-left"></i><a style="text-decoration: none;color: #fff;padding: 12px 6px;">#(flow.modelName)
                 </a></span>#for(node:flow.nodes)<span>#(node.node_name)<b></b></span>#end<span><i
                     class="i-right"></i>流程结束<b></b></span>
             </div>
@@ -178,13 +178,13 @@
                         selfButtons:{
                             show:true,
                             title:'导出Excel',
-                            icon:'images/excel.png', //图标    
+                            icon:'/images/excel.png', //图标    
                             onclick:function(op){
                                 //downloadExcelByData(op,'p');
                             	$("#tab1").table2excel({
                  					exclude: ".noExl",
                  					name: year,
-                 					filename: "客户统计",
+                 					filename: "客户统计.xls",
                  					exclude_img: true,
                  					exclude_links: true,
                  					exclude_inputs: true
@@ -266,14 +266,14 @@
                     selfButtons:{
                             show:true,
                             title:'导出Excel',
-                            icon:'images/excel.png', //图标    
+                            icon:'/images/excel.png', //图标    
                          onclick:function(op){
                                 //downloadExcelByData(op);
                           var year=$("#year").children('option:selected').val();
                     	  $("#tab2").table2excel({
          					exclude: ".noExl",
          					name: year,
-         					filename: year+"年借款数据",
+         					filename: year+"年借款数据.xls",
          					exclude_img: true,
          					exclude_links: true,
          					exclude_inputs: true
@@ -382,14 +382,14 @@
                     selfButtons:{//自定义按钮 danielinbiti,这里增加，selfbuttons可以随便取名字    
                      show:true,//是否显示    
                      title:'导出Excel', //鼠标移动上去显示的文字    
-                     icon:'images/excel.png', //图标    
+                     icon:'/images/excel.png', //图标    
                      option:{},    
                      onclick:function(opt) {//点击事件,这里的option1是chart的option信息    
                     	var year=$("#barMds").children('option:selected').val();
                     	  $("#tab3").table2excel({
          					exclude: ".noExl",
          					name: year,
-         					filename: year+"机构年度数据",
+         					filename: year+"机构年度数据.xls",
          					exclude_img: true,
          					exclude_links: true,
          					exclude_inputs: true

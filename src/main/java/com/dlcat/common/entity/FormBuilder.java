@@ -39,6 +39,7 @@ public class FormBuilder {
 		formField.setFiledName("c");
 		formField.setText("字母c");
 		formField.setType("radio");
+		formField.setOptions(ToCodeLibrary.getCodeLibrariesBySQL("YesNo",true,null));
 		formFieldList.add(formField);
 
 		formField = new FormField();

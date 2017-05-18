@@ -1,6 +1,10 @@
 package com.dlcat.common.entity;
 
 import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.List;
+
+import javax.swing.JComboBox.KeySelectionManager;
 
 /**
  * 列表页 -- 表头
@@ -25,7 +29,25 @@ public class TableHeader implements Serializable {
 	 * 列字段集合
 	 */
 	private String[] fieldNames;
+	/**
+	 * 多行复选
+	 */
+	private boolean multiple=false;
+	//多行复选时,需要指明主键等字段,不指明时默认是表格最左边一列
+	private ArrayList<String> keys;
 	
+	public ArrayList<String> getKeys() {
+		return keys;
+	}
+	public void setKeys(ArrayList<String> keys) {
+		this.keys = keys;
+	}
+	public boolean isMultiple() {
+		return multiple;
+	}
+	public void setMultiple(boolean multiple) {
+		this.multiple = multiple;
+	}
 	public String getFieldName() {
 		return fieldName;
 	}

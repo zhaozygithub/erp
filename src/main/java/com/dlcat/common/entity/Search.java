@@ -41,11 +41,11 @@ public class Search implements Serializable {
 	/**
 	 * 字典映射值，搜索框对应代码表中的字典值
 	 */
-	private List<ToCodeLibrary> optionList;
+	private List<Map> optionList;
 	/**
 	 * 所有字典映射值列表Map集合
 	 */
-	private Map<String,List<ToCodeLibrary>> optionListMap;
+	private Map<String,List<Map>> optionListMap;
 	
 	public String[] getTypes() {
 		return types;
@@ -63,19 +63,19 @@ public class Search implements Serializable {
 		this.type = type;
 	}
 
-	public List<ToCodeLibrary> getOptionList() {
+	public List<Map> getOptionList() {
 		return optionList;
 	}
 
-	public void setOptionList(List<ToCodeLibrary> optionList) {
+	public void setOptionList(List<Map> optionList) {
 		this.optionList = optionList;
 	}
 
-	public Map<String,List<ToCodeLibrary>> getOptionListMap() {
+	public Map<String,List<Map>> getOptionListMap() {
 		return optionListMap;
 	}
 
-	public void setOptionListMap(Map<String,List<ToCodeLibrary>> optionListMap) {
+	public void setOptionListMap(Map<String,List<Map>> optionListMap) {
 		this.optionListMap = optionListMap;
 	}
 

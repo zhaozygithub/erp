@@ -41,8 +41,12 @@ public class QueryItem {
 	 */
 	private List<QueryWhere> whereList;
 	
+	//表名的过滤:防止出现/*和点(.),出现点会导致表名变成类似'/*表名*/mysql.user'这种
+	final static String TABREG="^(\\w|\\d|_|\\s|,|\\(|\\)|\\*)+$";
+	
 	public QueryItem(String tableNames){
-		this.tableNames = tableNames;
+		//this.tableNames = tableNames;
+		setTableNames(tableNames);
 	}
 	
 	public QueryItem() {
@@ -56,6 +60,12 @@ public class QueryItem {
 	 * @author masai
 	 * @time 2017年5月10日 下午2:17:13
 	 */
+	String getFilteredTableNames(String tableNames){
+		if(!tableNames.matches(TABREG))
+			tableNames = " ";
+		return tableNames;
+		
+	}
 	public static String getQueryTotalCountSql(QueryItem item)throws Exception{
 		StringBuffer querySql = new StringBuffer();
 		if(item != null && StringUtils.isNotBlank(item.getTableNames())){
@@ -114,7 +124,7 @@ public class QueryItem {
 		return tableNames;
 	}
 	public void setTableNames(String tableNames) {
-		this.tableNames = tableNames;
+		this.tableNames=getFilteredTableNames(tableNames);
 	}
 	public String getFields() {
 		return fields;
@@ -157,4 +167,11 @@ public class QueryItem {
 	public void setWhereList(List<QueryWhere> whereList) {
 		this.whereList = whereList;
 	}
+
+	@Override
+	public String toString() {
+		return "QueryItem [tableNames=" + tableNames + ", fields=" + fields + ", order=" + order + ", group=" + group
+				+ ", having=" + having + ", limit=" + limit + ", whereList=" + whereList + "]";
+	}
+	
 }

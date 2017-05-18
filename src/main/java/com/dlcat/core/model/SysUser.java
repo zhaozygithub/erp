@@ -101,5 +101,5 @@ public class SysUser extends BaseModel<SysUser> {
 			return false;
 		}
 	}
-	
+
 }

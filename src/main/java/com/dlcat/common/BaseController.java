@@ -1,17 +1,27 @@
 package com.dlcat.common;
 
 import java.lang.reflect.Field;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 import com.dlcat.common.entity.DyResponse;
 import com.dlcat.common.entity.QueryItem;
 import com.dlcat.common.utils.JsonUtils;
 import com.dlcat.common.utils.StringUtils;
+import com.dlcat.core.model.SysMenu;
+import com.dlcat.core.model.SysUser;
 import com.google.gson.Gson;
+import com.jfinal.aop.Before;
 import com.jfinal.core.Controller;
+import com.jfinal.kit.JMap;
+import com.jfinal.plugin.activerecord.Db;
+import com.jfinal.plugin.activerecord.Model;
 import com.jfinal.plugin.activerecord.Record;
+import com.jfinal.plugin.activerecord.TableMapping;
+import com.jfinal.plugin.activerecord.tx.Tx;
 
 /**
  * controller基础类
@@ -19,6 +29,7 @@ import com.jfinal.plugin.activerecord.Record;
  * @time 2017年4月16日 下午3:07:38
  */
 public class BaseController extends Controller {
+	
 	//创建数据库操作引擎
 	public static BaseModel<?> baseModel = new BaseModel();
 	
@@ -28,13 +39,14 @@ public class BaseController extends Controller {
 	public static final String LT = "<";
 	public static final String LE = "<=";
 	public static final String NEQ = "<>";
-	public static final String IN = "in";
-	public static final String NOT_IN = "not in";
+	public static final String IN = "in";	//注意：in条件和not in条件的值两侧必须拼接上括号
+	public static final String NOT_IN = "not_in";
+	public static final String OR = "or";
 	public static final String LIKE_LEFT = "like_left";
 	public static final String LIKE_RIGHT = "like_right";
 	public static final String LIKE_ALL = "like_all";
-	public static final String NULL = "is null";	//注意：此处nulL和空值不同
-	public static final String NOT_NULL = "is not null";
+	public static final String NULL = "is_null";	//注意：此处nulL和空值不同
+	public static final String NOT_NULL = "is_not_null";
 	
 	/**
 	 * 请求列表数据
@@ -143,4 +155,86 @@ public class BaseController extends Controller {
        }
        return null;
 	}
+	
+	/**
+	* @author:zhaozhongyuan 
+	* @Description:获取当前用户所属的org_id
+	* @return int   
+	* @date 2017年5月15日 下午3:01:03  
+	*/
+	protected int getCurrentUserBelongID() {
+		SysUser sysUser=getSessionAttr("user");
+		return sysUser.getInt("belong_org_id");
+	}
+	
+	/**
+	* @author:zhaozhongyuan 
+	* @Description:仅能更新单表，单主键的表
+	* ids:要更新的主键数组，
+	* Map:字段name，value
+	* @return List<Record>   
+	* @date 2017年5月15日 下午3:03:28  
+	*/
+	@SuppressWarnings("rawtypes")
+	protected void updateByIds(Class<? extends Model> modelClass,String[] ids,Map<String, Object> map) {
+		//获取主键
+		String[] primaryKey=TableMapping.me().getTable(modelClass).getPrimaryKey();
+		String tableName=TableMapping.me().getTable(modelClass).getName();
+		if (primaryKey.length!=1) {
+			return;
+		}
+		
+		List<Record> recordList=new ArrayList<Record>();
+		for (int i = 0; i < ids.length; i++) {
+			Record record=new Record();
+			record.set(primaryKey[0],ids[i]);
+			Set<String> keys=map.keySet();
+			for (String key : keys) {
+				record.set(key, map.get(key).toString());
+			}
+            recordList.add(record);			
+		}
+		//更新数据
+		try {
+			Db.batchUpdate(tableName, recordList, ids.length);
+			renderText("操作成功");
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+			renderText("操作失败");
+		}
+	}
+	/**
+	 * 根据url获取menuId
+	 * @author liuran
+	 * @time 2017年5月17日 下午2:27:30
+	 * @param url
+	 * @return Integer
+	 */
+	public Integer getMenuId(String url) {
+		return SysMenu.dao.findFirst("select * from sys_menu where url = ?",url).getInt("id");	
+	}
+
+	/**
+	* @author:zhaozhongyuan 
+	* @Description:获取字段中文名和字段名
+	* @return Map<String, String>   
+	* @date 2017年5月17日 下午4:10:18  
+	*/
+	public  Map<String, String> getTrueFields(String[] arr,String[] cnNames) {
+		Map<String, String> map=new HashMap<String, String>();
+		for (int i = 0; i < arr.length; i++) {
+			if (arr[i].startsWith("cn_")) {
+				map.put(cnNames[i], arr[i].substring(3, arr[i].length()));
+			}else {
+				map.put(cnNames[i], arr[i]);
+			}
+		}
+		
+		return map;
+		
+	}
+	
+
+	
 }

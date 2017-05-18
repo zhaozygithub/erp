@@ -1,6 +1,7 @@
 package com.dlcat.common.entity;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.List;
 
 import com.dlcat.core.model.ToCodeLibrary;
@@ -8,15 +9,21 @@ import com.dlcat.core.model.ToCodeLibrary;
  * 表单构造元素类
  * @author masai
  * @time 2017年4月19日 上午11:36:24
+ * 构造方法可接受4或者5个参数:
+ * String text ,String name,String type,String value[,List<ToCodeLibrary> options]
  */
 public class FormField implements Serializable {
 	private static final long serialVersionUID = -8269558838532027061L;
+	/**
+	 * 请注意:radio类型的其name value和描述要放到options中
+	 * 
+	 */
 	/**
 	 * 字段名称
 	 */
 	private String filedName;
 	/**
-	 * 字段文本描述
+	 * 字段文本描述,就是左边的labal
 	 */
 	private String text;
 	/**
@@ -69,6 +76,80 @@ public class FormField implements Serializable {
 	 */
 	private String defaultValue;
 
+	//构造方法
+	public FormField(){
+	}
+	/**
+	 * 构造添加函数
+	 * @param text
+	 * @param name
+	 * @param type
+	 * @param value
+	 */
+	public FormField(String name ,String text,String type){
+		setText(text);
+		setFiledName(name);
+		setType(type);
+	}
+	
+	/**
+	 * 最核心的四个参数,适用于除select和radio以外的构造
+	 * @param text
+	 * @param name
+	 * @param type
+	 * @param value
+	 */
+	public FormField(String name ,String text,String type,String value){
+		//FormField( text , name, type, value,new ArrayList<ToCodeLibrary>());
+		setFiledName(name);
+		setText(text);
+		setType(type);
+		setDefaultValue(value);
+	}
+	public FormField(String name ,String text,String type,String value,boolean isRequired ){
+		//FormField( text , name, type, value,new ArrayList<ToCodeLibrary>());
+		setFiledName(name);
+		setText(text);
+		setType(type);
+		setDefaultValue(value);
+		setIsRequired(isRequired);
+	}
+	/**
+	 * 在上面的基础上增加select和radio的构造方法
+	 * */
+	public FormField(String name ,String text,String type,String value,List<ToCodeLibrary> options){
+		setFiledName(name);
+		setText(text);
+		setType(type);
+		setDefaultValue(value);
+		setOptions(options);
+		//return;
+	}
+	public FormField(String name ,String text,String type,String value,List<ToCodeLibrary> options,boolean isRequired){
+		setFiledName(name);
+		setText(text);
+		setType(type);
+		setDefaultValue(value);
+		setOptions(options);
+		setIsRequired(isRequired);
+		//return;
+	}
+	/**
+	 * 张松添加于2017年5月17日
+	 * 非构造函数便于复用
+	 * @param name
+	 * @param text
+	 * @param type
+	 * @param value
+	 * @param options 此参数仅用于select和radio类,非select和radio类请设为null
+	 * @param isRequired
+	 * @return
+	 */
+	public static FormField createFormField(String name ,String text,String type,String value,List<ToCodeLibrary> options,boolean isRequired){
+		FormField formField=new FormField( name , text, type, value, options, isRequired);
+		return formField;
+		
+	}
 	public String getFiledName() {
 		return filedName;
 	}
@@ -153,4 +234,13 @@ public class FormField implements Serializable {
 	public void setDefaultValue(String defaultValue) {
 		this.defaultValue = defaultValue;
 	}
+	@Override
+	public String toString() {
+		return "FormField [filedName=" + filedName + ", text=" + text + ", type=" + type + ", notice=" + notice
+				+ ", hint=" + hint + ", inNotice=" + inNotice + ", options=" + options + ", unit=" + unit
+				+ ", isHaschild=" + isHaschild + ", isHide=" + isHide + ", isRequired=" + isRequired
+				+ ", fatherFiledName=" + fatherFiledName + ", inType=" + inType + ", defaultValue=" + defaultValue
+				+ "]";
+	}
+	
 }

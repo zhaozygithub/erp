@@ -4,7 +4,6 @@ import com.alibaba.druid.filter.stat.StatFilter;
 import com.alibaba.druid.util.JdbcUtils;
 import com.alibaba.druid.wall.WallFilter;
 import com.dlcat.core.Interceptor.LoginInterceptor;
-import com.dlcat.core.controller.CommonController;
 import com.dlcat.core.controller.CrudController;
 import com.dlcat.core.controller.FlowController;
 import com.dlcat.core.controller.DataController;
@@ -12,12 +11,16 @@ import com.dlcat.core.controller.SystemManageController;
 import com.dlcat.core.controller.TestController;
 import com.dlcat.core.controller.TestUserController;
 import com.dlcat.core.controller.index.SetController;
-import com.dlcat.core.controller.customer.TemplateController;
+import com.dlcat.core.controller.customer.customerRecord.BlackListController;
+import com.dlcat.core.controller.customer.customerRecord.DistributionController;
+import com.dlcat.core.controller.customer.customerRecord.RecordController;
+import com.dlcat.core.controller.customer.customerSaleManager.CustomerAllotControllor;
 import com.dlcat.core.controller.customer.customerSaleManager.PossibleCustomerController;
 import com.dlcat.core.controller.collateral.CollateralController;
 import com.dlcat.core.controller.index.FileController;
 import com.dlcat.core.controller.index.IndexController;
-import com.dlcat.core.controller.index.MessageController;
+import com.dlcat.core.controller.system.RoleManageController;
+import com.dlcat.core.controller.system.UserManageController;
 import com.dlcat.core.model._MappingKit;
 import com.jfinal.config.Constants;
 import com.jfinal.config.Handlers;
@@ -48,27 +51,43 @@ public class Run extends JFinalConfig {
 		me.setBaseViewPath("/WEB-INF/views");
 		
 		//控制台模块
-		//登录，首页
-		me.add("/", IndexController.class);
-		//文件的上传下载
-		me.add("/file",FileController.class);
-		//有关form表单的展示
-		me.add("/form", CrudController.class);
-		//我的意向客户
-		me.add("/possibleCustomer",PossibleCustomerController.class,"/");
-		//个人信息设置
-		me.add("/set",SetController.class,"/console");
-		//首页消息统计
-		me.add("/message",MessageController.class,"/console");
+			//登录，首页
+			me.add("/", IndexController.class);
+			
+			//个人信息设置
+			me.add("/set",SetController.class,"/console");
 		
 
-		me.add("/template", TemplateController.class,"/customer");
-
+		
+		//客户管理模块
+		
+			//客户营销管理
+				//意向客户分配
+				me.add("/customerAllot",CustomerAllotControllor.class,"/");
+				//我的意向客户
+				me.add("/possibleCustomer",PossibleCustomerController.class,"/");
+			
+			//客户档案管理
+				//正式客户分配
+				me.add("/distribution",DistributionController.class,"/");
+				//档案管理
+				me.add("/record",RecordController.class,"/");
+				//黑名单
+				me.add("/blackList",BlackListController.class,"/");
+		
+		
+		
+		
 		//押品管理模块
-		me.add("/collateral",CollateralController.class,"/common");
+		me.add("/collateral",CollateralController.class,"/");
+		
+		//系统管理模块
+		me.add("/systemManage",SystemManageController.class);
+		me.add("/role",RoleManageController.class,"/");
+		me.add("/userManage", UserManageController.class,"/");
+		
 
-		//通用路由
-		me.add("/common",CommonController.class);
+		
 		
 		//测试路由
 		me.add("/test", TestController.class,"/");
@@ -79,7 +98,6 @@ public class Run extends JFinalConfig {
 		me.add("/data",DataController.class);
 		
 		
-		me.add("/systemManage",SystemManageController.class);
 		
 	}
 

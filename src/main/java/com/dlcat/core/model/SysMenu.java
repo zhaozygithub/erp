@@ -2,6 +2,8 @@ package com.dlcat.core.model;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 import java.util.Map;
 
@@ -50,6 +52,13 @@ public class SysMenu extends BaseModel<SysMenu> {
 				menuList.add(sysMenu);
 			}
 		}
+		//排序
+		Comparator<SysMenu> comparator=new Comparator<SysMenu>() {
+			public int compare(SysMenu s1, SysMenu s2) {
+				return s1.getInt("sort_no")-s2.getInt("sort_no");
+			}
+		};
+		Collections.sort(menuList, comparator);
 		return menuList;
 	}
 }

@@ -148,7 +148,7 @@ public class StringUtils {
 	public static boolean isNotBlank(String str) {
 		return !isBlank(str);
 	}
-	
+	/*beg:############编号生成相关############*/
 	/**
 	 * 生成32位的唯一序列号
 	 * @return
@@ -156,14 +156,16 @@ public class StringUtils {
 	public static String genenrateUniqueInd() {
 		return SecurityUtil.md5(UUID.randomUUID().toString());
 	}
-
 	/**
-	 * 生成订单序列号	16位序号 = 年份+日期+4位数字
+	 * 生成订单序列号	12位序号 = 年份+日期+4位数字
 	 * 日期加上(currentNum+1) pg: 201506160001
 	 * @param curNumIndex
 	 * @return
 	 */
-	public static String generateSerialno(int currentNum) {
+	public static String generateSerialno(Integer currentNum) {
+		if(currentNum == null || currentNum < 0){
+			currentNum = 0;
+		}
 		String nextNumStr = String.valueOf(currentNum + 1);
 		while (nextNumStr.length() < 4) {
 			nextNumStr = "0" + nextNumStr;
@@ -174,7 +176,23 @@ public class StringUtils {
 		}
 		return DateUtil.getCurrentDateStr() + nextNumStr;
 	}
-	
+	/**
+	 * 生成16位唯一序列号
+	 * pg: d-bd13642-df6f35
+	 * @param curNumIndex
+	 * @return
+	 */
+	public static String getSerialno() {
+		String base = UUID.randomUUID().toString();
+		Random random = new Random();     
+	    StringBuffer sb = new StringBuffer();     
+	    for (int i = 0; i < 16; i++) {     
+	        int number = random.nextInt(base.length());     
+	        sb.append(base.charAt(number));     
+	    }     
+	    return sb.toString();     
+	}
+	/*end:############编号生成相关############*/
 	/**
 	 * 将list转成String,并按impStr进行分隔
 	 * @param objList
@@ -236,23 +254,6 @@ public class StringUtils {
 			return sb.append(" * from ").append(tableName).toString();
 		}
 		return sb.append(listToStr(Arrays.asList(fields),",")).append(" from ").append(tableName).toString();
-	}
-	
-	/**
-	 * 生成16位唯一序列号
-	 * 日期加上(currentNum+1) pg: 201506160001
-	 * @param curNumIndex
-	 * @return
-	 */
-	public static String getSerialno() {
-		String base = UUID.randomUUID().toString();
-		Random random = new Random();     
-	    StringBuffer sb = new StringBuffer();     
-	    for (int i = 0; i < 16; i++) {     
-	        int number = random.nextInt(base.length());     
-	        sb.append(base.charAt(number));     
-	    }     
-	    return sb.toString();     
 	}
 	
 	public static List<String> getImageSrc(String htmlStr) {

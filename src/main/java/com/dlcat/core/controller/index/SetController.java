@@ -2,6 +2,7 @@ package com.dlcat.core.controller.index;
 
 import com.dlcat.common.BaseController;
 import com.dlcat.common.utils.CommonUtils;
+import com.dlcat.common.utils.DateUtil;
 import com.dlcat.core.model.SysUser;
 import com.jfinal.kit.HashKit;
 import com.jfinal.plugin.activerecord.Db;
@@ -53,7 +54,7 @@ public class SetController extends BaseController {
 		if(oldpassword.length() == 0){
 			//新密码为空
 			if (newpassword.length() == 0) {
-				Db.update("update sys_user set name = ? ,phone = ? where id=?",name,phone,userid);
+				Db.update("update sys_user set name = ? ,phone = ? ,update_time = ? ,update_user_id = ? where id=?",name,phone,DateUtil.getCurrentTime(),userid,userid);
 				removeSessionAttr("user");
 				SysUser user1 = SysUser.dao.findById(userid);
 				setSessionAttr("user", user1);
@@ -74,7 +75,7 @@ public class SetController extends BaseController {
 			//新密码非空	
 					//旧密码正确
 					if(SysUser.isRightPassword(userid, oldpassword)){
-						Db.update("update sys_user set name = ? ,password = ?,phone = ?  where id=?",name,HashKit.sha1(newpassword),phone,userid);
+						Db.update("update sys_user set name = ? ,password = ?,phone = ? ,update_time = ? ,update_user_id = ? where id=?",name,HashKit.sha1(newpassword),phone,DateUtil.getCurrentTime(),userid,userid);
 						removeSessionAttr("user");
 						redirect("/");
 					}else {

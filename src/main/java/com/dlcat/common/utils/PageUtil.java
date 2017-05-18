@@ -240,7 +240,10 @@ public class PageUtil {
 	 * @author masai
 	 * @time 2017年4月19日 下午2:41:11
 	 */
-	public static DyResponse createFormPageStructure(String formName,List<FormField> formFieldList,Integer columnsAmount,String submitUrl){
+	public static DyResponse createFormPageStructure(String formName,List<FormField> formFieldList,String submitUrl){
+		return  createFormPageStructure( formName, formFieldList, submitUrl,1);
+	}
+	public static DyResponse createFormPageStructure(String formName,List<FormField> formFieldList,String submitUrl,Integer columnsAmount){
 		//参数校验
 		if(formFieldList == null || formFieldList.size() == 0 || StringUtils.isBlank(submitUrl)){
 			return null;
@@ -322,13 +325,14 @@ public class PageUtil {
 			}
 		}
 		pageStructure.setTableHeader(tableHeaderList);
-		
+		//pageStructure.setMultiple(tableHeader.isMultiple());
+		pageStructure.setTableHeaderData(tableHeader);
 		//查询框
 		List<Search> searchList = null;
 		if(search != null && search.getFieldNames() != null && search.getTypes() != null) {
 			searchList = new ArrayList<Search>();
-			Map<String, List<ToCodeLibrary>> optionListMap = search.getOptionListMap();
-			if(optionListMap == null) optionListMap = new HashMap<String, List<ToCodeLibrary>>();
+			Map<String, List<Map>> optionListMap = search.getOptionListMap();
+			if(optionListMap == null) optionListMap = new HashMap<String, List<Map>>();
 			for(int i=0;i<search.getFieldNames().length;i++) {
 				Search temp = new Search();
 				temp.setFieldName(search.getFieldNames()[i]);

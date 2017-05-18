@@ -43,18 +43,18 @@ public class IndexEchartsImpl extends BaseService implements IndexEchartsService
 				for (CuObjectCustomer cuObjectCustomer : list) {
 					String status=cuObjectCustomer.getStr("status");
 					//3为黑名单
-					if (status.equals("3")) {
+					if (status.equals("2")) {
 						black++;
 						
 					//1为正常
 					}else if (status.equals("1")) {
 						String type=cuObjectCustomer.getStr("type");
 						//01为公司客户
-						if (type.equals("01")) {
+						if (type.equals("1")) {
 							company++;
 							
 						//02为个人客户
-						}else if (type.equals("02")) {
+						}else if (type.equals("2")) {
 							individual++;
 						}
 						

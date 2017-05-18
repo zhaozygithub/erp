@@ -10,15 +10,34 @@ body{margin-left:20px !important;  }
 td{vertical-align:top;}
 </style>
 <link rel="stylesheet" type="text/css" href="/js/ext-5.1.0\packages\ext-theme-neptune\build\resources\ext-theme-neptune-all.css">
-<script type="text/javascript" src='/js/ext-5.1.0/ext-all-debug.js'></script>
+<script type="text/javascript" src='/js/ext-5.1.0/ext-all.js'></script>
 </head>
 <body>
-<div id='menuper' style='width:1100px;'>
 
+<div id='menuper_outer' style='width:1000px;'>
+<div id='menuper'></div>
 </div>
 </body>
 <script type="text/javascript">
 Ext.onReady(function(){
+	pan=new Ext.Panel({title:'菜单管理 ',//renderTo:'menuper_outer',
+		tbar:new Ext.toolbar.Toolbar({
+			items:[{text:'添加子菜单',handler:function(){
+				var selid=treepan.getSelection()[0].data.id;
+				var msg='你选择的菜单的id是 '+selid;
+				 //Ext.Msg.alert(msg,'此功能尚未开发.');
+				 name=prompt('子菜单名','');
+				 Ext.Ajax.request({url:'addsubmenu',
+					 params:{name:name,pid:selid,level:treepan.getSelection()[0].data.level+1},
+					 success:function(resp,conf){
+						 alert(resp);
+					 }
+				 });
+			}}]
+		}) ,	
+		//html:"z",
+		region:'north'
+	});
 	var menudata;
 	Ext.Ajax.request({url:'/data/getMenu',
 	    success:function(resp,conf){
@@ -82,7 +101,7 @@ function formtotree(node){
 formtotree(mystore.root);
    
 treepan=new Ext.tree.Panel({
-	title:"菜单权限 ",
+	//title:"菜单权限 ",
 	store:mystore,
 	//rootVisible:false,
 	//selModel:new Ext.selection.TreeModel(),
@@ -92,7 +111,11 @@ treepan=new Ext.tree.Panel({
 		text:'菜单名',dataIndex:'name',
 		xtype:'treecolumn',flex:1},
 		{text:'按钮',dataIndex:'buttons',flex:3}],
-    renderTo:'menuper'});
+    //renderTo:'menuper',
+    region:'center'
+    });
+vp=new Ext.Viewport({layout:'border',
+	items:[pan,treepan]});
 treepan.expandAll();
 treepan.on('checkchange',function (node){
 	console.log(node.data);
@@ -101,7 +124,7 @@ treepan.on('checkchange',function (node){
 }
 });//ajax结束 
 
-	});
+	});//onReady结束
 //var mystore=treepan.getStore();
 //样式关联
 function changeUi(node,state){

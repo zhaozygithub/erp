@@ -71,16 +71,5 @@ public class FlowTask extends BaseModel<FlowTask> {
 		}
 		return flowTaskNo;
 	}
-	/**
-	 * 根据用户id获取当前用户未审批的流程总数
-	 * @author liuran
-	 * @time 2017年5月5日 下午2:46:29
-	 * @param userId
-	 * @return int
-	 */
-	public static int getWaitFlowTaskCount(int userId){
-		List<FlowTask> tasks = FlowTask.dao.find("select * from flow_task where cur_approve_user_id = ? and is_approve = '2'",userId);		
-		return tasks.size();
-	}
 }
 

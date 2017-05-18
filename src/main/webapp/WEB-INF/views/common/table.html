@@ -7,6 +7,7 @@
 #jumpul li{display:inline;margin:3px;}
 table tr:nth-child(even){background:#EEE;}
 tbody tr:hover{background:#DDD;}
+th,td{margin:0 5px;}
 </style>
 <link rel="stylesheet" type="text/css" href="/js/bootstrap-3.3.7-dist/css/bootstrap.min.css">
 <link rel="stylesheet" type="text/css" href="/css/examine.css">
@@ -25,6 +26,7 @@ tbody tr:hover{background:#DDD;}
 	#set(btnList = response.data.button)
 	#set(tableName = response.data.name)
 	#set(dataUrl = response.data.dataUrl)
+	#set(thdata=response.data.tableHeaderData)
 	<div class="container-fluid" style="padding-top:20px;">
         <div id='conditions'>
 			<form class="form-inline" role="form" style="padding-top:20px;">
@@ -44,7 +46,7 @@ tbody tr:hover{background:#DDD;}
 					#elseif(search.type == "date")
 						<div class="form-group" style="margin-bottom:12px;    margin-right: 20px;">
 		                    <label for="examineTime1">#(search.CNName):</label>
-		                    <input class="Wdate form-control" type="text" name='#(search.fieldName)' id="examineTime1" onClick="WdatePicker()">
+		                    <input class="Wdate form-control" type="datetime" name='#(search.fieldName)' id="examineTime1" onClick="WdatePicker()">
 		                </div>         
 		           
 					#else
@@ -65,7 +67,7 @@ tbody tr:hover{background:#DDD;}
 	         <div class="examine-btn"  style="padding-top:20px; padding-bottom:6px;" id='operations'>
 	             	#if(btnList)
 						#for(btn:btnList)
-							<button type="button" class="btn btn-warning" onclick=" showwin(this,'#(btn.url)')"  usetype='#(btn.useType)'>#(btn.name)</button>
+							<button type="button" id='btn#(btn.id)' class="btn btn-warning" onclick=" showwin(this,'#(btn.url)')"  usetype='#(btn.use_type)'>#(btn.name)</button>
 						#end
 					#end
 	         </div>
@@ -74,31 +76,24 @@ tbody tr:hover{background:#DDD;}
 		<!-- <p>表格数据</p> -->
 		<div id='datatable' style='max-width:100%;overflow:auto;'>
 		    <table class="table text-center" style='min-width:1000px;'>
-		             <thead style='background-color: #7bF;'>
+		             <thead style='background-color: #7bF;' keys>
 					#if(tableHeaderList)
 						<tr id='datafieldname'>
+							<th class="text-center">#if(thdata.isMultiple())<input type='checkbox' onchange='selectall(this)'>
+							#end</th>
 							#for(header:tableHeaderList)
-								<th field='#(header.fieldName)' class="text-center">#(header.CNName)</th>
+								<th field='#(header.fieldName)' class="text-center" 
+								isKey='#(thdata.keys!=null&&thdata.keys.contains(header.fieldName))'>#(header.CNName)</th>
 							#end
 						</tr>
 					#end
 					</thead>
 					<!-- v-if='userdatas.response.status==200' -->
-		            <tbody v-if='userdatas.response.status==200'>
-					#--
-					#for(data:dataList)
-						<tr>
-						#for(header:tableHeaderList)	
-							#for(rec:data.columns)
-								#if(header.fildName == rec.key)
-								<td>#(rec.value)</td>		
-								#end
-							#end	
-						#end
-						</tr>
-					#end--#
+		            <tbody v-if='userdatas.response.status==200' id='tbody'>
+					
 					<tr  v-for='user in userdatas.response.data.dataList' v-on:click='get_select_name(user)'
 						:style='(user!=null&&select_user!=null&&user.id==select_user.id)?"background:#a5d8f7;color:white;":""'>
+						<td><input  v-if='#(thdata.isMultiple())' type="checkbox" name='checks' :value='user[ths[0]]'></td>
 						<td  v-for=' i  in ths.length' v-text='user[ths[i-1]]'>  </td>
 					</tr>
 					</tbody>
@@ -122,23 +117,7 @@ tbody tr:hover{background:#DDD;}
 	     </div>  
 	</div>
 </body>
-
-			<script type="text/javascript">
-			/* function settablesty(){
-			$("tbody tr:nth-child(even)").attr("bgcolor","#ddd");
-			$("tbody tr:nth-child(odd)").attr("bgcolor","#eee");
-			$("tbody tr").click(function() {
-				//debugger;
-				$("tbody tr[bgcolor='#fdc26f']").removeAttr("bgcolor");
-				
-				$("tbody tr:nth-child(even)").attr("bgcolor","#ddd").css({"color":"#333"});
-				$("tbody tr:nth-child(odd)").attr("bgcolor","#eee").css({"color":"#333"});
-				
-				$(this).attr("bgcolor",'#fdc26f').css({"color":"#fff"});
-			});}
-			setTimeout(settablesty,1000); */
-			</script>
-						
+					
 <script type="text/javascript">
 //total= #(total??1);
 p=1;
@@ -146,6 +125,7 @@ page=20;
 datacount=#(datacount??0);
 total=Math.max(Math.ceil(datacount/page),1);
 select_user=null;
+isMultiple=#(thdata.isMultiple()??false);
 function getfields(){
 	/*var datafieldname=document.getElementById('datafieldname');
 	var thnodes=datafieldname.getElementsByTagName('th');
@@ -154,7 +134,6 @@ function getfields(){
 		ths.push(thnodes[i].getAttribute('field'));
 	}
 	thslength=ths.length;*/
-	//vxd.ths =ths ;
 	ths=[];
 	#for(header:tableHeaderList)
 		ths.push('#(header.fieldName)');
@@ -163,6 +142,13 @@ function getfields(){
 	#for(header:tableHeaderList)
 		cnths.push('#(header.CNName)');
 	#end;
+	tbkeys='#(thdata.keys)';
+	requestPara= {
+		tableName:'#(response.data.name)',
+		tableHeaders:cnths,
+		tableFields:ths,
+		queryItem:'',
+		page:p};
 	return ths;
 }
 var vxd=new Vue({
@@ -192,8 +178,7 @@ var vxd=new Vue({
 		datacount:function(v){
 			this.total=Math.max(Math.ceil(v/page),1);}
 	}
-});;
-//p=1;
+});
 function getps(p){
 		var i,ps=[];
 		if(p>5&&p<total-5)for(i=0;i<11;i++ ){ps.push(p-5+i);}
@@ -201,28 +186,14 @@ function getps(p){
 		else for(i=Math.max(total-10,1);i<=total;i++){ps.push(i);}
 		return ps;
 }
-	/*	var vpnum=new Vue({
-			el:'#pgnum',
-			data:{
-				p:p,
-				ps:getps(this.p),
-				total:total,
-				datacount:datacount
-				},
-			watch:{
-				p:function(v){//debugger;
-					this.ps=getps(v);},
-				datacount:function(v){
-					this.total=Math.max(Math.ceil(v/20),1);}
-			}
-			//template:'#pnumtpl'
-		});*/
 function setdatacountandtotal(resp){
+	respJson=JSON.parse( resp.target.responseText);		
 	datacount=JSON.parse( resp.target.responseText)['response']['data']['dataCount'];
 	vxd.page=page=JSON.parse( resp.target.responseText)['response']['data']['page'];
 	total=Math.max(Math.ceil(datacount/page),1);
 	//vpnum.datacount=datacount;
 	vxd.datacount=datacount;
+	requestPara.queryItem=respJson.response.data.queryItem;
 }
 (function initdata(){
 	var xhr=new XMLHttpRequest();
@@ -261,7 +232,7 @@ function seek(p){
 	var conditions=getconditions();
 	var xhr=new XMLHttpRequest();
 	xhr.open('get','#(dataUrl)?'+((conditions==null||conditions=='')?'':'condition='+conditions)
-			+(p==null?'':"page="+p));
+			+'&'+(p==null?'':"page="+p));
 	xhr.send();//'condition='+conditions);
 	xhr.onload=function(resp){
 		if(JSON.parse( resp.target.responseText)['response']['status']==200){
@@ -274,16 +245,16 @@ function seek(p){
 }
 function jumppage(p){
 	this.p=p;
-	vxd.p=p;
-	/*var xhr=new XMLHttpRequest();
-	xhr.open('post','#(dataUrl)?p='+p);
-	xhr.send();
-	xhr.onload=function(resp){
-	vxd.userdatas=JSON.parse( resp.target.responseText);}*/
+	requestPara.page=vxd.p=p;
 	seek(p);
 	
 }
-//}
+function selectall(ev){
+	var inp=document.getElementById('tbody').getElementsByTagName('input');
+	for(var i=0;i<inp.length;i++){
+		inp[i].checked=ev.checked;
+	}
+}
 </script>
 	
 </html>

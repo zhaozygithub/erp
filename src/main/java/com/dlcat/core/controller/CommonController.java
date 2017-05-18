@@ -43,8 +43,14 @@ public class CommonController extends BaseController {
 			String fileName = requestParaMap.get("tableName").toString();
 			//获取表头字符串（逗号间隔）
 			String tableHeader = requestParaMap.get("tableHeaders").toString();
+			if(tableHeader.indexOf("[")>=0 && tableHeader.lastIndexOf("]") >= 0){
+				tableHeader = tableHeader.substring(tableHeader.indexOf("[")+1, tableHeader.lastIndexOf("]"));
+			}
 			//获取表头对应字段
 			String tableFields = requestParaMap.get("tableFields").toString();
+			if(tableFields.indexOf("[")>=0 && tableFields.lastIndexOf("]") >= 0){
+				tableFields = tableFields.substring(tableFields.indexOf("[")+1, tableFields.lastIndexOf("]"));
+			}
 			//获取json格式的QueryItem字符串
 			String queryItem = requestParaMap.get("queryItem").toString();
 			//获取当前分页数 为空则为默认值1
@@ -96,5 +102,12 @@ public class CommonController extends BaseController {
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
+	}
+	public static void main(String[] args) {
+		String a = "[*[*]*]";
+		System.out.println(a.indexOf("["));
+		System.out.println(a.lastIndexOf("]"));
+		
+		System.out.println(a.substring(1,0));
 	}
 }

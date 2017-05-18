@@ -10,6 +10,7 @@ import java.util.Map;
 
 import com.dlcat.core.model.FlowModel;
 import com.dlcat.core.model.FlowNode;
+import com.dlcat.core.model.FlowTask;
 import com.dlcat.core.model.SysMenu;
 import com.dlcat.core.model.SysOrg;
 import com.dlcat.core.model.SysRole;
@@ -21,6 +22,7 @@ import com.jfinal.core.Controller;
 import com.jfinal.kit.HashKit;
 import com.jfinal.kit.JsonKit;
 import com.jfinal.plugin.activerecord.Db;
+import com.jfinal.plugin.activerecord.Record;
 import com.jfinal.plugin.activerecord.TableMapping;
 import com.jfinal.template.stat.ast.For;
 
@@ -52,6 +54,8 @@ public class IndexController extends Controller {
 	private void toIndex() {
 		SysUser user = (SysUser) getSessionAttr("user");
 		int userId = user.getInt("id");
+		Map<String, Long> messageMap = messageCount(userId);
+		setAttr("message", messageMap);
 		setAttr("orgName", SysOrg.getNameByUserId(userId));
 		setAttr("roleName", SysRole.getRoleNameByUserId(userId));
 		render("/WEB-INF/index.html");
@@ -183,11 +187,21 @@ public class IndexController extends Controller {
 		int rid = user.getInt("role_id");
 		// 根据rid去查看所具有的所有菜单
 		String roleMenus = SysRole.dao.findById(rid).getStr("role_menus");
-		if (roleMenus.endsWith(",")) {
-			roleMenus = roleMenus.substring(0, roleMenus.length() - 1);
+		
+		List<SysMenu> list=null;
+		//如果为管理员那么就查找全部有效菜单
+		if (roleMenus.equals("*")) {
+			list=SysMenu.dao.find("select * from sys_menu where status='1' ORDER BY pid,sort_no,id");
+		}else {
+			if (roleMenus.endsWith(",")) {
+				roleMenus = roleMenus.substring(0, roleMenus.length() - 1);
+			}
+			// 查询当前角色的有效菜单
+			list = SysMenu.dao.find("select * from sys_menu where id in (" + roleMenus + ") and status='1' ORDER BY pid,sort_no,id");
+			
 		}
-		// 查询当前角色的有效菜单
-		List<SysMenu> list = SysMenu.dao.find("select * from sys_menu where id in (" + roleMenus + ") and status='1' ORDER BY pid,sort_no,id");
+	    
+		
 		Map<Integer, SysMenu> map = new HashMap<Integer, SysMenu>();
 
 		List<SysMenu> firstMenu = new ArrayList<SysMenu>();
@@ -374,6 +388,21 @@ public class IndexController extends Controller {
 		}
 	}
 	
-	
+	/**
+	 * 首页消息统计
+	 * @author liuran
+	 * @time 2017年5月15日 下午5:47:50
+	 * @param userId
+	 * @return Map<String,Integer>
+	 */
+	private Map<String, Long> messageCount(int userId) {		
+		//流程统计 
+		long flowncount = Db.queryLong("select count(*) as count from flow_task where cur_approve_user_id = ? and is_approve = '2'", userId);		
+			
+		Map<String, Long> messageMap = new HashMap<String, Long>();
+		//此处增加消息处理类型
+		messageMap.put("flowcount", flowncount);	
+		return messageMap;
+	}
 
 }

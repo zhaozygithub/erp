@@ -74,7 +74,7 @@ public class BaseModel<M extends Model<M>> extends Model<M> implements IBean {
 	}
 	/**
 	 * 根据sql语句查询 Db方式
-	 * @param clazz	此处仅仅支持Map和Record，传空则默认为Record
+	 * @param clazz	此处仅仅支持Map和Record，传空则默认为Record，其他类型clazz则会报错
 	 * @param sql
 	 * @param paras
 	 * @return
@@ -110,9 +110,9 @@ public class BaseModel<M extends Model<M>> extends Model<M> implements IBean {
 	 * @return
 	 * @author masai
 	 * @time 2017年4月28日 上午11:06:09
-	 *//*
-	public  <T> List<T> baseQuery(String sql , Object[] paras){
-		List<T> objects = null;
+	 */
+	public  List<Object> baseQuery(String sql , Object[] paras){
+		List<Object> objects = null;
 		if(StringUtils.isNotBlank(sql)){
 			try {
 				if(paras == null){
@@ -126,18 +126,18 @@ public class BaseModel<M extends Model<M>> extends Model<M> implements IBean {
 		}
 		return  objects;
 	}
-	*//**
+	/**
 	 * 根据sql语句查询第一条记录
 	 * @param sql	sql语句
 	 * @param paras		参数列表 如果为null表示无参数
 	 * @return
 	 * @author masai
 	 * @time 2017年4月28日 上午11:07:15
-	 *//*
-	public <T> T  baseQueryFrist(String sql , Object[] paras){
-		List<T> objects = baseQuery(sql , paras);
+	 */
+	public Object  baseQueryFrist(String sql , Object[] paras){
+		List<Object> objects = baseQuery(sql , paras);
 		return (objects != null && objects.size()>0) ? objects.get(0) : null;
-	}*/
+	}
 	/**
 	 * 根据sql语句更新记录
 	 * @param sql	

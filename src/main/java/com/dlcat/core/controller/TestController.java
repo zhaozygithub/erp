@@ -8,10 +8,12 @@ import java.util.Map;
 import com.dlcat.common.BaseController;
 import com.dlcat.common.entity.DyResponse;
 import com.dlcat.common.entity.FormBuilder;
+import com.dlcat.common.entity.FormField;
 import com.dlcat.common.entity.QueryItem;
 import com.dlcat.common.entity.QueryWhere;
 import com.dlcat.common.entity.Search;
 import com.dlcat.common.entity.TableHeader;
+import com.dlcat.common.utils.OptionUtil;
 import com.dlcat.common.utils.PageUtil;
 import com.dlcat.core.model.SysMenu;
 import com.dlcat.core.model.ToCodeLibrary;
@@ -29,17 +31,22 @@ public class TestController extends BaseController{
 		TableHeader tableHeader = new TableHeader();
 		tableHeader.setFieldNames(new String[]{"id","name","business_id","repay_type","remark","cn_status"});
 		tableHeader.setCNNames(new String []{"id","名称","业务类型编号","还款方式","备注","是否开启"});
+		tableHeader.setMultiple(true);
 		//2.定义检索区域检索框 注意：字段名称必须是实际存在的字段名称，
 		//CNName中文标示这个检索字段的含义，type标示检索框的类型
 		Search search = new Search();
 		search.setFieldNames(new String[]{"name","status","remark","add_time"});
 		search.setCNNames(new String[]{"名称","是否有效","备注","时间"});
-		search.setTypes(new String[]{"text","select","text","date"});
+		search.setTypes(new String[]{"text","select","select","date"});
 		//3.定义下拉数据源 如果检索区域中存在select，必须定义下拉数据源
 		//注意：这里的资源必须和表头字段中的一致，可以定义多个
-		Map<String,List<ToCodeLibrary>> clListMap = new HashMap<String, List<ToCodeLibrary>>();
-		clListMap.put("status", ToCodeLibrary.getCodeLibrariesBySQL("YesNo",true,null));
+		Map<String,List<Map>> clListMap = new HashMap<String, List<Map>>();
+
+		clListMap.put("status", OptionUtil.getOptionListByCodeLibrary("YesNo",true,null));
+		clListMap.put("remark", OptionUtil.getOptionListByOther("id", "name", "loan_business_category", null));
+		/*clListMap.put("status", ToCodeLibrary.getCodeLibrariesBySQL("YesNo",true,null));*/
 		search.setOptionListMap(clListMap);
+		
 		DyResponse response = null;
 		
 		try {
@@ -47,7 +54,7 @@ public class TestController extends BaseController{
 			//第二个参数是这个列表数据的名称，如果页面中存在这个导出功能，这个名称就是导出的
 			//excel文件的文件名称
 			response = PageUtil.createTablePageStructure("/test/data", "测试列表数据", tableHeader, 
-					search,super.getLastPara().toString(),(Map<Integer, SysMenu>)this.getSessionAttr("menus"));
+					search,super.getLastPara()==null?"1":getLastPara().toString(),(Map<Integer, SysMenu>)this.getSessionAttr("menus"));
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -94,14 +101,16 @@ public class TestController extends BaseController{
 	   renderJson();
    }
    
-   public void getFild(){
-	   String a = super.getLastPara().toString();
-	   System.out.println(a);
-   }
    public void formTest(){
-	   DyResponse response = PageUtil.createFormPageStructure("表单测试", FormBuilder.formBuilderTest(), 2, "aaa");
+	   List<FormField> formFieldGroup=new ArrayList<FormField>();
+	   formFieldGroup.add(new FormField("name","名字","text",""));
+	   formFieldGroup.add(new FormField("f","文件","file",""));
+	   formFieldGroup.add(new FormField("textarea","ar","textarea","1\n2"));
+	   formFieldGroup.add(FormField.createFormField("名字","name2","text","",null,true) );
+	   formFieldGroup.addAll(FormBuilder.formBuilderTest());
+	   DyResponse response = PageUtil.createFormPageStructure("表单测试", formFieldGroup,  "aaa");
        this.setAttr("response", response);
-       this.render("test_form.html");
+       this.render("common/form_editarea.html");
    }
    public void mm() throws Exception{
 	   String aa = this.getPara("aa", "aa");

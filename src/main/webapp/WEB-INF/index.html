@@ -9,8 +9,7 @@
 	rel="stylesheet">
 <link href="css/index.css" rel="stylesheet">
 </head>
-<body style="text-align: center;">
-
+<body>
 	<div class="container-fluid">
 		<div class="row">
 			<div class="content-box clearfix col-lg-12">
@@ -27,16 +26,16 @@
 								#for(sec : first.children??)
 								<ul class="list-unstyled">
 
-									#for(third:sec.children??)
-									 #set(level = third.level)
-									 #set(size = for.size) #end
+									#for(third:sec.children??) 
+									#set(level = third.level)
+									#set(size = for.size) #end
 
 									#if(size&&level==3)
 									<li class="dropdown">
 										<button type="button" class="btn dropdown-toggle" 
-											id="dropdownMenu1" data-toggle="dropdown"
+											id="dropdownMenu1" data-toggle="dropdown" onclick="$('#secName').text('>#(sec.name??)');$('#thirdName').text('')"
 											style="width: 180px; height: 54px; color: #fff; background-color: transparent !important; border: none; font-size: 16px;">
-											<a href="##(sec.id ??)" onclick="$('#secName').text('>#(sec.name??)');$('#thirdName').text('')">#(sec.name??)</a> <b class="down-up"><img
+											<a href="##(sec.id ??)" >#(sec.name??)</a> <b class="down-up"><img
 												class="down-up-img" alt="向上箭头" src="images/up.png"></b> <b
 												class="down-down"><img class="down-down-img" alt="向下箭头"
 												src="images/down.png"></b>
@@ -51,11 +50,11 @@
 													alt="三角" src="images/triangle.png"></b></li>
 											#end
 										</ul>
-									</li> #set(size = null) #elseif(level==4)
+									</li> #set(size = null) #else
 									<li><button type="button" class="btn dropdown-toggle"
-											id="dropdownMenu1" data-toggle="dropdown"
+											id="dropdownMenu2" data-toggle="dropdown" onclick="$('#secName').text('>#(sec.name??)');$('#thirdName').text('')"
 											style="width: 180px; height: 54px; color: #fff; background-color: transparent !important; border: none; font-size: 16px;">
-											<a href="#" class="hs" id="#(sec.id)" rel="#(sec.url??)" onclick="$('#secName').text('>#(sec.name??)');$('#thirdName').text('')">#(sec.name??)</a>
+											<a href="#" id="#(sec.id)" data-toggle="tab" rel="#(sec.url??)" >#(sec.name??)</a>
 										</button></li> #end
 								</ul>
 
@@ -76,7 +75,7 @@
 							</ul>
 						</div>
 						<div class="pull-right">
-							<div class="media">
+							<div class="media pull-left">
 								<a class="pull-left" href="#"> <img class="media-object"
 									src="images/people.png" alt="用户头像">
 								</a>
@@ -84,16 +83,32 @@
 									<h4 class="media-heading">#(session.user.name)</h4>
 								</div>
 							</div>
-							<div class="pull-right">
-								<a class="set-a"  href="/set" data-toggle="modal" data-target="#mymodal-data"><img alt="设置图片" src="images/set.png" ></a>
-								<a href="/message" class="news-a"><img alt="消息图片" src="images/news.png"></a>
+							<div class="pull-right slider-media-right">
+								<a class="set-a"  href="/set" data-toggle="modal" data-target="#mymodal1" data-backdrop="static"><img alt="设置图片" src="images/set.png" ></a>
+								<a class="news-a">
+									<img alt="消息图片" src="images/news3.png">
+									<img alt="消息图片" src="images/news2.png" style="display:none;">
+								</a>
 								<a href="/doExit" class="close-a">退出</a>
 							</div>
 						</div>
 					</div>
 				</div>
 			</div>
-			
+			<!-- 消息框 -->
+			<div class="news-body"></div>
+			<div class="news-box">
+				<div class="news-box-before"></div>
+				<!-- 消息统计总数 如有更多，相加 -->
+				<div class="news-box-header"><i></i><span style="color:red;font-size:16px;padding-left:10px;">#(message.flowcount ??)</span>条通知</div>
+				<ul class="list-unstyled">
+				    <li class="clearfix">
+				    	<div class="pull-left">待处理流程</div>
+				    	<div class="pull-right">+#(message.flowcount ??)</div>
+				    </li>
+				</ul>
+				<div class="text-center news-more"><a href="#" onclick="$('#firstName').text('所有通知');$('#secName').text('');$('#thirdName').text('')">查看所有通知 ></a></div>
+			</div>
             <!-- 部门位置 -->
 			<div class="pull-right" style="margin-right:20px;"> 
 				<label class="position-label">当前部门职位：#(orgName ??) > #(roleName ??)</label>
@@ -101,17 +116,16 @@
 			<!-- 当前位置 -->
 			<div class="pull-left" style="margin-left: 200px;"> 
             <label class="position-label" id="firstName">控制台 </label>
-            <label class="position-label" id="secName">> 首页 </label>
+            <label class="position-label" id="secName">>首页 </label>
             <label class="position-label" id="thirdName"></label>
             </div>	
 		</div>
 	</div>
-
 		
 	<!-- 模态弹出窗内容 -->
-	<div class="modal" id="mymodal-data" tabindex="-1" role="dialog"
-		aria-labelledby="mySmallModalLabel" aria-hidden="true">
-		<div class="modal-dialog" style="margin: 10% auto;">
+	<div class="modal" id="mymodal1" tabindex="-1" role="dialog" aria-labelledby="mySmallModalLabel" aria-hidden="true">
+	<span style="font-family: arial, 宋体, sans-serif, tahoma, 'Microsoft YaHei'; font-size: 14px; line-height: 24px;">>  
+		<div class="modal-dialog" style="    position: absolute;left: 50%;top: 50%;margin-left: -300px;margin-top: -258px;">
 			<div class="modal-content">                          
             </div>            
 		</div>
@@ -121,24 +135,21 @@
 
 
 	<div class="container-fluid body-box">
-	
 		<ul id="myTabs" class="nav nav-tabs body-tabs">
-	       <!--  <li class="active"><a href="#examine" data-toggle="tab" class="text-muted btn">审核列表</a></li> -->
-	        <!-- <li><a href="#examineDone" data-toggle="tab" class="text-muted btn">已审核</a></li>  -->
+	        <!-- <li class="active"><a href="#examine" data-toggle="tab" class="text-muted btn">审核列表</a></li>
+	        <li><a href="#examineDone" data-toggle="tab" class="text-muted btn">已审核</a></li>  -->
 	    </ul>
-	    
 	    <div id="myTabContents" class="tab-content body-box-tab-content">
-	        
-	       <!--  <div class="tab-pane fade in active" id="examine">
+	        <!-- <div class="tab-pane fade in active" id="examine">
 	        	<div class="row" id="box" style="margin-left:0;">
 					<iframe src="/echarts" id="iframe_box"
 						style="width: 100%; height: 850px;background-color: #fff;"
 						frameborder="no" border="0" framespacing="0"> </iframe>
 				</div>
-	        </div> -->
+	        </div>
 	        
 	       
-	   		<!-- <div class="tab-pane fade" id="examineDone">
+	   		<div class="tab-pane fade" id="examineDone">
 	            <p>iOS 是一个由苹果公司开发和发布的手机操作系统。最初是于 2007 年首次发布 iPhone、iPod Touch 和 Apple 
 	                TV。iOS 派生自 OS X，它们共享 Darwin 基础。OS X 操作系统是用在苹果电脑上，iOS 是苹果的移动版本。</p>
 	        </div> -->
@@ -150,8 +161,6 @@
 	
 	<script type="text/javascript">
 		$(function() {
-			
-			 $("#iframe_box").css("height",$(window).height()-149);
 			
 			//首页的背景处于活动状态
 			$("a[id='7']").parent().parent().css("background-color","#d38606");
@@ -169,34 +178,44 @@
 			$(".down-up").css("display", "none");
 
 			$(".dropdown-toggle").click(function() {
-				//debugger;
-				$(".down-up").css("display", "none");
-				$(".down-down").css("display", "");
-				var down = $(this).attr("aria-expanded");
+				//$(".down-up").css("display", "");
+				//ss$(".down-down").css("display", "none");
+				/* var down = $(this).attr("aria-expanded");
 				if (down == undefined || down == 'false') {
 					$(this).find(".down-up").css("display", "");
 					$(this).find(".down-down").css("display", "none");
 				} else {
 					$(this).find(".down-up").css("display", "none");
-					$(this).find(".down-down").css("display", "");
-				}
+					ss$(this).find(".down-down").css("display", "");
+				} */
+				
+				if($(this).siblings("ul.dropdown-menu").css("display")=="block"){
+					$(this).parent("li.dropdown").find(".dropdown-toggle").find(".down-up").css("display", "none");
+					$(this).parent("li.dropdown").find(".dropdown-toggle").find(".down-down").css("display", "");	
+					//$(this).parent("li.dropdown").css("background-color","#505050");
+				}else{
+					$(this).parent("li.dropdown").find(".dropdown-toggle").find(".down-up").css("display", "");
+					$(this).parent("li.dropdown").find(".dropdown-toggle").find(".down-down").css("display", "none");
+					//$(this).parent("li.dropdown").css("background-color","#d38606");
+				};
 			})
 
 			
+
 			 //点击显示颜色
 			   $(".tab-pane li").click(function () {
-				// debugger;
-				$(".tab-pane li").css("background-color","");
-				$(this).css("background-color","#d38606");
-				
-				if ($(this).children("b").length>0) {
-				$(".triangle-box").css("display","");
-				$(this).children("b").css("display","inline");
-				
-				$(".hs").each(function() {
-					if($(this).css("color")=='rgb(211, 134, 6)'){
-						$(this).css("color","");
-					}
+					//debugger;
+					$(".tab-pane li").css("background-color","");
+					$(this).css("background-color","#d38606");
+					
+					if ($(this).children("b").length>0) {
+					$(".triangle-box").css("display","");
+					$(this).children("b").css("display","inline");
+					
+					$(".hs").each(function() {
+						if($(this).css("color")=='rgb(211, 134, 6)'){
+							$(this).css("color","");
+						}
 				});
 				
 				$(this).children("a").css("color","#d38606");
@@ -204,23 +223,30 @@
 				$(this).parent().parent().css("background-color","#d38606");
 				}
 			}); 
-			 
 			
 			function getTabs(id) {
 				$.ajax({
 					type: "POST",
 	                url: "/getTabsById/"+id,
 	                success: function(tabs){
-	                	debugger;
+	                	//debugger;
 	                    $("#myTabs").empty();
+	                    $("#myTabContents").empty();
 	                    if (tabs.length>0) {
 	                	for(var i=0;i<tabs.length;i++) {
 							$("#myTabs").append('<li><a href="#'+tabs[i].id+'" data-toggle="tab" class="text-muted btn">'+tabs[i].name+'</a></li>');
 							
+							var parm;
+							if (tabs[i].url=="") {
+								parm="";
+							}else {
+								parm=tabs[i].url+"/"+tabs[i].id;
+							}
+							
 							$("#myTabContents").append('<div class="tab-pane fade in" id="'+tabs[i].id+'">'
 						        	+'<div class="row" id="box" style="margin-left:0;">'
-						        	+'<iframe src="'+tabs[i].url+'" id="iframe_box"'
-						        	+'	style="width: 100%; height: 850px;background-color: #fff;"'
+						        	+'<iframe src="'+parm+'"'
+						        	+'	style="width: 100%; height: '+($(window).height()-149)+'px;background-color: #fff;"'
 						        	+'	frameborder="no" border="0" framespacing="0"> </iframe>'
 						        	+'</div></div>');
 						
@@ -238,42 +264,97 @@
 			
 			//初始化首页tabs
 			getTabs(7);
-			
-			 //点击二级或者三级菜单事件
-			 $(".hs").click(function () {
-				 //debugger;
+			 
+			 //三级菜单事件
+			  $(".hs").click(function () {
 				var id=$(this).attr("id");
 				getTabs(id);
 			  
 			 });
 			 
 			 
-			 
-			 
+			 //点击二级菜单事件
+			  $("#dropdownMenu2").click(function () {
+				var id=$(this).children().first().attr("id");
+				getTabs(id);
+			 });
 			
-		 $(window).resize(function() {  
-			var height = $(this).height();  
-			 $("#iframe_box").css("height",height-149); 
-			  
+		$(window).resize(function() {  
+				var height = $(this).height();  
+				 $("iframe").css("height",height-149); 
+		});
+		
+		//拓展toggle方法
+		$.fn.toggle = function( fn, fn2 ) {
+			var args = arguments,guid = fn.guid || $.guid++,i=0,
+			toggle = function( event ) {
+			  var lastToggle = ( $._data( this, "lastToggle" + fn.guid ) || 0 ) % i;
+			  $._data( this, "lastToggle" + fn.guid, lastToggle + 1 );
+			  event.preventDefault();
+			  return args[ lastToggle ].apply( this, arguments ) || false;
+			};
+			toggle.guid = guid;
+			while ( i < args.length ) {
+			  args[ i++ ].guid = guid;
+			}
+			return this.click( toggle );
+		  };
+		  
+		//左侧栏按钮下拉控制，此段JS删除会用下拉菜单插件效果
+		 $(".dropdown").click(function(){
+			$(this).children("ul").css("display","block");
+		});
+		
+		 $(".dropdown").toggle(function(){
+			$(this).removeClass("open");
+			$(this).children("ul").css("display","block");
+		},function(){
+			$(this).children("ul").css("display","none");
+		});
+		
+		$(".dropdown .dropdown-menu li").click(function(){
+			$(this).parent("ul.dropdown-menu").css("display","block");
+			$(this).parent("ul").parent("li.dropdown").parent("ul").siblings("ul").children("li.dropdown").children("ul.dropdown-menu").css("display","none");	
+			$(this).parent("ul").parent("li.dropdown").parent("ul").siblings("ul").children("li.dropdown").find("button").find("b.down-up").css("display", "none");	
+			$(this).parent("ul").parent("li.dropdown").parent("ul").siblings("ul").children("li.dropdown").find("button").find("b.down-down").css("display", "");
+			$(".dropdown").toggle(function(){
+				$(this).removeClass("open");
+				$(this).children("ul").css("display","block");
+				//$(this).parent("ul").siblings("ul").children("li.dropdown").children("ul.dropdown-menu").css("display","none");
+			},function(){
+				$(this).children("ul").css("display","none");
 			});
-			
-			
+		}); 
 
-		})
-		/* function set_ifr_wid(){
-		var ifr_con=document.getElementsByClassName('ifr_con') ;
-		for(var i=0;i<ifr_con.length;i++){
-		ifr_con[i].style.width=window.innerWidth-200;}}
-		set_ifr_wid();
-		window.onresize=set_ifr_wid; */
+	 //消息框 	
+	 $(".news-box").click(function () {
+		if ($(this).css("display")=="block") {
+			 $(this).css("display","block");
+			 $(".news-body").css("display","block");
+		};
+	});
+	 $(".news-body").click(function () {
+		if ($(".news-box").css("display")=="block") {
+			$(".news-box").css("display","none");
+			$(".news-body").css("display","none");
+		}	
+	});
+     
+	$(".news-a").click(function () {
+		if ($(".news-box").css("display")=="none") {
+			$(".news-body").css("display","block");
+			$(".news-box").css("display","block");
+			$(this).find("img").attr("src","images/news2.png");
+		}else{
+			$(".news-box").css("display","none");
+			$(".news-body").css("display","none");
+		}
+		event.stopPropagation();
+	});
+	
+
+});
 		
-		
-		 
-		
-		 
-		 
-		 
-		 
 
 	</script>
 

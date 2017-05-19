@@ -123,6 +123,10 @@ public class CollateralController extends BaseController {
 		   whereList.add(new QueryWhere("cu_id",IN,"(select id from cu_object_customer where belong_org_id LIKE '"+user.getInt("belong_org_id")+"%')"));
 		   //QueryWhere()2个参数 默认是name=value,3个参数中间加上符号或条件
 //		   whereList.add(new QueryWhere("cu_id",GT,"1"));
+		 //获取本部门以及以下部门,或者所属部门为空
+//			item.setOtherWhere("and (belong_org_id  like  '1%' or  belong_org_id  is null)");
+//			
+//			item.setOrder("input_time desc");
 		   item.setWhereList(whereList);
 		   //4.获取数据  格式为List<Record>
 		   DyResponse dyResponse = super.getTableData(item,page);
@@ -131,31 +135,49 @@ public class CollateralController extends BaseController {
 		   renderJson();
 	   }
 	/**
-	 * 新增
+	 * 构建表单页面，增改查
 	 * @author liuran
 	 * @time 2017年5月16日 下午5:24:47 void
 	 */
-	 public void add() {
+	 public void form() {
+			String type = getPara(0);
+			String id=getPara("id");
 			List<FormField> formFieldList = new ArrayList<FormField>();
-
-//			formFieldList.add(new FormField("id", "财产编号", "text"));
-			formFieldList.add(new FormField("type", "财产种类", "select","",ToCodeLibrary.getCodeLibrariesBySQL("CustomerProperty", true, null)));
+			formFieldList.add(new FormField("id", "", "hidden"));//必须加上这个，否则edit无法辨别编辑的数据
+			
+			formFieldList.add(new FormField("type", "财产种类", "select","",OptionUtil.getOptionListByCodeLibrary("CustomerProperty", true, "")));
 			formFieldList.add(new FormField("cu_id", "所属客户编号", "text"));
 			formFieldList.add(new FormField("cu_name", "所属客户名称", "text"));
-			formFieldList.add(new FormField("certificate_type", "证件类型", "select","",ToCodeLibrary.getCodeLibrariesBySQL("CertType", true, null)));
+			formFieldList.add(new FormField("certificate_type", "证件类型", "select","",OptionUtil.getOptionListByCodeLibrary("CertType", true, "")));
 			formFieldList.add(new FormField("certificate_no", "证件编号", "text"));
 			formFieldList.add(new FormField("buy_time", "购买时间", "text"));
-			formFieldList.add(new FormField("buy_type", "购买类型", "select","",ToCodeLibrary.getCodeLibrariesBySQL("BuyType", true, null)));
+			formFieldList.add(new FormField("buy_type", "购买类型", "select","",OptionUtil.getOptionListByCodeLibrary("BuyType", true, "")));
 			formFieldList.add(new FormField("buy_price", "购买价格", "text"));		
 			formFieldList.add(new FormField("brand", "品牌", "text"));
 			formFieldList.add(new FormField("color", "颜色", "text"));
 			formFieldList.add(new FormField("run_km", "已行驶里程数（㎞）", "text"));
 			formFieldList.add(new FormField("area", "面积（㎡）", "text"));
 			formFieldList.add(new FormField("addr", "详细地址", "text"));
-			formFieldList.add(new FormField("status", "状态", "select","",ToCodeLibrary.getCodeLibrariesBySQL("ProStatus", true, null)));
+			formFieldList.add(new FormField("status", "状态", "select","",OptionUtil.getOptionListByCodeLibrary("ProStatus", true, "")));
 			
-
-			DyResponse response = PageUtil.createFormPageStructure("押品添加", formFieldList, "toAdd");
+			DyResponse response = null;
+			
+			if (type.equals("add")) {
+				response = PageUtil.createFormPageStructure("押品添加", formFieldList, "/collateral/toAdd");
+			} else if (type.equals("edit")) {
+				if (id.equals("")) {
+					renderText("请选择一条记录来编辑！");
+					return;
+				}
+				response = PageUtil.createFormPageStructure("押品编辑", formFieldList, "/collateral/toEdit");
+			}else if (type.equals("detail")) {
+				if (id.equals("")) {
+					renderText("请选择一条记录来查看！");
+					return;
+				}
+				//第三个参数 由于校验非空，所以要随便写点什么即可
+				response = PageUtil.createFormPageStructure("查看详细信息", formFieldList, "/detail");
+			}
 			this.setAttr("response", response);
 			this.render("common/form_editarea.html");
 		}
@@ -166,10 +188,7 @@ public class CollateralController extends BaseController {
 //			System.out.println(customerId+"------------------00000000");
 			CuProperty cuProperty = getModel(CuProperty.class, "");
 			cuProperty.set("id", "cpr" + DateUtil.getCurrentTime());
-//			cuProperty.set("belong_org_id", getCurrentUserBelongID());
-//			cuProperty.set("belong_user_name", sysUser.getStr("name"));
-//			cuProperty.set("input_time", DateUtil.getCurrentTime());
-//			cuProperty.set("belong_user_id", sysUser.getInt("id"));
+
 
 			try {
 				cuProperty.save();
@@ -187,6 +206,10 @@ public class CollateralController extends BaseController {
 		@Before(Tx.class)
 		public void del() {
 			String[] ids = getPara("id").toString().split(",");
+			if (ids[0].equals("")) {
+				renderText("请选择至少一条记录！！！");
+				return;
+			}
 			// 批量删除
 			CuProperty cuProperty = new CuProperty();
 
@@ -202,26 +225,17 @@ public class CollateralController extends BaseController {
 			}
 		}
 	
-	//提交 修改
-	public void update(){
-		String customerId = getPara("cu_id");
-		String certificateType = getPara("certificate_type");
-		String certificateNo = getPara("certificate_no");
-		if (CuObjectCustomer.isHasCustomer(customerId)) {
-			if (CuProperty.isRepeatCertificate(certificateType, certificateNo)) {
-				setAttr("msgcertificate_no", "证件信息输入有误，请重新填写！");
-				return;
+		public void toEdit() {
+			CuProperty cuProperty = getModel(CuProperty.class, "");
+			try {
+				cuProperty.update();
+				renderText("操作成功");
+			} catch (Exception e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+				renderText("操作失败");
 			}
-			else {
-				CuProperty property = getModel(CuProperty.class,"property");
-				property.update();
-				redirect("/collateral");
-			}		
-		}else {
-			setAttr("msgcu_name", "所属客户不存在，请重新填写！");
-			return;
-		}	
-	}
+		}
 	
 	
 	

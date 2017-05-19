@@ -8,6 +8,7 @@
 table tr:nth-child(even){background:#EEE;}
 tbody tr:hover{background:#DDD;}
 th,td{margin:0 5px;}
+.bigchk{height:16px;width:16px;}
 </style>
 <link rel="stylesheet" type="text/css" href="/js/bootstrap-3.3.7-dist/css/bootstrap.min.css">
 <link rel="stylesheet" type="text/css" href="/css/examine.css">
@@ -16,6 +17,7 @@ th,td{margin:0 5px;}
 <script type="text/javascript" src='/js/bootstrap-3.3.7-dist/js/bootstrap.min.js'></script>
 <script type="text/javascript" src='/js/vue/vue.js'></script>
 <script language="javascript" type="text/javascript" src="/js/My97DatePicker/WdatePicker.js"></script>
+<script type="text/javascript" src='/js/toast.js'></script>
 </head>
 ###@jquery?()
 <body>
@@ -66,8 +68,8 @@ th,td{margin:0 5px;}
 		<div class="examine-table">
 	         <div class="examine-btn"  style="padding-top:20px; padding-bottom:6px;" id='operations'>
 	             	#if(btnList)
-						#for(btn:btnList)
-							<button type="button" id='btn#(btn.id)' class="btn btn-warning" onclick=" showwin(this,'#(btn.url)')"  usetype='#(btn.use_type)'>#(btn.name)</button>
+						#for(btn:btnList)<!-- disabled -->
+							<button type="button" id='btn#(btn.id)' class="btn btn-warning" onclick=" showwin(this,'#(btn.url)')"  usetype='#(btn.use_type)' >#(btn.name)</button>
 						#end
 					#end
 	         </div>
@@ -79,7 +81,8 @@ th,td{margin:0 5px;}
 		             <thead style='background-color: #7bF;' keys>
 					#if(tableHeaderList)
 						<tr id='datafieldname'>
-							<th class="text-center">#if(thdata.isMultiple())<input type='checkbox' onchange='selectall(this)'>
+							<th class="text-center">#if(thdata.isMultiple())
+							<input type='checkbox' onchange='selectall(this)'  class='bigchk'>
 							#end</th>
 							#for(header:tableHeaderList)
 								<th field='#(header.fieldName)' class="text-center" 
@@ -93,7 +96,7 @@ th,td{margin:0 5px;}
 					
 					<tr  v-for='user in userdatas.response.data.dataList' v-on:click='get_select_name(user)'
 						:style='(user!=null&&select_user!=null&&user.id==select_user.id)?"background:#a5d8f7;color:white;":""'>
-						<td><input  v-if='#(thdata.isMultiple())' type="checkbox" name='checks' :value='user[ths[0]]'></td>
+						<td xdonclick='reversechecked(this)'><input  v-if='#(thdata.isMultiple())' type="checkbox" name='checks' :value='user[ths[0]]' class='bigchk'></td>
 						<td  v-for=' i  in ths.length' v-text='user[ths[i-1]]'>  </td>
 					</tr>
 					</tbody>
@@ -166,7 +169,7 @@ var vxd=new Vue({
 	},
 	methods:{
 		get_select_name:function(user){
-			//alert( user.id);
+			//toast( user.id);
 			vxd.select_user=select_user=user;			
 		}
 	},
@@ -240,7 +243,7 @@ function seek(p){
 			setdatacountandtotal(resp);
 		}
 		else
-			alert(JSON.parse( resp.target.responseText)['response']['description']);
+			toast(JSON.parse( resp.target.responseText)['response']['description']);
 	}
 }
 function jumppage(p){
@@ -254,6 +257,10 @@ function selectall(ev){
 	for(var i=0;i<inp.length;i++){
 		inp[i].checked=ev.checked;
 	}
+}
+function reversechecked(node){
+	var inp=node.getElementsByTagName('input')[0];
+	inp.checked=!inp.checked;
 }
 </script>
 	

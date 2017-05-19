@@ -6,6 +6,10 @@ body {
 	overflow-x: hidden;
 }
 
+*{
+	font-family:"Microsoft YaHei";
+}
+
 a, a:link, a:visited, a:hover {
 	text-decoration: none;
 }
@@ -151,6 +155,7 @@ ul.dropdown-menu li a.hs:hover {
 .slider-right {
 	padding-left: 180px !important;
 	height: 60px;
+	padding-right:0;
 }
 
 .slider-right .media {
@@ -180,6 +185,7 @@ ul.dropdown-menu li a.hs:hover {
 .slider-media-right{
 	height:60px;
 	line-height:60px;
+	margin-left:16px;
 }
 .nav-tabs {
 	border-bottom: none;
@@ -210,25 +216,33 @@ ul.dropdown-menu li a.hs:hover {
 
 .set-a, .news-a, .close-a {
 	display: inline-block;
+	position: relative;
 }
-
-.set-a {
-	margin: 0 18px 0 30px;
+.set-a, .news-a {
+	width:50px;
+	height:60px;
 }
-
 .close-a {
-	width: 96px;
-	text-align: center;
-	margin: 0 0 0 30px;
-	font-size: 16px;
-	color: #6452a4;
+	width:90px;
+	height:60px;
 }
-.news-a{
-	background-color:#6452a4;
-	padding:0 13px;
+.set-a img, .news-a img, .close-a img {
+	position:absolute;
+	top:0;
+	left:0;
+}
+.news-a,.set-a{
 	cursor: pointer;
 }
-
+.news-a .hover-b,.set-a .hover-b,.close-a .hover-b {
+	display:none;
+}
+.slider-media-right a:hover img.hover-b {
+	display:block;
+}
+.slider-media-right a:hover img.hover-a {
+	display:none;
+}
 .body-box {
 	position: absolute;
     left: 0;
@@ -284,8 +298,8 @@ label {
 /*消息框*/
 .news-box{
 	position: fixed; 
-	top: 60px; 
-	right: 130px; 
+	top: 65px; 
+	right: 75px; 
 	background-color:#fff; 
 	width:260px; 
 	z-index:100;

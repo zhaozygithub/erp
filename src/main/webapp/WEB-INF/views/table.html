@@ -3,92 +3,64 @@
 <head>
 <meta charset="UTF-8">
 <title>show Table</title>
-<script type="text/javascript" src='#assets("/assets/assets.jjs")'></script>
+<script type="text/javascript" src="/js/jqueryUI/jquery.js"></script>
+<script type="text/javascript" src="/js/jqueryUI/jquery-ui.js"></script>
+<link type="text/css" rel="stylesheet" href="/js/jqueryUI/jquery-ui.css">
 <script type="text/javascript" src="/js/table2excel.js"></script>
-<link href="/js/date/datepicker.css" rel="stylesheet">
-<script type="text/javascript" src="/js/date/bootstrap-datepicker.js"></script>
+
 </head>
 <body>
-#@bootstrap()
-<h3>测试 table(columns,data)</h3>
-	#@table?(columns,data)
 
-<button id="btn">导出到excel中</button>
-
-<!-- data-target触发模态弹出窗元素 -->
-<button class="btn btn-primary" data-toggle="modal" data-target="#mymodal-data" type="button">通过data-target触发</button>
-<!-- 模态弹出窗内容 -->
-<div class="modal" id="mymodal-data" tabindex="-1" role="dialog" aria-labelledby="mySmallModalLabel" aria-hidden="true">
- <div class="modal-dialog">
- <div class="modal-content">
- <div class="modal-header">
- <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">×</span><span class="sr-only">Close</span></button>
- <h4 class="modal-title">模态弹出窗标题</h4>
- </div>
- <div class="modal-body">
- <p>模态弹出窗主体内容</p>
- </div>
- <div class="modal-footer">
- <button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
- <button type="button" class="btn btn-primary">保存</button>
- </div>
- </div>
- </div>
+<!-- ui-dialog -->
+<div id="dialog" title="Dialog Title">
+	<p>Lorem ipsum dolor sit amet, consectetur adipisicing mco laboris nisi ut aliquip ex ea commodo consequat.</p>
 </div>
-		
-
-	<hr>
-	###@form?(form,model)
-	<h3>测试 checkBoxTag(fieldName,list,defaultVals)组件</h3>
-
-
-
-	###@checkBoxTag?("sub",list,list2)
-	<h3>测试 redioTag(fieldName,list,defaultVal)组件</h3>
-
-	###@redioTag?("redio",list,"js")
-
-	<h3>测试 wangEditTag(fieldName,text)组件</h3>
-	###@wangEditTag?("ua","测试文本")
-
-  <input id="id-element" type="text">
 
 	<h3>图片上传</h3>
-	#@pluploadTag()
-<script type="text/javascript">
-$(function() {
-			
-	$('#id-element').datepicker();
+	###@pluploadTag()
+
+<table border="2px">
+<tbody>
+<tr class="h"><td>11</td><td>12</td></tr>
+<tr><td>21</td><td>22</td></tr>
+</tbody>
+</table>
+
 	
-			$("#btn").click(function(){
-			debugger;
-				$("table").table2excel({
-					exclude: ".noExl",
-					name: "Excel Document Name",
-					filename: "myFileName",
-					exclude_img: true,
-					exclude_links: true,
-					exclude_inputs: true
-				});
+	<script type="text/javascript">
+		$(function() {
+			
+			$("tr").click(function () {
+				alert("tr");
 			});
 			
-			$("tr:nth-child(even)").attr("bgcolor","#ddd");
-			$("tr:nth-child(odd)").attr("bgcolor","#eee");
-			//$("tr:nth-child(even)").css("color","red");
-			
-			$("tr").click(function() {
-				//debugger;
-				$("tr[bgcolor='#000']").removeAttr("bgcolor");
-				
-		        $("tr:nth-child(even)").attr("bgcolor","#ddd").css("color","#333");
-				$("tr:nth-child(odd)").attr("bgcolor","#eee").css("color","#333");
-		        
-		        $(this).attr("bgcolor",'#000').css("color","#fff");
+			$(".h").click(function () {
+				alert("h");
 			});
 			
+			
+
+			$("#dialog").dialog({
+				autoOpen: true,
+				width: 400,
+				buttons: [
+					{
+						text: "Ok",
+						click: function() {
+							$(this).dialog( "close" );
+						}
+					},
+					{
+						text: "Cancel",
+						click: function() {
+							$(this).dialog( "close" );
+						}
+					}
+				]
+			});
+
 			
 		});
-
-</script>
+	</script>
 </body>
 </html>

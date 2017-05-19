@@ -25,6 +25,7 @@ public class QueryWhere {
 		conditationMap.put(BaseController.NEQ, "<>");
 		conditationMap.put(BaseController.IN, "in");
 		conditationMap.put(BaseController.NOT_IN, "not_in");
+		conditationMap.put(BaseController.AND, "and");
 		conditationMap.put(BaseController.OR, "or");
 		conditationMap.put(BaseController.LIKE_LEFT, "like_left");
 		conditationMap.put(BaseController.LIKE_RIGHT, "like_right");
@@ -45,6 +46,10 @@ public class QueryWhere {
 	 */
 	private String condition;
 	/**
+	 * 条件连接（and 或者 or）
+	 */
+	private String connection;
+	/**
 	 * 校验条件是否合法	合法返回trus，反之返回false
 	 * @param conditation
 	 * @return
@@ -64,12 +69,17 @@ public class QueryWhere {
 	public static String getWhereConditation(List<QueryWhere> whereList){
 		StringBuffer whereCondiation = new StringBuffer(" ");
 		for(QueryWhere where:whereList){
+			if(where.getConnection() == null ||
+					!(BaseController.AND.equals(where.getConnection()) ||
+							BaseController.OR.equals(where.getConnection()))){
+				continue;
+			}
 			if(where.getCondition() == null || (!checkOutWhereConditation(where.getCondition())) ||
-							(BaseController.EQ.equals(where.getCondition()) && where.getValue() == null) ||
+					  (BaseController.EQ.equals(where.getCondition()) && where.getValue() == null) ||
 							(where.getCondition().startsWith("like") && where.getValue() == null)){
 				continue;
 			}
-			whereCondiation.append(" and ");
+			whereCondiation.append(" "+where.getConnection()+" ");
 			if(BaseController.NULL.equals (where.getCondition())||BaseController.NOT_NULL .equals (where.getCondition())){
 				whereCondiation.append(" " + where.getName() + " ");
 				if(BaseController.NULL.equals (where.getCondition())){
@@ -105,66 +115,96 @@ public class QueryWhere {
 		}
 		return whereCondiation.toString();
 	}
+
+	public QueryWhere() {
+
+	}
 	public QueryWhere(String name, Object value) {
 		this.name = name;
 		this.value = value;
 		this.condition = "=";
+		this.connection = "and";
 	}
-
 	public QueryWhere(String name, String condition, Object value) {
 		this.name = name;
 		this.value = value;
 		this.condition = condition;
+		this.connection = "and";
 	}
 	
+	
+	/**
+	 * 构造并列条件
+	 * @param name			字段名称
+	 * @param condition		条件
+	 * @param value			值
+	 * @param connection	条件连接
+	 */
+	public QueryWhere(String name, String condition, Object value , String connection) {
+		this.name = name;
+		this.value = value;
+		this.condition = condition;
+		this.connection = connection;
+	}
+	/**
+	 * 静态方法构造并列条件
+	 * @param name
+	 * @param value
+	 * @return
+	 * @author masai
+	 * @time 2017年5月18日 上午9:40:52
+	 */
 	public static QueryWhere eq(String name, Object value) {
-		return new QueryWhere(name, "=", value);
+		return new QueryWhere(name, "=", value, "and");
 	}
 
 	public static QueryWhere notEq(String name, Object value) {
-		return new QueryWhere(name, "<>",value);
+		return new QueryWhere(name, "<>",value, "and");
 	}
 
 	public static QueryWhere gt(String name, Object value) {
-		return new QueryWhere(name,">",value);
+		return new QueryWhere(name,">",value, "and");
 	}
 
 	public static QueryWhere ge(String name, Object value) {
-		return new QueryWhere(name, ">=",value);
+		return new QueryWhere(name, ">=",value, "and");
 	}
 
 	public static QueryWhere lt(String name, Object value) {
-		return new QueryWhere(name,  "<",value);
+		return new QueryWhere(name,  "<",value, "and");
 	}
 
 	public static QueryWhere le(String name, Object value) {
-		return new QueryWhere(name, "<=",value);
+		return new QueryWhere(name, "<=",value, "and");
 	}
 
 	public static QueryWhere in(String name, Object value) {
-		return new QueryWhere(name, "in",value);
+		return new QueryWhere(name, "in",value, "and");
 	}
 
 	public static QueryWhere notIn(String name, Object value) {
-		return new QueryWhere(name, "not_in",value);
+		return new QueryWhere(name, "not_in",value, "and");
 	}
 	
-	public static QueryWhere like(String name, Object value) {
+	public static QueryWhere likeRight(String name, Object value) {
 		//右侧模糊查询
-		return new QueryWhere(name, "like",value);
+		return new QueryWhere(name, "like_right",value, "and");
 	}
-
+	public static QueryWhere likeLeft(String name, Object value) {
+		//左模糊查询
+		return new QueryWhere(name, "like_left",value, "and");
+	}
 	public static QueryWhere likeAll(String name, Object value) {
 		//全模糊查询
-		return new QueryWhere(name, "like",value);
+		return new QueryWhere(name, "like_all",value, "and");
 	}
 
 	public static QueryWhere isNull(String name) {
-		return new QueryWhere(name , "is_null" , null);
+		return new QueryWhere(name , "is_null" , null, "and");
 	}
 
 	public static QueryWhere isNotNull(String name) {
-		return new QueryWhere(name , "is_not_null" , null);
+		return new QueryWhere(name , "is_not_null" , null, "and");
 	}
 	
 	public String getName() {
@@ -190,11 +230,15 @@ public class QueryWhere {
 	public void setCondition(String condition) {
 		this.condition = condition;
 	}
-	
+	public String getConnection() {
+		return connection;
+	}
+	public void setConnection(String connection) {
+		this.connection = connection;
+	}
 	@Override
 	public String toString() {
-		return "QueryWhere [name=" + name + ", value=" + value + ", condition=" + condition + "]";
+		return "QueryWhere [name=" + name + ", value=" + value + ", condition=" + condition + ", connection="
+				+ connection + "]";
 	}
-	
-
 }

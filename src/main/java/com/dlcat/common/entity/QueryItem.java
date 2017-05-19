@@ -40,6 +40,11 @@ public class QueryItem {
 	 * where条件集合
 	 */
 	private List<QueryWhere> whereList;
+	/**
+	 * 其他where条件字符串（处理无法自动生成的where条件） ps: or(name is not null and name<>'dlcat')
+	 * otherWhere必须以 and 或者 or 开头，否则会顾虑该条件
+	 */
+	private String otherWhere;	
 	
 	//表名的过滤:防止出现/*和点(.),出现点会导致表名变成类似'/*表名*/mysql.user'这种
 	final static String TABREG="^(\\w|\\d|_|\\s|,|\\(|\\)|\\*)+$";
@@ -75,6 +80,10 @@ public class QueryItem {
 			if(item.getWhereList() != null){
 				querySql.append(QueryWhere.getWhereConditation(item.getWhereList()) + " ");
 			}
+			 String otherWhere = item.getOtherWhere();
+			 if(StringUtils.isNotBlank(otherWhere) && (otherWhere.trim().startsWith("and") || otherWhere.trim().startsWith("or"))){
+				 querySql.append(otherWhere);
+			 }
 		}else{
 			throw new Exception("查询对象或者表名称为空");
 		}
@@ -100,20 +109,24 @@ public class QueryItem {
 			if(item.getWhereList() != null){
 				querySql.append(QueryWhere.getWhereConditation(item.getWhereList()) + " ");
 			}
+			String otherWhere = item.getOtherWhere();
+			if(StringUtils.isNotBlank(otherWhere) && (otherWhere.trim().startsWith("and") || otherWhere.trim().startsWith("or"))){
+				querySql.append(otherWhere);
+			}
 			if(StringUtils.isNotBlank(item.getGroup())){
-				querySql.append("group by ");
-				querySql.append(item.getGroup() + " ");
+				querySql.append(" group by ");
+				querySql.append(item.getGroup());
 			}
 			if(StringUtils.isNotBlank(item.getHaving())){
-				querySql.append("having ");
-				querySql.append(item.getHaving() + " ");
+				querySql.append(" having ");
+				querySql.append(item.getHaving());
 			}
 			if(StringUtils.isNotBlank(item.getOrder())){
-				querySql.append("order by ");
-				querySql.append(item.getOrder() + " ");
+				querySql.append(" order by ");
+				querySql.append(item.getOrder());
 			}
 			Integer page = item.getLimit() != null ? item.getLimit() : 20;
-			querySql.append("limit ?, " + page + " ");
+			querySql.append(" limit ?, " + page + " ");
 		}else{
 			throw new Exception("查询对象或者表名称为空");
 		}
@@ -167,7 +180,12 @@ public class QueryItem {
 	public void setWhereList(List<QueryWhere> whereList) {
 		this.whereList = whereList;
 	}
-
+	public String getOtherWhere() {
+			return otherWhere;
+	}
+	public void setOtherWhere(String otherWhere) {
+		this.otherWhere = otherWhere;
+	}
 	@Override
 	public String toString() {
 		return "QueryItem [tableNames=" + tableNames + ", fields=" + fields + ", order=" + order + ", group=" + group

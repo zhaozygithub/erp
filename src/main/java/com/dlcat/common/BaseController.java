@@ -29,7 +29,8 @@ import com.jfinal.plugin.activerecord.tx.Tx;
  * @time 2017年4月16日 下午3:07:38
  */
 public class BaseController extends Controller {
-	
+	 //接收列表选择的参数
+	private static String[] idarrays;
 	//创建数据库操作引擎
 	public static BaseModel<?> baseModel = new BaseModel();
 	
@@ -41,6 +42,7 @@ public class BaseController extends Controller {
 	public static final String NEQ = "<>";
 	public static final String IN = "in";	//注意：in条件和not in条件的值两侧必须拼接上括号
 	public static final String NOT_IN = "not_in";
+	public static final String AND = "and";
 	public static final String OR = "or";
 	public static final String LIKE_LEFT = "like_left";
 	public static final String LIKE_RIGHT = "like_right";
@@ -49,8 +51,9 @@ public class BaseController extends Controller {
 	public static final String NOT_NULL = "is_not_null";
 	
 	/**
-	 * 请求列表数据
-	 * @param sql	请求的sql语句
+	 * 请求列表数据（自动组装sql）
+	 * @param item	请求的sql语句
+	 * @param page	分页数
 	 * @return
 	 * @author masai
 	 * @time 2017年5月9日 上午10:21:17
@@ -62,13 +65,13 @@ public class BaseController extends Controller {
 			 item.setLimit((item.getLimit()==null || item.getLimit()<=0) ? 20 : item.getLimit());
 			//获取页面数
 			 int p = StringUtils.isBlank(page) ? 1 : Integer.parseInt(page);
-			 //获取查询sql
-			 String querySql = QueryItem.getQuerySql(item);
-			 String test = QueryItem.getQueryTotalCountSql(item);
-			 //获取查询总数
-			 Long dataCount = baseModel.baseFindFrist(QueryItem.getQueryTotalCountSql(item)).getLong("count");
-			 //查询数据
-			 List<Record> res = baseModel.baseFind(querySql, new Object[]{(p-1)*item.getLimit()});
+			 String queryItemSql = QueryItem.getQuerySql(item);
+			 String queryCountSql = QueryItem.getQueryTotalCountSql(item);
+			
+			 //获取sql语句，并查询总数
+			 Long dataCount = baseModel.baseFindFrist(queryCountSql).getLong("count");
+			 //获取sql语句，并查询数据
+			 List<Record> res = baseModel.baseFind(queryItemSql, new Object[]{(p-1)*item.getLimit()});
 			 //返回数据
 			 Map<String,Object> resultData = new HashMap<String, Object>();
 			 resultData.put("dataCount", dataCount); //本次请求总条数
@@ -87,6 +90,50 @@ public class BaseController extends Controller {
 		}
 		return dyResponse;
 	}
+	/**
+	 * 请求列表数据（手动拼接sql）
+	 * @param sql	查询sql,自己拼接完整sql
+	 * @return
+	 * @author masai
+	 * @time 2017年5月18日 下午7:29:12
+	 */
+	/*public DyResponse getTableData(String sql){
+		DyResponse dyResponse = new DyResponse();
+		String queryCountSql  = "";
+		try {
+			if(StringUtils.isNotBlank(sql)){
+				sql = sql.trim();
+				if(sql.startsWith("select") && sql.indexOf("from") >= 0){//判断sql语句是否以select开头，是否包含from
+					String tempSql = sql.split("limit")[0];
+					int indexOf = tempSql.indexOf("from");
+					queryCountSql = "select count(*) as count " + tempSql.substring(indexOf, tempSql.length());
+					
+					 //获取sql语句，并查询总数
+					 Long dataCount = baseModel.baseFindFrist(queryCountSql).getLong("count");
+					 //获取sql语句，并查询数据
+					 List<Record> res = baseModel.baseFind(sql, null);
+					 //返回数据
+					 Map<String,Object> resultData = new HashMap<String, Object>();
+					 resultData.put("dataCount", dataCount); //本次请求总条数
+					 resultData.put("dataList", res);        //数据
+					 resultData.put("queryItem", JsonUtils.object2JsonNoEscaping(item));   //查询Item转化成json返回到页面（配合导出）
+					 resultData.put("page", item.getLimit());//分页步长
+					 //QueryItem qi = JsonUtils.fromJson(a, QueryItem.class);
+					 dyResponse.setData(resultData);
+					 dyResponse.setDescription("OK");
+				}else{
+					return null;
+				}
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+			//请求不正常的时候description为错误信息
+			dyResponse.setDescription("请求数据出错");
+			dyResponse.setStatus(DyResponse.ERROR);
+		}
+		
+		return null;
+	}*/
 	/**
 	 * 获取列表where条件
 	 * @param para	参数字符串  ps：name:1,age:20
@@ -204,17 +251,7 @@ public class BaseController extends Controller {
 			renderText("操作失败");
 		}
 	}
-	/**
-	 * 根据url获取menuId
-	 * @author liuran
-	 * @time 2017年5月17日 下午2:27:30
-	 * @param url
-	 * @return Integer
-	 */
-	public Integer getMenuId(String url) {
-		return SysMenu.dao.findFirst("select * from sys_menu where url = ?",url).getInt("id");	
-	}
-
+	
 	/**
 	* @author:zhaozhongyuan 
 	* @Description:获取字段中文名和字段名
@@ -233,6 +270,12 @@ public class BaseController extends Controller {
 		
 		return map;
 		
+	}
+	public static String[] getIdarrays() {
+		return BaseController.idarrays;
+	}
+	public static void setIdarrays(String[] idarrays) {
+		BaseController.idarrays = idarrays;
 	}
 	
 

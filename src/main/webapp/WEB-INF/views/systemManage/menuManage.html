@@ -11,29 +11,50 @@ td{vertical-align:top;}
 </style>
 <link rel="stylesheet" type="text/css" href="/js/ext-5.1.0\packages\ext-theme-neptune\build\resources\ext-theme-neptune-all.css">
 <script type="text/javascript" src='/js/ext-5.1.0/ext-all.js'></script>
+<script type="text/javascript" src='/js/toast.js'></script>
 </head>
 <body>
-
+	#include('../common/dialog.html')
 <div id='menuper_outer' style='width:1000px;'>
 <div id='menuper'></div>
 </div>
 </body>
 <script type="text/javascript">
+function append(){
+	var selid;
+	if(treepan.getSelection().length==0){
+		toast('请先选择左侧的一个条目');
+		return;}
+	try{selid=treepan.getSelection()[0].data.id;}
+	catch(e){}
+	//设置select_user可以通过JS设置默认值.但是网址包含add时不赋值.所以此处改名为append
+	select_user={pid:selid,level:treepan.getSelection()[0].data.level+1};
+	showwin('/systemManage/submenuform?type=append&pid='+selid);
+	/*
+	var msg='你选择的菜单的id是 '+selid;
+	 //Ext.Msg.alert(msg,'此功能尚未开发.');
+	 name=prompt('子菜单名','');
+	 Ext.Ajax.request({url:'/systemManage/addsubmenu',
+		 params:{name:name,pid:selid,level:treepan.getSelection()[0].data.level+1},
+		 success:function(resp,conf){
+			 alert(resp);
+		 }
+	 });*/
+}
+function del(){
+	var ids=getAllChecked().toString();
+	showwin('/systemManage/delsubmenu?type=del&id='+ids);
+}
+function detail(){
+	alert(JSON.stringify(treepan.getSelection()[0].data).replace(/,(?=")/g,'\r\n'));
+}
 Ext.onReady(function(){
 	pan=new Ext.Panel({title:'菜单管理 ',//renderTo:'menuper_outer',
+		html:'<p style="font-size: medium;">当你勾选并进行删除时,会删除level最末的,安全起见,请勿选择多个分支 </p>',
 		tbar:new Ext.toolbar.Toolbar({
-			items:[{text:'添加子菜单',handler:function(){
-				var selid=treepan.getSelection()[0].data.id;
-				var msg='你选择的菜单的id是 '+selid;
-				 //Ext.Msg.alert(msg,'此功能尚未开发.');
-				 name=prompt('子菜单名','');
-				 Ext.Ajax.request({url:'addsubmenu',
-					 params:{name:name,pid:selid,level:treepan.getSelection()[0].data.level+1},
-					 success:function(resp,conf){
-						 alert(resp);
-					 }
-				 });
-			}}]
+			items:[{text:'添加子菜单或按钮',handler:append},
+			       {text:'删除末级子菜单或按钮',handler:del},
+			       {text:'查看选中菜单',handler:detail}]
 		}) ,	
 		//html:"z",
 		region:'north'
@@ -44,7 +65,7 @@ Ext.onReady(function(){
 	        //console.log(resp);
 	        menudata=JSON.parse(resp.responseText.toString());
 	function formToCon(item){
-		var atta={checked:false,leaf:true,expandable:false};
+		var atta={checked:false,leaf:true,expandable:true};
 		if(!item||JSON.stringify(item)=='{}')return atta;
 		var stritem=(JSON.stringify(atta)+JSON.stringify(item)).replace('}{',',');
 		return JSON.parse(stritem);

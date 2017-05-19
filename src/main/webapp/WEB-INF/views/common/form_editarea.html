@@ -13,8 +13,9 @@
 <script type="text/javascript" src='/js/bootstrap-3.3.7-dist/js/less.min.js'></script>
 <link rel="stylesheet" type="text/css" href="/js/My97DatePicker/skin/WdatePicker.css">
 <script language="javascript" type="text/javascript" src="/js/My97DatePicker/WdatePicker.js"></script>
+<script type="text/javascript" src='/js/toast.js'></script>
 <style type="text/css">
-fieldset{max-width:800px;margin 5px auto;padding:3px;}
+fieldset{max-width:800px;min-width: 400px;margin 5px auto;padding:3px;}
 </style>
 </head>
 <body xclass="well" style='min-height:100%'>
@@ -29,47 +30,50 @@ fieldset{max-width:800px;margin 5px auto;padding:3px;}
 		#end
 		 onsubmit='return checknotnull()'>
 	#for(input : formFieldList)
-	<div class="form-group" style='display:#(input.type=="hidden"?"none":"");'>
+	<div class="form-group" style='display:#((input.type=="hidden"||input.isHide ==true)?"none":"");'>
 	<label class=' xs2  control-label input-label'>#(input.text  )</label>
 	<div class=" xs9">   
-	<div class="col-xs-10">  
+	<div class="col-xs-9">  
 	#if(input.type!="select")
 		#if(input.type=="radio")
-		 	#for(option : input.options)
-		 		<span style='padding:0 20px　0　0;'>#(option.item_name)<input v-for type='#(input.type)' name='#(input.filedName  )' value='#(option.item_no)' 
+		 	#for(option : input.optionList)
+		 		<span style='margin-right: 15px;'>#(option.item_name)
+		 		<input v-for type='#(input.type)' name='#(input.filedName  )' value='#(option.item_no)' #(input.disable?"readonly":"")
 		 		 #(option.item_no==input.defaultValue?"checked":"") necessity='#(input.isRequired)'>
 		 		</span>
 	    	#end ###for
 	 	#elseif(input.type=="textarea")
-	 		<textarea rows="6" cols="" name='#(input.filedName  )' class="form-control"  
+	 		<textarea rows="6" cols="" name='#(input.filedName  )' class="form-control"   #(input.disable?"readonly":"")
 	 			title='#(input.hint)' placeholder='#(input.inNotice)' necessity='#(input.isRequired)'>#(input.defaultValue)</textarea>
 	 	#elseif(input.type=="date")
-	 		<input  type='#(input.type)' name='#(input.filedName  )' value='#(option.item_no)' 
+	 		<input  type='#(input.type)' name='#(input.filedName  )' value='#(option.item_no)' #(input.disable?"readonly":"")
 	 		 title='#(input.hint)' placeholder='#(input.inNotice)'  necessity='#(input.isRequired)'
 	 		 class="Wdate form-control"  onClick="WdatePicker()">
 	 	#else
-	       <input v-for type='#(input.type=="datetime"?"datetime-local":input.type)' name='#(input.filedName  )' 
+	       <input v-for type='#(input.type=="datetime"?"datetime-local":input.type)' name='#(input.filedName  )'  #(input.disable?"readonly":"")
 	       value='#(input.defaultValue)' title='#(input.hint)' placeholder='#(input.inNotice)'  necessity='#(input.isRequired)'
+	       inType='#(input.inType)' onblur='checkintype(this)'
 		 class='#(input.type=="radio"?"":"form-control")' >
     	#end ###if
 	#else
-	<select class="form-control"  name='#(input.filedName  )' 
+	<select class="form-control"  name='#(input.filedName  )'  #(input.disable?"readonly":"")
 	       value='#(input.defaultValue)' title='#(input.hint)' placeholder='#(input.inNotice)'  necessity='#(input.isRequired)'>
 	       <option value="">--请选择--</option>
-	       #for(option : input.options)
+	       #for(option : input.optionList)
 			<option value="#(option.item_no)" #(option.item_no==input.defaultValue?"selected":"")>#(option.item_name)</option>
 			#end</select>
-	#end	
+	#end #(input.unit)	&nbsp&nbsp&nbsp&nbsp;
+	<abbr title='#(input.notice)' style='float: right;display:#((input.notice==null)?"none":"");'>提示</abbr>
 	</div>
 	 
 	#if(input.isRequired)
-	<label class=" col-xs-1 control-label input-label" style='color:red;'>*</label>
+	<label class=" col-xs-2 control-label input-label" style='color:red; padding: 7px 0px;'>*必填</label>
 	#end 
 	</div>
 	</div>
 	#end
 	  <div class="form-group">
-            <div class="col-xs-8 col-xs-offset-2">
+            <div class="col-xs-8 col-xs-offset-2" id='btsgrp'>
 			<button class="btn btn-primary  " style="padding:6px 22px;margin:1px 10px;" type='submit'>提交</button>
 			<button class="btn btn-primary  " style="padding:6px 22px;margin:1px 10px;" type='reset'>复原</button>
 			</div>
@@ -88,29 +92,54 @@ function checknotnull(){
 	var inp=mainform.getElementsByTagName('input');
 	for( i=0;i<inp.length;i++){
 		if(inp[i].getAttribute('necessity')=='true'&&(inp[i].value==null||inp[i].value=='')){
-			alert('标红星号的字段不可为空!');
+			toast('标红星号的字段不可为空!');
 			return false;
 		}
 	}
 	inp=mainform.getElementsByTagName('select');
 	for( i=0;i<inp.length;i++){
 		if(inp[i].getAttribute('necessity')=='true'&&(inp[i].value==null||inp[i].value=='')){
-			alert('标红星号的字段不可为空!');
+			toast('标红星号的字段不可为空!');
 			return false;
 		}
 	}
 }
 //如果之前选中了某行,可执行此函数对表单进行赋值 
+//设置父窗口的select_user可以通过JS设置默认值.但是网址包含add时不赋值.所以必要时请改名为append 
 (function initdata(){
-	if(!parent.select_user)
+	if(location.href.toLowerCase().match('add')||!parent.select_user)
 		return;
+	select_user=parent.select_user;
 	for(k in select_user){
-		try{var el=mainform.getElementsByName(k);
+		try{var el=document.getElementsByName(k)[0];
 		if(el.type!='radio'||el.type!='checkbox')el.value=select_user[k];
 		else //if(el.value==select_user[k])
 			el.checked=(el.value==select_user[k]);
 		}catch(e){}
 	}
+	setDisable();
 })()
+function setDisable(){
+	if(location.href.toLowerCase().match('detail')){
+		var i=0;
+		var inp=mainform.getElementsByTagName('input');
+		for( i=0;i<inp.length;i++){
+			inp[i].disabled=true;
+		}
+		inp=mainform.getElementsByTagName('select');
+		for( i=0;i<inp.length;i++){
+			inp[i].disabled=true;
+		}
+		document.getElementById('btsgrp').style.display='none';
+	}
+}
+function checkintype(node){
+	//三种: decimal digital string  分别是小数 整数 字符串
+	var inType=node.getAttribute('inType').toLowerCase();
+	if(inType.match(/(int|digital)/)&&node.value.match(/^\d*$/))
+		toast('只接受整数');
+	else if(inType.match(/(float|decimal)/)&&node.value.match(/^\d*\.\d*$/)&&node.value!='.')
+		toast('只接受小数');
+}
 </script>
 </html>

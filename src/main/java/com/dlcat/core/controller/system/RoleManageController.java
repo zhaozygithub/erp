@@ -5,6 +5,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import javax.management.relation.Role;
+
 import com.dlcat.common.BaseController;
 import com.dlcat.common.entity.DyResponse;
 import com.dlcat.common.entity.FormField;
@@ -37,6 +39,8 @@ public class RoleManageController extends BaseController {
 			TableHeader tableHeader = new TableHeader();
 			tableHeader.setFieldNames(new String[]{"id","role_name","cn_status"});
 			tableHeader.setCNNames(new String []{"角色编号","角色名称","状态"});
+			//多选框
+			tableHeader.setMultiple(true);
 			
 			Search search = new Search();
 			search.setFieldNames(new String[]{"id","status"});
@@ -53,7 +57,7 @@ public class RoleManageController extends BaseController {
 				//第二个参数是这个列表数据的名称，如果页面中存在这个导出功能，这个名称就是导出的
 				//excel文件的文件名称
 				response = PageUtil.createTablePageStructure("/role/data", "角色管理数据", tableHeader, 
-				search,getMenuId("/role").toString(),(Map<Integer, SysMenu>)this.getSessionAttr("menus"));
+				search,super.getLastPara().toString(),(Map<Integer, SysMenu>)this.getSessionAttr("menus"));
 			} catch (Exception e) {
 				e.printStackTrace();
 			}
@@ -81,7 +85,7 @@ public class RoleManageController extends BaseController {
 			   //设置查询字段（可以使用函数包括聚合函数）
 			   item.setFields("*, getCodeItemName('YesNo',status) as cn_status");
 			   //设置分页步长  如果不设置 或者 值<=0，则会默认歩长为20
-			   item.setLimit(10);
+//			   item.setLimit(10);
 			   //注意：此处whereMap在页面初始化的时候为null，此处有必要判空
 			   List<QueryWhere> whereList = new ArrayList<QueryWhere>();
 			   //检索条件
@@ -98,20 +102,39 @@ public class RoleManageController extends BaseController {
 		   }
 		  
 		  /**
-			 * 新增
+			 * 构建表单页面，增改查
 			 * @author liuran
 			 * @time 2017年5月16日 下午5:24:47 void
 			 */
-			 public void add() {
+			 public void form() {
+					String type = getPara(0);
+					String id=getPara("id");
 					List<FormField> formFieldList = new ArrayList<FormField>();
 
+					formFieldList.add(new FormField("id", "", "hidden"));
 					formFieldList.add(new FormField("role_name", "角色名称", "text"));
-					formFieldList.add(new FormField("status", "是否可用", "select","",ToCodeLibrary.getCodeLibrariesBySQL("YesNo", true, null)));
+					formFieldList.add(new FormField("status", "是否可用", "select","",OptionUtil.getOptionListByCodeLibrary("YesNo", true, "")));
 //					formFieldList.add(new FormField("remark", "备注", "text"));
 					
 					
-
-					DyResponse response = PageUtil.createFormPageStructure("角色添加", formFieldList, "toAdd");
+					DyResponse response = null;
+					
+					if (type.equals("add")) {
+						response = PageUtil.createFormPageStructure("角色添加", formFieldList, "/role/toAdd");
+					} else if (type.equals("edit")) {
+						if (id.equals("")) {
+							renderText("请选择一条记录来编辑！");
+							return;
+						}
+						response = PageUtil.createFormPageStructure("角色编辑", formFieldList, "/role/toEdit");
+					}else if (type.equals("detail")) {
+						if (id.equals("")) {
+							renderText("请选择一条记录来查看！");
+							return;
+						}
+						//第三个参数 由于校验非空，所以要随便写点什么即可
+						response = PageUtil.createFormPageStructure("查看详细信息", formFieldList, "/detail");
+					}
 					this.setAttr("response", response);
 					this.render("common/form_editarea.html");
 				}
@@ -143,6 +166,10 @@ public class RoleManageController extends BaseController {
 				@Before(Tx.class)
 				public void del() {
 					String[] ids = getPara("id").toString().split(",");
+					if (ids[0].equals("")) {
+						renderText("请选择至少一条记录！！！");
+						return;
+					}
 					// 批量删除
 					SysRole role = new SysRole();
 
@@ -157,7 +184,22 @@ public class RoleManageController extends BaseController {
 						renderHtml("<h1>操作失败！！</h1>");
 					}
 				}
-
+				/**
+				 * 编辑
+				 * @author liuran
+				 * @time 2017年5月18日 下午1:42:59 void
+				 */
+				public void toEdit() {
+					SysRole role = getModel(SysRole.class, "");
+					try {
+						role.update();
+						renderText("操作成功");
+					} catch (Exception e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+						renderText("操作失败");
+					}
+				}
 			
 			//分配权限
 			public void assign(){

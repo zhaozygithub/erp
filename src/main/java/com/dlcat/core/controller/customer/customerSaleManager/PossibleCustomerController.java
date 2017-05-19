@@ -187,14 +187,14 @@ public class PossibleCustomerController extends BaseController {
 		item.setFields(
 				"*, getCodeItemName('CustomerType',type) as cn_type,getCodeItemName('OpCuPosStatus',op_status) as cn_op_status,FROM_UNIXTIME(input_time) as time");
 		SysUser sysUser = getSessionAttr("user");
-		int org_id = sysUser.getInt("belong_org_id");
+		int org_id =getCurrentUserBelongID();
 		int id = sysUser.getInt("id");
 
 		List<QueryWhere> whereList = new ArrayList<QueryWhere>();
 		whereList.add(new QueryWhere("belong_org_id", LIKE_RIGHT, org_id));
 		whereList.add(new QueryWhere("belong_user_id", id));
-		// 跟进中
-		whereList.add(new QueryWhere("op_status", "2"));
+		//
+		whereList.add(new QueryWhere("op_status",NEQ, "1"));
 
 		// 注意：此处whereMap在页面初始化的时候为null，此处有必要判空
 		if (whereMap != null) {
@@ -238,7 +238,7 @@ public class PossibleCustomerController extends BaseController {
 
 	/**
 	 * @author:zhaozhongyuan
-	 * @return 
+	 * @return
 	 * @Description:转为无效客户
 	 * @return void
 	 * @date 2017年5月15日 上午11:35:02
@@ -274,28 +274,28 @@ public class PossibleCustomerController extends BaseController {
 		Map<String, Object> map = new HashMap<String, Object>();
 		map.put("op_status", 3);
 		try {
-			//更新op_status
+			// 更新op_status
 			updateByIds(CuPossibleCustomer.class, ids, map);
-			CuPossibleCustomer cuPossibleCustomer=null;
-			Record record=null;
-			//并把这些客户加入正式客户表
+			CuPossibleCustomer cuPossibleCustomer = null;
+			Record record = null;
+			// 并把这些客户加入正式客户表
 			for (String id : ids) {
-				cuPossibleCustomer=CuPossibleCustomer.dao.findById(id);
-				record=cuPossibleCustomer.toRecord();
+				cuPossibleCustomer = CuPossibleCustomer.dao.findById(id);
+				record = cuPossibleCustomer.toRecord();
 				record.set("cu_possible_id", record.get("id"));
-				record.set("id", "fomal"+DateUtil.getCurrentTime());
-				record.set("input_time",DateUtil.getCurrentTime());
-				record.remove("op_status","remark");
-				
+				record.set("id", "fomal" + DateUtil.getCurrentTime());
+				record.set("input_time", DateUtil.getCurrentTime());
+				record.remove("op_status", "remark");
+
 				try {
-					Db.save("cu_object_customer",record);
+					Db.save("cu_object_customer", record);
 					renderText("操作成功");
 				} catch (Exception e) {
 					// TODO Auto-generated catch block
 					e.printStackTrace();
 					renderText("操作失败");
 				}
-				
+
 			}
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
@@ -303,15 +303,40 @@ public class PossibleCustomerController extends BaseController {
 		}
 	}
 
-	public void add() {
+	/**
+	* @author:zhaozhongyuan 
+	* @Description:构建表单页面，增改查
+	* @return void   
+	* @date 2017年5月18日 上午11:19:57  
+	*/
+	public void form() {
+		String type = getPara(0);
+		String id=getPara("id");
+		
 		List<FormField> formFieldList = new ArrayList<FormField>();
-
+		formFieldList.add(new FormField("id", "", "hidden"));
 		formFieldList.add(new FormField("name", "客户姓名", "text"));
 		formFieldList.add(new FormField("phone", "电话", "text"));
 		formFieldList.add(new FormField("type", "客户类型", "select", "",
-				ToCodeLibrary.getCodeLibrariesBySQL("CustomerType", true, null)));
+				OptionUtil.getOptionListByCodeLibrary("CustomerType", true, "")));
 
-		DyResponse response = PageUtil.createFormPageStructure("意向客户添加", formFieldList, "toAdd");
+		DyResponse response = null;
+		if (type.equals("add")) {
+			response = PageUtil.createFormPageStructure("意向客户添加", formFieldList, "/possibleCustomer/toAdd");
+		} else if (type.equals("edit")) {
+			if (id.equals("")) {
+				renderText("请选择一条记录来编辑！");
+				return;
+			}
+			response = PageUtil.createFormPageStructure("意向客户编辑", formFieldList, "/possibleCustomer/toEdit");
+		}else if (type.equals("detail")) {
+			if (id.equals("")) {
+				renderText("请选择一条记录来查看！");
+				return;
+			}
+			//第三个参数 由于校验非空，所以要随便写点什么即可
+			response = PageUtil.createFormPageStructure("查看详细信息", formFieldList, "/s");
+		}
 		this.setAttr("response", response);
 		this.render("common/form_editarea.html");
 	}
@@ -342,6 +367,12 @@ public class PossibleCustomerController extends BaseController {
 	@Before(Tx.class)
 	public void del() {
 		String[] ids = getPara("id").toString().split(",");
+		
+		if (ids[0].equals("")) {
+			renderText("请选择至少一条记录！！！");
+			return;
+		}
+		
 		// 批量删除
 		CuPossibleCustomer cuPossibleCustomer = new CuPossibleCustomer();
 
@@ -354,26 +385,6 @@ public class PossibleCustomerController extends BaseController {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 			renderText("操作失败");
-		}
-	}
-
-	public void edit() {
-		String[] ids = getPara("id").toString().split(",");
-		if (ids.length != 1) {
-
-		} else {
-			CuPossibleCustomer cuPossibleCustomer = CuPossibleCustomer.dao.findById(ids[0]);
-			List<FormField> formFieldList = new ArrayList<FormField>();
-
-			formFieldList.add(new FormField("id", "", "hidden", cuPossibleCustomer.getStr("id")));
-			formFieldList.add(new FormField("name", "客户姓名", "text", cuPossibleCustomer.getStr("name")));
-			formFieldList.add(new FormField("phone", "电话", "text", cuPossibleCustomer.getStr("phone")));
-			formFieldList.add(new FormField("type", "客户类型", "select", cuPossibleCustomer.getStr("type"),
-					ToCodeLibrary.getCodeLibrariesBySQL("CustomerType", true, null)));
-
-			DyResponse response = PageUtil.createFormPageStructure("意向客户编辑", formFieldList, "toEdit");
-			this.setAttr("response", response);
-			this.render("common/form_editarea.html");
 		}
 	}
 

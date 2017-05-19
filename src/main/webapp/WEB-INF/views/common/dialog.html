@@ -1,6 +1,12 @@
 <!-- <!DOCTYPE html>
 <html> -->
 <meta charset='utf-8'>
+<script type="text/javascript" src='/js/vue/vue.js'></script>
+<link rel="stylesheet" type="text/css" href="/js/bootstrap-3.3.7-dist/css/bootstrap.min.css">
+<link rel="stylesheet" type="text/css" href="/css/examine.css">
+<script type="text/javascript" src='/js/jquery-3.2.0.min.js'></script>
+<script type="text/javascript" src='/js/bootstrap-3.3.7-dist/js/bootstrap.min.js'></script>
+<script type="text/javascript" src='/js/toast.js'></script>
 <style>
 <!--
 #xw{height: 25px; width:25px;    background: gray;}
@@ -12,9 +18,8 @@
 	<div id='tstw'>
 	<div class="modal  " id="mymodalData" tabindex="-1" role="dialog"
 		aria-labelledby="mySmallModalLabel"  style='display:block;'><!--aria-hidden="true"-->
-		<div id='win' class="modal-dialog" draggable="true"
-			style="position: fixed; top: 5%; left: 50%;width: 70%;
- 			-webkit-transform: translateX(-50%) translateY(0%); -moz-transform: translateX(-50%) translateY(0%); -ms-transform: translateX(-50%) translateY(0%);">
+		<div id='win' class="modal-dialog" xdraggable="true"
+			style="position: fixed; top: 15%; left: 50%;width: 70%;height:400px;transform: translateX(-50%) translateY(0%);">
 			<div class="modal-content" style=' padding: 5px;'>
 				<div class="modal-header" style="background: #b8e0fd;border-radius:4px;">
 					<button type="button" onclick='delwindowbyid("tstw")' class="close" id='xw'>
@@ -42,14 +47,23 @@
 	</script>
 	<script type="text/javascript">
 	//isMultiple定义在table.html中 
+	function showwin(src){
+		return showwin(document.body,src)
+	}
 	function showwin(node,src){
 		//console.log(this);
-		usetype=node.getAttribute('usetype');
+		try{usetype=node.getAttribute('usetype');}
+		catch(e){//只有一个src参数时,默认node=document.body;
+			usetype=0;src=node;node=document.body;}
+		//下载文件
 		if(usetype=='1'){
 			location.href=src+'?requestPara='+JSON.stringify(requestPara);
 			return;
 		}
+		//请求阿贾克斯 
 		else if(usetype=='2'){
+			var isDel=src.toLowerCase().match('del');
+			
 			var xhr=new XMLHttpRequest();
 			xhr.open('post',src+'?');
 			//post要加这一句
@@ -57,15 +71,16 @@
 			xhr.send(ths[0]+'='+getchecked());
 			xhr.onload=function(resp){
 				//var userdata=JSON.parse( resp.target.responseText);
-				alert(resp.target.responseText);
+				toast(resp.target.responseText);
 			}
 		}
+		//弹框 
 		else{
 			if(document.getElementById('tstw')!=null)
 				return;
 			var div=document.createElement('div');
 			div.setAttribute('id','otstw');
-			node.parentElement.append(div);
+			node.parentElement.appendChild(div);
 			var chkpara="";
 			try{chkpara=(ths[0]+'='+getchecked());}
 			catch(e){}
@@ -134,8 +149,8 @@
                 return;
             if (oDrag != "") {
                 //var e = e ? e : event;
-                dx = parseInt(oDrag.style.left);
-                dy = parseInt(oDrag.style.top);
+                dx = (oDrag.style.left.match('%')?window.innerWidth*0.01:1)*parseInt(oDrag.style.left);
+                dy = (oDrag.style.top.match('%')?window.innerHeight*0.01:1)*parseInt(oDrag.style.top);
                 nx = e.clientX;
                 ny = e.clientY;
                 oDrag.style.left = (dx + (nx - ox)) + "px";

@@ -41,7 +41,7 @@ import com.sun.xml.internal.ws.util.HandlerAnnotationInfo;
 
 public class CustomerAllotControllor extends BaseController {
     //接收列表选择的参数
-	private static String[] idarrays;
+//	private static String[] idarrays;
     private static Map<String, String> fields;
 	
 
@@ -88,6 +88,7 @@ public class CustomerAllotControllor extends BaseController {
 	}
 
 	public void data() {
+		SysUser sysUser = getSessionAttr("user");
 		// 1.从页面获取参数 condition参数名称固定 key=condition 格式为：name:ms,age:24
 		// 获取分页参数 固定格式 key=page
 		String conditation = this.getPara("condition");
@@ -105,11 +106,8 @@ public class CustomerAllotControllor extends BaseController {
 				"*, getCodeItemName('CustomerType',type) as cn_type,getCodeItemName('OpCuPosStatus',op_status) as cn_op_status,FROM_UNIXTIME(input_time) as cn_input_time");
 
 		List<QueryWhere> whereList = new ArrayList<QueryWhere>();
-		//获取本部门以及以下部门
-		whereList.add(new QueryWhere("belong_org_id", LIKE_RIGHT, getCurrentUserBelongID()));
-		//或者所属部门为空
-		//whereList.add(new QueryWhere("belong_org_id", NULL));
-		whereList.add(new QueryWhere("belong_user_id", 0));
+		
+		whereList.add(new QueryWhere("belong_user_id",0));
 
 		// 注意：此处whereMap在页面初始化的时候为null，此处有必要判空
 		if (whereMap != null) {
@@ -123,6 +121,10 @@ public class CustomerAllotControllor extends BaseController {
 			}
 		}
 		item.setWhereList(whereList);
+		//获取本部门以及以下部门,或者所属部门为空
+		item.setOtherWhere("and (belong_org_id  like  '"+getCurrentUserBelongID()+"%' or  belong_org_id  is null)");
+		
+		item.setOrder("input_time desc");
 		// 4.获取数据 格式为List<Record>
 		DyResponse dyResponse = super.getTableData(item, page);
 		// 5.返回数据到页面 response 固定值 不可改变
@@ -162,7 +164,13 @@ public class CustomerAllotControllor extends BaseController {
 	 */
 	public void getUsers() {
 		//获取当前登录用户的所属部门ID
-		setIdarrays(getPara("id").toString().split(","));
+		String[] ids=getPara("id").toString().split(",");
+		
+		if (ids[0].equals("")) {
+			renderHtml("<h1>请选择至少一条记录。</h1>");
+			return;
+		}
+		setIdarrays(ids);
 		
 		TableHeader tableHeader = new TableHeader();
 		tableHeader.setFieldNames(new String[] { "id", "name", "role_id", "belong_org_id", "status"});
@@ -216,9 +224,10 @@ public class CustomerAllotControllor extends BaseController {
 		//获取本部门以及以下部门
 		whereList.add(new QueryWhere("belong_org_id", LIKE_RIGHT, getCurrentUserBelongID()));
 
-		// 注意：此处whereMap在页面初始化的时候为null，此处有必要判空
 		
+
 		item.setWhereList(whereList);
+		item.setOrder("input_time desc");
 		// 4.获取数据 格式为List<Record>
 		DyResponse dyResponse = super.getTableData(item, page);
 		// 5.返回数据到页面 response 固定值 不可改变
@@ -226,15 +235,39 @@ public class CustomerAllotControllor extends BaseController {
 		renderJson();
 	}
 	
-	public void add() {
+	/**
+	* @author:zhaozhongyuan 
+	* @Description:构建表单页面，增改查
+	* @return void   
+	* @date 2017年5月18日 上午11:19:57  
+	*/
+	public void form() {
+		String type = getPara(0);
+		String id=getPara("id");
 		List<FormField> formFieldList = new ArrayList<FormField>();
 
+		formFieldList.add(new FormField("id", "", "hidden"));
 		formFieldList.add(new FormField("name", "客户姓名", "text"));
 		formFieldList.add(new FormField("phone", "电话", "text"));
-		formFieldList.add(new FormField("type", "客户类型", "select", "",
-				ToCodeLibrary.getCodeLibrariesBySQL("CustomerType", true, null)));
+		formFieldList.add(new FormField("type", "客户类型", "select", "",OptionUtil.getOptionListByCodeLibrary("CustomerType", true, "")));
 
-		DyResponse response = PageUtil.createFormPageStructure("意向客户添加", formFieldList, "toAdd");
+		DyResponse response = null;
+		if (type.equals("add")) {
+			response = PageUtil.createFormPageStructure("意向客户添加", formFieldList, "/customerAllot/toAdd");
+		} else if (type.equals("edit")) {
+			if (id.equals("")) {
+				renderText("请选择一条记录来编辑！");
+				return;
+			}
+			response = PageUtil.createFormPageStructure("意向客户编辑", formFieldList, "/customerAllot/toEdit");
+		}else if (type.equals("detail")) {
+			if (id.equals("")) {
+				renderText("请选择一条记录来查看！");
+				return;
+			}
+			//第三个参数 由于校验非空，所以要随便写点什么即可
+			response = PageUtil.createFormPageStructure("查看详细信息", formFieldList, "/u");
+		}
 		this.setAttr("response", response);
 		this.render("common/form_editarea.html");
 	}
@@ -246,7 +279,6 @@ public class CustomerAllotControllor extends BaseController {
 		cuPossibleCustomer.set("belong_org_id", getCurrentUserBelongID());
 		cuPossibleCustomer.set("belong_user_name", sysUser.getStr("name"));
 		cuPossibleCustomer.set("input_time", DateUtil.getCurrentTime());
-		cuPossibleCustomer.set("belong_user_id", sysUser.getInt("id"));
 
 		try {
 			cuPossibleCustomer.save();
@@ -256,25 +288,7 @@ public class CustomerAllotControllor extends BaseController {
 		}
 	}
 	
-	public void edit() {
-		String[] ids = getPara("id").toString().split(",");
-		if (ids.length != 1) {
-
-		} else {
-			CuPossibleCustomer cuPossibleCustomer = CuPossibleCustomer.dao.findById(ids[0]);
-			List<FormField> formFieldList = new ArrayList<FormField>();
-
-			formFieldList.add(new FormField("id", "", "hidden", cuPossibleCustomer.getStr("id")));
-			formFieldList.add(new FormField("name", "客户姓名", "text", cuPossibleCustomer.getStr("name")));
-			formFieldList.add(new FormField("phone", "电话", "text", cuPossibleCustomer.getStr("phone")));
-			formFieldList.add(new FormField("type", "客户类型", "select", cuPossibleCustomer.getStr("type"),
-					ToCodeLibrary.getCodeLibrariesBySQL("CustomerType", true, null)));
-
-			DyResponse response = PageUtil.createFormPageStructure("意向客户编辑", formFieldList, "toEdit");
-			this.setAttr("response", response);
-			this.render("common/form_editarea.html");
-		}
-	}
+	
 
 	/**
 	 * @author:zhaozhongyuan
@@ -297,6 +311,11 @@ public class CustomerAllotControllor extends BaseController {
 	@Before(Tx.class)
 	public void del() {
 		String[] ids = getPara("id").toString().split(",");
+		
+		if (ids[0].equals("")) {
+			renderText("请选择至少一条记录！！！");
+			return;
+		}
 		// 批量删除
 		CuPossibleCustomer cuPossibleCustomer = new CuPossibleCustomer();
 
@@ -348,12 +367,12 @@ public class CustomerAllotControllor extends BaseController {
 		CustomerAllotControllor.fields = fields;
 	}
 
-	public static String[] getIdarrays() {
+	/*public static String[] getIdarrays() {
 		return idarrays;
 	}
 
 	public static void setIdarrays(String[] idarrays) {
 		CustomerAllotControllor.idarrays = idarrays;
-	}
+	}*/
 	
 }

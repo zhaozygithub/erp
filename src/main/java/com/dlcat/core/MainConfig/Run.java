@@ -12,8 +12,9 @@ import com.dlcat.core.controller.TestController;
 import com.dlcat.core.controller.TestUserController;
 import com.dlcat.core.controller.index.SetController;
 import com.dlcat.core.controller.customer.customerRecord.BlackListController;
-import com.dlcat.core.controller.customer.customerRecord.DistributionController;
-import com.dlcat.core.controller.customer.customerRecord.RecordController;
+import com.dlcat.core.controller.customer.customerRecord.CustomerRecordController;
+import com.dlcat.core.controller.customer.customerRecord.MyCustomerController;
+import com.dlcat.core.controller.customer.customerRecord.ObjectCustomerAllotController;
 import com.dlcat.core.controller.customer.customerSaleManager.CustomerAllotControllor;
 import com.dlcat.core.controller.customer.customerSaleManager.PossibleCustomerController;
 import com.dlcat.core.controller.collateral.CollateralController;
@@ -39,6 +40,7 @@ import com.jfinal.plugin.druid.DruidStatViewHandler;
 import com.jfinal.template.Engine;
 
 import net.dreamlu.ui.jfinal.AssetsDirective;
+
 public class Run extends JFinalConfig {
 
 	public static void main(String[] args) {
@@ -47,58 +49,49 @@ public class Run extends JFinalConfig {
 
 	@Override
 	public void configRoute(Routes me) {
-		//所有的html文件都放在WEB-INF下
+		// 所有的html文件都放在WEB-INF下
 		me.setBaseViewPath("/WEB-INF/views");
-		
-		//控制台模块
-			//登录，首页
-			me.add("/", IndexController.class);
-			
-			//个人信息设置
-			me.add("/set",SetController.class,"/console");
-		
 
-		
-		//客户管理模块
-		
-			//客户营销管理
-				//意向客户分配
-				me.add("/customerAllot",CustomerAllotControllor.class,"/");
-				//我的意向客户
-				me.add("/possibleCustomer",PossibleCustomerController.class,"/");
-			
-			//客户档案管理
-				//正式客户分配
-				me.add("/distribution",DistributionController.class,"/");
-				//档案管理
-				me.add("/record",RecordController.class,"/");
-				//黑名单
-				me.add("/blackList",BlackListController.class,"/");
-		
-		
-		
-		
-		//押品管理模块
-		me.add("/collateral",CollateralController.class,"/");
-		
-		//系统管理模块
-		me.add("/systemManage",SystemManageController.class);
-		me.add("/role",RoleManageController.class,"/");
-		me.add("/userManage", UserManageController.class,"/");
-		
+		// 控制台模块
+		// 登录，首页
+		me.add("/", IndexController.class);
 
-		
-		
-		//测试路由
-		me.add("/test", TestController.class,"/");
-		//测试路由
-		me.add("/flow", FlowController.class,"/views");
-		//测试路由
-		me.add("/user",TestUserController.class,"/views");
-		me.add("/data",DataController.class);
-		
-		
-		
+		// 个人信息设置
+		me.add("/set", SetController.class, "/console");
+
+		// 客户管理模块
+		// 客户营销管理
+		// 意向客户分配
+		me.add("/customerAllot", CustomerAllotControllor.class, "/");
+		// 我的意向客户
+		me.add("/possibleCustomer", PossibleCustomerController.class, "/");
+
+		// 客户档案管理
+		// 我的客户
+		me.add("/myCustomer", MyCustomerController.class,"/");
+		// 正式客户分配
+		me.add("/distribution", ObjectCustomerAllotController.class, "/");
+		// 档案管理
+		me.add("/record", CustomerRecordController.class, "/");
+		// 黑名单
+		me.add("/blackList", BlackListController.class, "/");
+
+		// 押品管理模块
+		me.add("/collateral", CollateralController.class, "/");
+
+		// 系统管理模块
+		me.add("/systemManage", SystemManageController.class, "/");
+		me.add("/role", RoleManageController.class, "/");
+		me.add("/userManage", UserManageController.class, "/");
+
+		// 测试路由
+		me.add("/test", TestController.class, "/");
+		// 测试路由
+		me.add("/flow", FlowController.class, "/views");
+		// 测试路由
+		me.add("/user", TestUserController.class, "/views");
+		me.add("/data", DataController.class);
+
 	}
 
 	@Override
@@ -106,20 +99,20 @@ public class Run extends JFinalConfig {
 		me.setDevMode(true);
 		PropKit.use("db.config");
 		me.setBaseUploadPath(PropKit.get("img_path"));
-//		me.setBaseDownloadPath(PropKit.get("baseDownloadPath"));
+		// me.setBaseDownloadPath(PropKit.get("baseDownloadPath"));
 
 	}
 
 	@Override
 	public void configEngine(Engine me) {
-		//js.css压缩插件
-		me.addDirective("assets",new AssetsDirective());
+		// js.css压缩插件
+		me.addDirective("assets", new AssetsDirective());
 		me.addSharedFunction("/WEB-INF/Template/core.html");
 	}
 
 	@Override
 	public void configHandler(Handlers me) {
-		//开启druid sql监控
+		// 开启druid sql监控
 		DruidStatViewHandler dvh = new DruidStatViewHandler("/druid");
 		me.add(dvh);
 
@@ -127,10 +120,10 @@ public class Run extends JFinalConfig {
 
 	@Override
 	public void configInterceptor(Interceptors me) {
-		//开启session
+		// 开启session
 		me.addGlobalActionInterceptor(new SessionInViewInterceptor());
-		//登录验证
-		//me.addGlobalActionInterceptor(new LoginInterceptor());
+		// 登录验证
+		// me.addGlobalActionInterceptor(new LoginInterceptor());
 
 	}
 
@@ -138,11 +131,11 @@ public class Run extends JFinalConfig {
 	public void configPlugin(Plugins me) {
 		ActiveRecordPlugin arp = addDataSource(me, "dlcat_erp", JdbcUtils.MYSQL);
 		_MappingKit.mapping(arp);
-		
 
 	}
 
-	private ActiveRecordPlugin addDataSource(Plugins plugins, String datasource, String dbType) {
+	private ActiveRecordPlugin addDataSource(Plugins plugins,
+			String datasource, String dbType) {
 		// 添加数据源
 		String url, user, pwd;
 		url = PropKit.get(datasource + "_url");

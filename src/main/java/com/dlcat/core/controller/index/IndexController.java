@@ -134,7 +134,7 @@ public class IndexController extends Controller {
 	}
 
 	/**
-	 * 滚到登录页面
+	 * 到登录页面
 	 */
 	private void toLogin() {
 		render("/WEB-INF/login.html");
@@ -162,6 +162,18 @@ public class IndexController extends Controller {
 			toLogin();
 			return;
 		}
+		
+		
+		if (!user.getStr("status").equals("1")) {
+			setAttr("msg", "该用户不可用。");
+			try {
+				throw new Exception("该用户不可用。");
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+			toLogin();
+			return;
+		}
 
 		if (!(user.getStr("password").equals(HashKit.sha1(loginPwd)))) {
 			setAttr("msg", "用户名或者密码错误");
@@ -182,11 +194,21 @@ public class IndexController extends Controller {
 		redirect("/");
 	}
 
-	private void loginInit(IndexController indexController, SysUser user) {
+	private void loginInit(IndexController indexController, SysUser user) throws Exception {
 		// TODO Auto-generated method stub
 		int rid = user.getInt("role_id");
+		
+		//获得角色信息
+		SysRole sysRole=SysRole.dao.findById(rid);
+		
+		//先判断此角色是否可用
+		if (!sysRole.getStr("status").equals("1")) {
+			setAttr("msg", "该角色不可用。");
+			throw new Exception("该角色不可用。"); 
+		}
+		
 		// 根据rid去查看所具有的所有菜单
-		String roleMenus = SysRole.dao.findById(rid).getStr("role_menus");
+		String roleMenus = sysRole.getStr("role_menus");
 		
 		List<SysMenu> list=null;
 		//如果为管理员那么就查找全部有效菜单
@@ -217,11 +239,7 @@ public class IndexController extends Controller {
 
 		SysMenu sysMenus = new SysMenu();
 		if (firstMenu.size() < 1) {
-			try {
-				throw new Exception("没有查看任何菜单的权限，请联系管理员。");
-			} catch (Exception e) {
-				e.printStackTrace();
-			}
+			throw new Exception("没有查看任何菜单的权限，请联系管理员。");
 		} else {
 			for (SysMenu sysMenu : firstMenu) {
 				SysMenu child = recursiveTree(sysMenu.getInt("id"));

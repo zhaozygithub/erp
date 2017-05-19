@@ -11,7 +11,6 @@ public interface IndexEchartsService{
 	
 	public Map<String, List<Number>> getMonthNum(String year,SysUser user);
 	
-	public String getWhere(SysUser user);
 	
 	public Map<String, Number> getMdNum(String defaultYear, SysUser user);
 	

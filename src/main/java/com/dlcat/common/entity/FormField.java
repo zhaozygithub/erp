@@ -3,6 +3,7 @@ package com.dlcat.common.entity;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 import com.dlcat.core.model.ToCodeLibrary;
 /**
@@ -36,17 +37,18 @@ public class FormField implements Serializable {
 	 */
 	private String notice;
 	/**
-	 * 隐性提示	需要鼠标放到提醒符号上面再显示
+	 * 隐性提示	需要鼠标放到提醒符号上面再显示,就是title
 	 */
 	private String hint;
 	/**
-	 * 文本框内提示
+	 * 文本框内提示,就是placeholder
 	 */
 	private String inNotice;
 	/**
 	 * 节点数据源，适用下拉框、单选框等
+	 * 数据来源：调用OptionUtil类
 	 */
-	private List<ToCodeLibrary> options;
+	private List<Map> optionList;
 	/**
 	 * 计量单位
 	 */
@@ -69,20 +71,24 @@ public class FormField implements Serializable {
 	private String fatherFiledName;
 	/**
 	 * 输入值类型
+	 * 三种: decimal digital string 分别是小数 整数 字符串
 	 */
 	private String inType;
 	/**
 	 * 默认值
 	 */
 	private String defaultValue;
-
+	/**
+	 * disable 禁止用户修改(但是可以用JS修改)
+	 */
+	private boolean disable=false;
 	//构造方法
 	public FormField(){
 	}
 	/**
-	 * 构造添加函数
-	 * @param text
+	 * 构造添加函数.最核心的三个参数,适用于除select和radio以外的构造
 	 * @param name
+	 * @param text 旁边的描述
 	 * @param type
 	 * @param value
 	 */
@@ -92,13 +98,6 @@ public class FormField implements Serializable {
 		setType(type);
 	}
 	
-	/**
-	 * 最核心的四个参数,适用于除select和radio以外的构造
-	 * @param text
-	 * @param name
-	 * @param type
-	 * @param value
-	 */
 	public FormField(String name ,String text,String type,String value){
 		//FormField( text , name, type, value,new ArrayList<ToCodeLibrary>());
 		setFiledName(name);
@@ -117,20 +116,27 @@ public class FormField implements Serializable {
 	/**
 	 * 在上面的基础上增加select和radio的构造方法
 	 * */
-	public FormField(String name ,String text,String type,String value,List<ToCodeLibrary> options){
+	public FormField(String name ,String text,String type,List<Map> options){
 		setFiledName(name);
 		setText(text);
 		setType(type);
-		setDefaultValue(value);
-		setOptions(options);
+		setOptionList(options);
 		//return;
 	}
-	public FormField(String name ,String text,String type,String value,List<ToCodeLibrary> options,boolean isRequired){
+	public FormField(String name ,String text,String type,String value,List<Map> options){
 		setFiledName(name);
 		setText(text);
 		setType(type);
 		setDefaultValue(value);
-		setOptions(options);
+		setOptionList(options);
+		//return;
+	}
+	public FormField(String name ,String text,String type,String value,List<Map> options,boolean isRequired){
+		setFiledName(name);
+		setText(text);
+		setType(type);
+		setDefaultValue(value);
+		setOptionList(options);
 		setIsRequired(isRequired);
 		//return;
 	}
@@ -145,7 +151,7 @@ public class FormField implements Serializable {
 	 * @param isRequired
 	 * @return
 	 */
-	public static FormField createFormField(String name ,String text,String type,String value,List<ToCodeLibrary> options,boolean isRequired){
+	public static FormField createFormField(String name ,String text,String type,String value,List<Map> options,boolean isRequired){
 		FormField formField=new FormField( name , text, type, value, options, isRequired);
 		return formField;
 		
@@ -186,11 +192,11 @@ public class FormField implements Serializable {
 	public void setInNotice(String inNotice) {
 		this.inNotice = inNotice;
 	}
-	public List<ToCodeLibrary> getOptions() {
-		return options;
+	public List<Map> getOptionList() {
+		return optionList;
 	}
-	public void setOptions(List<ToCodeLibrary> options) {
-		this.options = options;
+	public void setOptionList(List<Map> optionList) {
+		this.optionList = optionList;
 	}
 	public String getUnit() {
 		return unit;
@@ -222,6 +228,12 @@ public class FormField implements Serializable {
 	public void setFatherFiledName(String fatherFiledName) {
 		this.fatherFiledName = fatherFiledName;
 	}
+	public boolean getDisable() {
+		return disable;
+	}
+	public void setDisable(boolean disable) {
+		this.disable = disable;
+	}
 	public String getInType() {
 		return inType;
 	}
@@ -237,7 +249,7 @@ public class FormField implements Serializable {
 	@Override
 	public String toString() {
 		return "FormField [filedName=" + filedName + ", text=" + text + ", type=" + type + ", notice=" + notice
-				+ ", hint=" + hint + ", inNotice=" + inNotice + ", options=" + options + ", unit=" + unit
+				+ ", hint=" + hint + ", inNotice=" + inNotice + ", optionList=" + optionList + ", unit=" + unit
 				+ ", isHaschild=" + isHaschild + ", isHide=" + isHide + ", isRequired=" + isRequired
 				+ ", fatherFiledName=" + fatherFiledName + ", inType=" + inType + ", defaultValue=" + defaultValue
 				+ "]";

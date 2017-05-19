@@ -51,7 +51,7 @@
 											#end
 										</ul>
 									</li> #set(size = null) #else
-									<li><button type="button" class="btn dropdown-toggle"
+									<li class="menu-only"><button type="button" class="btn dropdown-toggle"
 											id="dropdownMenu2" data-toggle="dropdown" onclick="$('#secName').text('>#(sec.name??)');$('#thirdName').text('')"
 											style="width: 180px; height: 54px; color: #fff; background-color: transparent !important; border: none; font-size: 16px;">
 											<a href="#" id="#(sec.id)" data-toggle="tab" rel="#(sec.url??)" >#(sec.name??)</a>
@@ -84,12 +84,18 @@
 								</div>
 							</div>
 							<div class="pull-right slider-media-right">
-								<a class="set-a"  href="/set" data-toggle="modal" data-target="#mymodal1" data-backdrop="static"><img alt="设置图片" src="images/set.png" ></a>
-								<a class="news-a">
-									<img alt="消息图片" src="images/news3.png">
-									<img alt="消息图片" src="images/news2.png" style="display:none;">
+								<a class="set-a"  href="/set" data-toggle="modal" data-target="#mymodal1" data-backdrop="static">
+									<img class="hover-a" alt="设置图片" src="images/set5.png">
+									<img class="hover-b" alt="设置图片" src="images/set4.png">
 								</a>
-								<a href="/doExit" class="close-a">退出</a>
+								<a class="news-a">
+									<img class="hover-a" alt="消息图片" src="images/news6.png">
+									<img class="hover-b" alt="消息图片" src="images/news5.png">
+								</a>
+								<a href="/doExit" class="close-a">
+									<img class="hover-a" alt="退出图片" src="images/exit5.png">
+									<img class="hover-b" alt="退出图片" src="images/exit6.png">
+								</a>
 							</div>
 						</div>
 					</div>
@@ -179,14 +185,14 @@
 
 			$(".dropdown-toggle").click(function() {
 				//$(".down-up").css("display", "");
-				//ss$(".down-down").css("display", "none");
+				//$(".down-down").css("display", "none");
 				/* var down = $(this).attr("aria-expanded");
 				if (down == undefined || down == 'false') {
 					$(this).find(".down-up").css("display", "");
 					$(this).find(".down-down").css("display", "none");
 				} else {
 					$(this).find(".down-up").css("display", "none");
-					ss$(this).find(".down-down").css("display", "");
+					$(this).find(".down-down").css("display", "");
 				} */
 				
 				if($(this).siblings("ul.dropdown-menu").css("display")=="block"){
@@ -301,22 +307,42 @@
 		  };
 		  
 		//左侧栏按钮下拉控制，此段JS删除会用下拉菜单插件效果
-		 $(".dropdown").click(function(){
-			$(this).children("ul").css("display","block");
-		});
-		
-		 $(".dropdown").toggle(function(){
+		$(".dropdown").toggle(function(){
 			$(this).removeClass("open");
 			$(this).children("ul").css("display","block");
 		},function(){
 			$(this).children("ul").css("display","none");
 		});
+		 $(".menu-only").click(function(){
+			$(this).children("ul").css("display","block");
+			$(this).parent("ul").parent("div.tab-pane").siblings("div.tab-pane").children("ul").children("li.dropdown").children("ul.dropdown-menu").css("display","none");
+			$(this).parent("ul").parent("div.tab-pane").siblings("div.tab-pane").children("ul").children("li.dropdown").find("button").find("b.down-up").css("display", "none");
+			$(this).parent("ul").parent("div.tab-pane").siblings("div.tab-pane").children("ul").children("li.dropdown").find("button").find("b.down-down").css("display", "");
+			$(this).parent("ul").parent("div.tab-pane").siblings("div.tab-pane").children("ul").children("li.dropdown").children("ul.dropdown-menu").find("a.hs").css("color", "#999999");
+			$(this).parent("ul").parent("div.tab-pane").siblings("div.tab-pane").children("ul").children("li.dropdown").children("ul.dropdown-menu").find("b.triangle-box").css("display", "none");	
+			$(this).parent("ul").siblings("ul").children("li.dropdown").children("ul.dropdown-menu").css("display", "none");	
+			$(this).parent("ul").siblings("ul").children("li.dropdown").find("button").find("b.down-up").css("display", "none");
+			$(this).parent("ul").siblings("ul").children("li.dropdown").find("button").find("b.down-down").css("display", "");
+			$(this).parent("ul").siblings("ul").children("li.dropdown").children("ul.dropdown-menu").find("a.hs").css("color", "#999999");
+			$(this).parent("ul").siblings("ul").children("li.dropdown").children("ul.dropdown-menu").find("b.triangle-box").css("display", "none");	
+			//不能省略，和上面的功能不同   处理同一页只有三级和有四级菜单  四级菜单父级下拉图片转换 
+			$(".dropdown").toggle(function(){
+				$(this).removeClass("open");
+				$(this).children("ul").css("display","block");
+			},function(){
+				$(this).children("ul").css("display","none");
+			});
+			
+		 });
 		
 		$(".dropdown .dropdown-menu li").click(function(){
 			$(this).parent("ul.dropdown-menu").css("display","block");
-			$(this).parent("ul").parent("li.dropdown").parent("ul").siblings("ul").children("li.dropdown").children("ul.dropdown-menu").css("display","none");	
+			$(this).parent("ul").parent("li.dropdown").parent("ul").siblings("ul").children("li.dropdown").children("ul.dropdown-menu").css("display","none");
 			$(this).parent("ul").parent("li.dropdown").parent("ul").siblings("ul").children("li.dropdown").find("button").find("b.down-up").css("display", "none");	
 			$(this).parent("ul").parent("li.dropdown").parent("ul").siblings("ul").children("li.dropdown").find("button").find("b.down-down").css("display", "");
+			$(this).parent("ul").parent("li.dropdown").parent("ul").parent("div.tab-pane").siblings("div.tab-pane").children("ul").children("li.dropdown").children("ul.dropdown-menu").css("display","none");
+			$(this).parent("ul").parent("li.dropdown").parent("ul").parent("div.tab-pane").siblings("div.tab-pane").children("ul").children("li.dropdown").find("button").find("b.down-up").css("display", "none");
+			$(this).parent("ul").parent("li.dropdown").parent("ul").parent("div.tab-pane").siblings("div.tab-pane").children("ul").children("li.dropdown").find("button").find("b.down-down").css("display", "");
 			$(".dropdown").toggle(function(){
 				$(this).removeClass("open");
 				$(this).children("ul").css("display","block");
@@ -337,22 +363,34 @@
 		if ($(".news-box").css("display")=="block") {
 			$(".news-box").css("display","none");
 			$(".news-body").css("display","none");
+			$(".news-a").find(".hover-a").attr("src","images/news7.png");
+			$(".news-a").find(".hover-b").attr("src","images/news4.png");
+			
 		}	
+		$(".news-a").click(function(){
+			if ($(".news-box").css("display")=="block") {
+				$(this).find("img").attr("src","images/news4.png"); 
+			}
+		 });
 	});
      
 	$(".news-a").click(function () {
 		if ($(".news-box").css("display")=="none") {
 			$(".news-body").css("display","block");
 			$(".news-box").css("display","block");
-			$(this).find("img").attr("src","images/news2.png");
-		}else{
-			$(".news-box").css("display","none");
-			$(".news-body").css("display","none");
+			$(this).find("img").attr("src","images/news4.png");
 		}
-		event.stopPropagation();
+		//event.stopPropagation();
+		 
 	});
-	
+	/*  $(".news-a").mouseover(function(){
+		$(this).find("img").attr("src","images/news7.png"); 
+	}); 
+	$(".news-a").mouseleave(function(){
+		$(this).find("img").attr("src","images/news4.png"); 
+	});  */
 
+	
 });
 		
 

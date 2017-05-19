@@ -54,7 +54,7 @@ public class TestController extends BaseController{
 			//第二个参数是这个列表数据的名称，如果页面中存在这个导出功能，这个名称就是导出的
 			//excel文件的文件名称
 			response = PageUtil.createTablePageStructure("/test/data", "测试列表数据", tableHeader, 
-					search,super.getLastPara()==null?"1":getLastPara().toString(),(Map<Integer, SysMenu>)this.getSessionAttr("menus"));
+					search,super.getLastPara()==null?"41":getLastPara().toString(),(Map<Integer, SysMenu>)this.getSessionAttr("menus"));
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -92,6 +92,7 @@ public class TestController extends BaseController{
 	   //默认追加条件
 	   //whereList.add(new QueryWhere("2","2"));	//注意：jfinal仅仅支持一个常量条件，超过一个会报错
 	   whereList.add(QueryWhere.isNotNull("remark"));
+	   whereList.add(new QueryWhere("business_id", EQ, "4", OR));
 	   item.setWhereList(whereList);
 	   //4.获取数据  格式为List<Record>
 	   DyResponse dyResponse = super.getTableData(item , page);

@@ -3,6 +3,7 @@ package com.dlcat.common.entity;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.dlcat.common.utils.OptionUtil;
 import com.dlcat.core.model.ToCodeLibrary;
 
 /**
@@ -39,14 +40,14 @@ public class FormBuilder {
 		formField.setFiledName("c");
 		formField.setText("字母c");
 		formField.setType("radio");
-		formField.setOptions(ToCodeLibrary.getCodeLibrariesBySQL("YesNo",true,null));
+		formField.setOptionList(OptionUtil.getOptionListByCodeLibrary("YesNo", true, ""));
 		formFieldList.add(formField);
 
 		formField = new FormField();
 		formField.setFiledName("d");
 		formField.setText("字母d");
 		formField.setType("select");
-		formField.setOptions(ToCodeLibrary.getCodeLibrariesBySQL("YesNo",true,null));
+		formField.setOptionList(OptionUtil.getOptionListByCodeLibrary("YesNo", true, ""));
 		formFieldList.add(formField);
 
 		return formFieldList;

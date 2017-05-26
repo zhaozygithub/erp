@@ -27,6 +27,11 @@ import com.jfinal.plugin.activerecord.Record;
 import com.jfinal.upload.UploadFile;
 
 public class TestController extends BaseController{
+	/**
+	 * 自动组装sql，构造页面（单表）
+	 * @author masai
+	 * @time 2017年5月26日 下午3:42:01
+	 */
 	public void index(){
 		//首先注意：此处的列表页面应该是在Tab下面的，所以加载Tab中的url，
 		//Tab的url中需要将Tab的id拼接到url最后
@@ -45,9 +50,8 @@ public class TestController extends BaseController{
 		//3.定义下拉数据源 如果检索区域中存在select，必须定义下拉数据源
 		//注意：这里的资源必须和表头字段中的一致，可以定义多个
 		Map<String,List<Map>> clListMap = new HashMap<String, List<Map>>();
-
 		clListMap.put("status", OptionUtil.getOptionListByCodeLibrary("YesNo",true,null));
-		//clListMap.put("remark", OptionUtil.getOptionListByOther("id", "name", "loan_business_category", null));
+		clListMap.put("remark", OptionUtil.getOptionListByOther("id", "name", "loan_business_category", null,null));
 		clListMap.put("testM", OptionUtil.getOptionListByManual(new String[]{"shang","xia","wan"}, new String[]{"上午","下午","晚上"}));
 		/*clListMap.put("status", ToCodeLibrary.getCodeLibrariesBySQL("YesNo",true,null));*/
 		search.setOptionListMap(clListMap);
@@ -67,6 +71,11 @@ public class TestController extends BaseController{
 		this.setAttr("response", response);
 		this.render("common/table.html");
 	}
+	/**
+	 * 自动组装sql，数据（单表） 
+	 * @author masai
+	 * @time 2017年5月26日 下午3:42:32
+	 */
    public void data(){
 	   //1.从页面获取参数 condition参数名称固定 key=condition 格式为：name:ms,age:24
 	   //获取分页参数	固定格式 key=page
@@ -100,11 +109,51 @@ public class TestController extends BaseController{
 	   whereList.add(new QueryWhere("business_id", EQ, "4", OR));
 	   item.setWhereList(whereList);
 	   //4.获取数据  格式为List<Record>
+	   //DyResponse dyResponse = super.getTableData(item , page);
 	   DyResponse dyResponse = super.getTableData(item , page);
 	   //5.返回数据到页面	response 固定值 不可改变
 	   //this.setAttr("response", dyResponse);
 	   
 	   renderJson(dyResponse);
+   }
+   /**
+    * 手动组装sql，构造页面（多表） 
+    * @author masai
+    * @time 2017年5月26日 下午3:43:30
+    */
+   public void handPage(){
+	   TableHeader tableHeader = new TableHeader();
+	   tableHeader.setFieldNames(new String[]{"su_id","su_name","sr_role_name","so_org_name"});
+	   tableHeader.setCNNames(new String []{"用户编号","用户名称","角色名称","所属机构名称"});
+	   tableHeader.setMultiple(true);
+	   DyResponse response = null;
+		try {
+			//4.构造页面结构并返回，注意：第一个参数标示请求列表数据时候的url，必须是存在的
+			//第二个参数是这个列表数据的名称，如果页面中存在这个导出功能，这个名称就是导出的
+			//excel文件的文件名称
+			response = PageUtil.createTablePageStructure("/test/handData", "测试手动组装列表数据", tableHeader, 
+					null,super.getLastPara()==null?"41":getLastPara().toString(),(Map<Integer, SysMenu>)this.getSessionAttr("menus"));
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		//5.返回数据到页面 response不可改变,页面名称也不可改变
+		this.setAttr("response", response);
+		this.render("common/table.html");
+   }
+   /**
+    * 手动组装sql，数据（多表） 
+    * @author masai
+    * @time 2017年5月26日 下午3:43:54
+    */
+   public void handData(){
+	  String sql = "select su.id as su_id,su.name as su_name,sr.role_name as sr_role_name,so.org_name as so_org_name "
+		  		+ " from "
+		  		+ " sys_user su,sys_org so,sys_role sr"
+		  		+ " where "
+		  		+ " su.role_id=sr.id and su.belong_org_id=so.org_id";
+	  //检索条件自己拼接，多表较为复杂慎用，且多表时分页默认是20条
+	  DyResponse dyResponse = super.getTableData(sql , this.getPara("page"));
+	  renderJson(dyResponse);
    }
    
    public void formTest(){

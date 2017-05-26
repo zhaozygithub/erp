@@ -92,13 +92,14 @@
 			xhr.setRequestHeader('Content-type','application/x-www-form-urlencoded');
 			xhr.send((!src.match(/(?:\?|&)id=/)?ths[0]+'='+getchecked():null)+'&btnid='+btnid);
 			xhr.onload=function(resp){
+				resp=resp.target||resp;
 				try{var rsl=JSON.parse(resp.responseText);
 				//加.toString()是为了确保此字段存在.
 			    if(rsl.status.toString()==200)layer.msg('操作成功. ',2,1);
 			    else layer.msg(rsl.description.toString() ,2,2);
 			    }catch(e){
 				layer.msg(resp.responseText,2,0);}
-				setTimeout('location.href=location.href;',1000);
+				setTimeout('location.href=location.href;',2000);
 			}}
 		}
 		//弹框 

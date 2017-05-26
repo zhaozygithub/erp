@@ -126,10 +126,7 @@ public class CollateralController extends BaseController {
 //			
 //			item.setOrder("input_time desc");
 		   item.setWhereList(whereList);
-		   //4.获取数据  格式为List<Record>
 		   DyResponse dyResponse = super.getTableData(item,page);
-		   //5.返回数据到页面	response 固定值 不可改变
-		   this.setAttr("response", dyResponse);
 		   renderJson(dyResponse);
 	   }
 	/**
@@ -141,7 +138,7 @@ public class CollateralController extends BaseController {
 			String type = getPara(0);
 			String id=getPara("id");
 			if(type == null){
-				renderHtml("<h1>数据库错误，请联系管理员。</h1>");
+				renderJson(createErrorJsonResonse("数据库错误，请联系管理员！"));
 				return;
 			}
 			List<FormField> formFieldList = new ArrayList<FormField>();
@@ -169,19 +166,19 @@ public class CollateralController extends BaseController {
 				response = PageUtil.createFormPageStructure("押品添加", formFieldList, "/collateral/toAdd");
 			} else if (type.equals("edit")) {
 				if (id==null || id.equals("")) {
-					renderHtml("<h1>请先选择一条记录。</h1>");
+					renderJson(createErrorJsonResonse("请先选择一条记录！"));
 					return;
 				}
 				response = PageUtil.createFormPageStructure("押品编辑", formFieldList, "/collateral/toEdit");
 			}else if (type.equals("detail")) {
 				if (id==null || id.equals("")) {
-					renderHtml("<h1>请先选择一条记录。</h1>");
+					renderJson(createErrorJsonResonse("请先选择一条记录！"));
 					return;
 				}
 				response = PageUtil.createFormPageStructure("查看详细信息", formFieldList, "/detail");
 			}
 			if (response == null) {
-				renderHtml("<h1>数据库错误，请联系管理员。</h1>");
+				renderJson(createErrorJsonResonse("数据库错误，请联系管理员！"));
 				return;
 			}
 			this.setAttr("response", response);
@@ -193,15 +190,15 @@ public class CollateralController extends BaseController {
 			String certificate_type = getPara("certificate_type");
 			String certificate_no = getPara("certificate_no");
 			if (!CuObjectCustomer.isHasCustomer(cuId)) {
-				renderHtml("<h1>所属客户不存在，请重新添加！！</h1>");
+				renderJson(createErrorJsonResonse("所属客户不存在，请重新添加！"));
 				return;
 			}
 			if ((!StringUtils.isNotBlank(certificate_type)) || (!StringUtils.isNotBlank(certificate_no))) {
-				renderHtml("<h1>证件填写错误，请重新添加！！</h1>");
+				renderJson(createErrorJsonResonse("证件填写错误，请重新添加！"));
 				return;
 			}
 			if (CuProperty.isRepeatCertificate(certificate_type, certificate_no)) {
-				renderHtml("<h1>证件已存在，请重新添加！！</h1>");
+				renderJson(createErrorJsonResonse("证件已存在，请重新添加！"));
 				return;
 			}
 			CuProperty cuProperty = getModel(CuProperty.class, "");
@@ -210,9 +207,9 @@ public class CollateralController extends BaseController {
 
 			try {
 				cuProperty.save();
-				renderHtml("<h1>操作成功！！</h1>");
+				renderJson(createSuccessJsonResonse());
 			} catch (Exception e) {
-				renderHtml("<h1>操作失败！！</h1>");
+				renderJson(createErrorJsonResonse("操作失败！"));
 			}
 		}
 		
@@ -225,7 +222,7 @@ public class CollateralController extends BaseController {
 		public void del() {
 			String id=getPara("id");
 			if (id==null || id.equals("")) {
-				renderText("请选择至少一条记录！！！");
+				renderJson(createErrorJsonResonse("请选择至少一条记录！"));
 				return;
 			}
 			
@@ -237,11 +234,10 @@ public class CollateralController extends BaseController {
 				for (String id1 : ids) {
 					cuProperty.deleteById(id1);
 				}
-				renderText("操作成功！！");
+				renderJson(createSuccessJsonResonse());
 			} catch (Exception e) {
-				// TODO Auto-generated catch block
 				e.printStackTrace();
-				renderText("操作失败！！");
+				renderJson(createErrorJsonResonse("操作失败！"));
 			}
 		}
 	
@@ -250,25 +246,20 @@ public class CollateralController extends BaseController {
 			String certificate_type = getPara("certificate_type");
 			String certificate_no = getPara("certificate_type");
 			if (!CuObjectCustomer.isHasCustomer(cuId)) {
-				renderHtml("<h1>所属客户不存在，请重新编辑！！</h1>");
+				renderJson(createErrorJsonResonse("所属客户不存在，请重新编辑！"));
 				return;
 			}
 			if (certificate_type.equals("") || certificate_no.equals("")) {
-				renderHtml("<h1>证件填写错误，请重新编辑！！</h1>");
+				renderJson(createErrorJsonResonse("证件填写错误，请重新编辑！"));
 				return;
 			}
 			CuProperty cuProperty = getModel(CuProperty.class, "");
 			try {
 				cuProperty.update();
-				renderHtml("<h1>操作成功！！</h1>");
+				renderJson(createSuccessJsonResonse());
 			} catch (Exception e) {
-				// TODO Auto-generated catch block
 				e.printStackTrace();
-				renderHtml("<h1>操作失败！！</h1>");
+				renderJson(createErrorJsonResonse("操作失败！"));
 			}
 		}
-	
-	
-	
-	
 }

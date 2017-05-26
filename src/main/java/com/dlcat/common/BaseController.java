@@ -62,82 +62,76 @@ public class BaseController extends Controller {
 	 * @time 2017年5月9日 上午10:21:17
 	 */
 	public DyResponse getTableData(QueryItem item,String page){
-		DyResponse dyResponse = new DyResponse();
+		Map<String,Object> resultData = new HashMap<String, Object>();
 		try {
+			 if(item == null){
+				throw new Exception("数据查询出错");
+			 }
 			 //分页步长重新赋值
 			 item.setLimit((item.getLimit()==null || item.getLimit()<=0) ? 20 : item.getLimit());
 			//获取页面数
 			 int p = StringUtils.isBlank(page) ? 1 : Integer.parseInt(page);
-			 String queryItemSql = QueryItem.getQuerySql(item);
-			 String queryCountSql = QueryItem.getQueryTotalCountSql(item);
+			 String queryItemSql = QueryItem.getQuerySql(item).toLowerCase();
+			 String queryCountSql = QueryItem.getQueryTotalCountSql(item).toLowerCase();
 			
 			 //获取sql语句，并查询总数
 			 Long dataCount = baseModel.baseFindFrist(queryCountSql).getLong("count");
 			 //获取sql语句，并查询数据
 			 List<Record> res = baseModel.baseFind(queryItemSql, new Object[]{(p-1)*item.getLimit()});
 			 //返回数据
-			 Map<String,Object> resultData = new HashMap<String, Object>();
 			 resultData.put("dataCount", dataCount); //本次请求总条数
 			 resultData.put("dataList", res);        //数据
 			//进行简单的加密
 			 resultData.put("queryItem", Base64.encodeToString(JsonUtils.object2JsonNoEscaping(item).getBytes()));   //查询Item转化成json返回到页面（配合导出）
 			 resultData.put("page", item.getLimit());//分页步长
-			 //QueryItem qi = JsonUtils.fromJson(a, QueryItem.class);
-			 dyResponse.setData(resultData);
-			 dyResponse.setDescription("OK");
-			 dyResponse.setStatus(DyResponse.OK);
 		} catch (Exception e) {
 			e.printStackTrace();
 			//请求不正常的时候description为错误信息
-			dyResponse.setDescription("请求数据出错");
-			dyResponse.setStatus(DyResponse.ERROR);
+			return createErrorJsonResonse("请求数据出错");
 		}
-		return dyResponse;
+		return createSuccessJsonResonse(resultData);
 	}
 	/**
-	 * 请求列表数据（手动拼接sql）
+	 * 请求列表数据（手动组装sql）（默认分页歩长20，无需手动加）
 	 * @param sql	查询sql,自己拼接完整sql
+	 * @param page	当前页，默认为1
 	 * @return
 	 * @author masai
 	 * @time 2017年5月18日 下午7:29:12
 	 */
-	/*public DyResponse getTableData(String sql){
-		DyResponse dyResponse = new DyResponse();
+	 public DyResponse getTableData(String sql,String page){
 		String queryCountSql  = "";
+		 Map<String,Object> resultData = new HashMap<String, Object>();
 		try {
 			if(StringUtils.isNotBlank(sql)){
-				sql = sql.trim();
+				//无论sql给出的是分页歩长是多少，默认是20
+				sql = sql.split("limit")[0] + " limit ?,20";
+				sql = sql.trim().toLowerCase();//去两端空格，并转为小写
+				int currentPage = StringUtils.isNotBlank(page) ? Integer.valueOf(page) : 1 ;
 				if(sql.startsWith("select") && sql.indexOf("from") >= 0){//判断sql语句是否以select开头，是否包含from
 					String tempSql = sql.split("limit")[0];
 					int indexOf = tempSql.indexOf("from");
 					queryCountSql = "select count(*) as count " + tempSql.substring(indexOf, tempSql.length());
-					
 					 //获取sql语句，并查询总数
 					 Long dataCount = baseModel.baseFindFrist(queryCountSql).getLong("count");
 					 //获取sql语句，并查询数据
-					 List<Record> res = baseModel.baseFind(sql, null);
+					 List<Record> res = baseModel.baseFind(sql, new Object[]{(currentPage-1)*20});
 					 //返回数据
-					 Map<String,Object> resultData = new HashMap<String, Object>();
 					 resultData.put("dataCount", dataCount); //本次请求总条数
 					 resultData.put("dataList", res);        //数据
-					 resultData.put("queryItem", JsonUtils.object2JsonNoEscaping(item));   //查询Item转化成json返回到页面（配合导出）
-					 resultData.put("page", item.getLimit());//分页步长
-					 //QueryItem qi = JsonUtils.fromJson(a, QueryItem.class);
-					 dyResponse.setData(resultData);
-					 dyResponse.setDescription("OK");
+					 resultData.put("querySql", Base64.encodeToString(sql.getBytes())); //Base64加密
+					 resultData.put("page", "20");//分页步长
 				}else{
-					return null;
+					return createErrorJsonResonse("无效请求语句");
 				}
 			}
 		} catch (Exception e) {
 			e.printStackTrace();
 			//请求不正常的时候description为错误信息
-			dyResponse.setDescription("请求数据出错");
-			dyResponse.setStatus(DyResponse.ERROR);
+			return createErrorJsonResonse("请求数据出错");
 		}
-		
-		return null;
-	}*/
+		return createSuccessJsonResonse(resultData);
+	}
 	/**
 	 * 获取列表where条件
 	 * @param para	参数字符串  ps：name:1,age:20

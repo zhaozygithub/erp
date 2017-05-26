@@ -139,7 +139,7 @@ public class LoanShowController extends BaseController {
 		}
 		LoanApplyApprove applyApprove = LoanApplyApprove.getLoanApplyApproveById(loanId);
 		if(applyApprove == null || "-10".equals(applyApprove.get("status"))){
-			renderJson(createErrorJsonResonse("借款申请不存在或无法放弃"));
+			renderJson(createErrorJsonResonse("借款申请不存在或无法废弃"));
 		}
 		applyApprove.set("status", "-10");
 		try {
@@ -164,7 +164,7 @@ public class LoanShowController extends BaseController {
 		if(applyApprove == null || "10".equals(applyApprove.get("status"))){
 			renderJson(createErrorJsonResonse("借款申请不存在或无法恢复"));
 		}
-		applyApprove.set("status", "-10");
+		applyApprove.set("status", "10");
 		try {
 			baseModel.baseUpdateByEntity(applyApprove);
 		} catch (Exception e) {

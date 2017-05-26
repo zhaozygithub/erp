@@ -35,54 +35,63 @@ public class CommonController extends BaseController {
 	 */
 	public void exportExcel() throws Exception{
 		try {
-			//（1）.数据准备
+			//（1）.基本数据准备
 			String jsonstr=getPara("requestPara");
 			jsonstr= java.net.URLDecoder.decode(jsonstr);
-			//xd.getAsString("")
 			Gson gson=new Gson();
-			HashMap requestParaMap=gson.fromJson(jsonstr, HashMap.class);
-			//获取导出文件名称
+			HashMap requestParaMap = gson.fromJson(jsonstr, HashMap.class);
+			//导出文件—名称
 			String fileName = requestParaMap.get("tableName").toString();
-			//获取表头字符串（逗号间隔）
+			//导出文件—表头（逗号间隔）
 			String tableHeader = requestParaMap.get("tableHeaders").toString();
 			if(tableHeader.indexOf("[")>=0 && tableHeader.lastIndexOf("]") >= 0){
 				tableHeader = tableHeader.substring(tableHeader.indexOf("[")+1, tableHeader.lastIndexOf("]"));
 			}
-			//获取表头对应字段
+			//导出文件—表头对应字段
 			String tableFields = requestParaMap.get("tableFields").toString();
 			if(tableFields.indexOf("[")>=0 && tableFields.lastIndexOf("]") >= 0){
 				tableFields = tableFields.substring(tableFields.indexOf("[")+1, tableFields.lastIndexOf("]"));
 			}
-			//获取json格式的QueryItem字符串
-			String queryItem =Base64.decodeToString( requestParaMap.get("queryItem").toString());
+			//（2）.导出sql语句合成
+			String querySql = "";
+			Object[] pageCount = null;
+			QueryItem item = null;
+			//自动组装sql方式—sql重新组装
+			if(requestParaMap.containsKey("queryItem") && StringUtils.isNotBlank(requestParaMap.get("queryItem").toString())){
+				//获取json格式的QueryItem字符串
+				String queryItem = Base64.decodeToString( requestParaMap.get("queryItem").toString());//Base64解密
+				if(StringUtils.isBlank(queryItem)){
+					throw new Exception("导出对象异常");
+				}
+				//将json格式的QueryItem字符串转化为QueryItem对象
+				item = JsonUtils.fromJson(queryItem, QueryItem.class);
+				querySql = QueryItem.getQuerySql(item).toLowerCase();
+			}else{//表示手动组装sql
+				querySql = Base64.decodeToString(requestParaMap.get("querySql").toString()).toLowerCase();
+			}
+			//（3）.处理分页相关
 			//获取当前分页数 为空则为默认值1
 			int currentPage = requestParaMap.get("currentPage") == null ?  1 :
 								Integer.parseInt(requestParaMap.get("page").toString());
-			if(StringUtils.isBlank(queryItem)){
-				throw new Exception("导出对象异常");
-			}
-			//获取导出对象类型，url拼接的第一个参数(导出类型)，全部导出(all) or 导出当前页(current) ？
 			/*
+			 * 获取导出对象类型，url拼接的第一个参数(导出类型)，全部导出(all) or 导出当前页(current) ？
 			 * 注：全部导出是指的是在当前查询条件下全部导出，而不是指的是无查询条件，与导出当前
 			 * 的区别是导出全部无分页限制，导出当前有分页限制。
 			 */
-			String exprotType = this.getPara(0, "all");
-			//（2）.将json格式的QueryItem字符串转化为QueryItem对象
-			QueryItem item = JsonUtils.fromJson(queryItem, QueryItem.class);
-			//（3）.获取导出数据sql
-			//如果参数为空默认为导出类型为：全部导出（all）
-			String querySql = QueryItem.getQuerySql(item);
-			Object[] pageCount = null;
-			if(exprotType.equals("all")){//全部导出
+			String exprotType = this.getPara(0, "all");//获取第一个参数，全部导出（all）
+			if(exprotType.equals("all")){//全部导出，不需要分页
 				querySql = querySql.split("limit")[0];
-			}else{
-				pageCount = new Object[]{(currentPage-1)*item.getLimit()};
+			}else{//导出当前，需要分页
+				pageCount = new Object[]{(currentPage-1) * (item == null ? 20 : item.getLimit())};
 			}
 			//（4）.查询数据
+			if(StringUtils.isBlank(querySql)){
+				throw new Exception("导出数据异常");
+			}
 			List<Map> resMapList = baseModel.baseFind(Map.class, querySql, pageCount);
 			ByteArrayOutputStream out = new ByteArrayOutputStream();
 			ExportExcelUtil exportExcel = new ExportExcelUtil();
-			//调用导出工具类
+			//（5）.调用导出工具类，输出文件流到页面
 			exportExcel.exportExcel(fileName, tableHeader.split(","), resMapList, tableFields.split(","), out);
 
 			getResponse().setHeader("Content-Type", "application/-excel");

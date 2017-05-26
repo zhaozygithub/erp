@@ -12,6 +12,7 @@ import java.util.Map;
 import com.dlcat.common.utils.DateUtil;
 import com.dlcat.common.utils.IpUtil;
 import com.dlcat.core.Interceptor.SSOJfinalInterceptor;
+import com.dlcat.core.model.SysLoginLog;
 import com.dlcat.core.model.SysMenu;
 import com.dlcat.core.model.SysOrg;
 import com.dlcat.core.model.SysRole;
@@ -193,13 +194,25 @@ public class IndexController extends Controller {
 			return;
 		}
 		//验证通过后，登录次数+1 ,并更新登录ip和登录时间
-		String ip = null;
+		String ip = "";
 		try {
 			ip = IpUtil.getRealIp();		
 		} catch (SocketException e) {
+			System.out.println("获取用户IP失败。");
 			e.printStackTrace();			
 		}
 		Db.update("update sys_user set login_count = login_count+1 ,last_login_time = ? ,last_login_ip = ? where id =?",DateUtil.getCurrentTime(),ip,user.getInt("id"));
+		//登录日志
+		SysLoginLog log = new SysLoginLog();
+		log.set("login_id", user.getInt("id"));
+		log.set("login_name", loginId);
+		log.set("belong_org_id", user.getInt("belong_org_id"));
+		log.set("belong_org_name", user.getStr("belong_org_name"));
+		log.set("login_count", user.getInt("login_count"));
+		log.set("login_time", DateUtil.getCurrentTime());
+		log.set("ip", ip);
+		log.save();
+		
 		SysUser user2 = SysUser.dao.findById(user.getInt("id"));
 		setSessionAttr("user", user2);
 		

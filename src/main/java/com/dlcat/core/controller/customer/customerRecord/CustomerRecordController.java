@@ -15,13 +15,19 @@ import com.dlcat.common.entity.TableHeader;
 import com.dlcat.common.utils.DateUtil;
 import com.dlcat.common.utils.OptionUtil;
 import com.dlcat.common.utils.PageUtil;
+import com.dlcat.common.utils.StringUtils;
 import com.dlcat.core.model.CuObjectCustomer;
 import com.dlcat.core.model.SysMenu;
 import com.dlcat.core.model.SysUser;
 import com.dlcat.core.model.ToCodeLibrary;
 import com.jfinal.aop.Before;
 import com.jfinal.plugin.activerecord.tx.Tx;
-
+/**
+ * @ClassName CustomerRecordController  
+ * @Description 客户档案    
+ * @author liuran  
+ * @time 2017年5月26日上午9:52:19
+ */
 public class CustomerRecordController extends BaseController {
 
 	/**
@@ -99,10 +105,7 @@ public class CustomerRecordController extends BaseController {
 		whereList.add(new QueryWhere("belong_org_id", LIKE_RIGHT,getCurrentUserBelongID()));
 		item.setOrder("update_time desc");
 		item.setWhereList(whereList);
-		// 4.获取数据 格式为List<Record>
 		DyResponse dyResponse = super.getTableData(item, page);
-		// 5.返回数据到页面 response 固定值 不可改变
-		this.setAttr("response", dyResponse);
 		renderJson(dyResponse);
 	}
 	/**
@@ -114,7 +117,7 @@ public class CustomerRecordController extends BaseController {
 		String type = getPara(0);
 		String id = getPara("id");
 		if(type == null){
-			renderHtml("<h1>数据库错误，请联系管理员。</h1>");
+			renderJson(createErrorJsonResonse("数据库错误，请联系管理员！"));
 			return;
 		}
 		List<FormField> formFieldList = new ArrayList<FormField>();
@@ -133,13 +136,13 @@ public class CustomerRecordController extends BaseController {
 				response = PageUtil.createFormPageStructure("客户添加",formFieldList, "/record/toAdd");
 			} else if (type.equals("edit")) {
 				if (id==null || id.equals("")) {
-					renderHtml("<h1>请先选择一条记录。</h1>");
+					renderJson(createErrorJsonResonse("请先选择一条记录！"));
 					return;
 				}
 				response = PageUtil.createFormPageStructure("客户编辑",formFieldList, "/record/toEdit");
 			} else if (type.equals("detail")) {
 				if (id==null || id.equals("")) {
-					renderHtml("<h1>请先选择一条记录。</h1>");
+					renderJson(createErrorJsonResonse("请先选择一条记录！"));
 					return;
 				}
 				formFieldList.add(new FormField("type", "客户类型", "select", "",OptionUtil.getOptionListByCodeLibrary("CustomerType", true, "")));
@@ -148,24 +151,49 @@ public class CustomerRecordController extends BaseController {
 				response = PageUtil.createFormPageStructure("查看详细信息",formFieldList, "/detail");
 			}
 			if (response == null) {
-				renderHtml("<h1>数据库错误，请联系管理员。</h1>");
+				renderJson(createErrorJsonResonse("数据库错误，请联系管理员！"));
 				return;
 			}
 		this.setAttr("response", response);
 		this.render("common/form.html");
 	}
 
-	// 提交
+	/**
+	 * @Title toAdd 
+	 * @Description 表单数据提交
+	 * @param   
+	 * @return void 
+	 * @author liuran 
+	 * @time 2017年5月26日下午3:13:47
+	 */
 	public void toAdd() {
 		SysUser user = getSessionAttr("user");
+		String card_type =getPara("card_type");//证件类型
+		String card_id =getPara("card_id");//证件编号
 		String type = getPara("type");//客户类型
+		if (StringUtils.isBlank(card_type)) {
+			renderJson(createErrorJsonResonse("证件类型不能为空，请重新输入"));
+			return;
+		}
+		if (StringUtils.isBlank(card_id)) {
+			renderJson(createErrorJsonResonse("证件编号不能为空，请重新输入"));
+			return;
+		}
+		
 		CuObjectCustomer cuObjectCustomer = getModel(CuObjectCustomer.class, "");
-		if (type.equals("1")) {
-			cuObjectCustomer.set("id", "COR" + DateUtil.getCurrentTime());//公司客户
+		
+		if (StringUtils.isNotBlank(type)) {
+			if (type.equals("1")) {
+				cuObjectCustomer.set("id", "COR" + DateUtil.getCurrentTime());//公司客户
+			}
+			if(type.equals("2")) {
+				cuObjectCustomer.set("id", "IND" + DateUtil.getCurrentTime());//个人客户
+			}
+		}else {
+			renderJson(createErrorJsonResonse("客户类型不能为空，请重新输入"));
+			return;
 		}
-		if(type.equals("2")) {
-			cuObjectCustomer.set("id", "IND" + DateUtil.getCurrentTime());//个人客户
-		}
+		
 		cuObjectCustomer.set("input_time", DateUtil.getCurrentTime());
 		cuObjectCustomer.set("update_time", DateUtil.getCurrentTime());		
 		cuObjectCustomer.set("belong_org_id", getCurrentUserBelongID());
@@ -177,9 +205,9 @@ public class CustomerRecordController extends BaseController {
 
 		try {
 			cuObjectCustomer.save();
-			renderHtml("<h1>操作成功！！</h1>");
-		} catch (Exception e) {
-			renderHtml("<h1>操作失败！！</h1>");
+			renderJson(createSuccessJsonResonse());
+		} catch (Exception e) {		
+			renderJson(createErrorJsonResonse("操作失败！"));
 		}
 	}
 
@@ -192,7 +220,7 @@ public class CustomerRecordController extends BaseController {
 	public void del() {
 		String id=getPara("id");
 		if (id==null || id.equals("")) {
-			renderText("请选择至少一条记录");
+			renderJson(createErrorJsonResonse("请选择至少一条记录！"));		
 			return;
 		}		
 		String[] ids = id.split(",");
@@ -203,11 +231,11 @@ public class CustomerRecordController extends BaseController {
 			for (String id1 : ids) {
 				cuObjectCustomer.deleteById(id1);
 			}
-			renderText("操作成功！！");
+			renderJson(createSuccessJsonResonse());
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
-			renderText("操作失败！！");
+			renderJson(createErrorJsonResonse("操作失败！"));
 		}
 	}
 	
@@ -222,11 +250,11 @@ public class CustomerRecordController extends BaseController {
 			cuObjectCustomer.set("update_org_id", user.getInt("belong_org_id"));
 			cuObjectCustomer.set("update_org_name", user.getStr("belong_org_name"));
 			cuObjectCustomer.update();
-			renderHtml("<h1>操作成功！！</h1>");
+			renderJson(createSuccessJsonResonse());
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
-			renderHtml("<h1>操作失败！！</h1>");
+			renderJson(createErrorJsonResonse("操作失败！"));
 		}
 	}
 	/**
@@ -238,7 +266,7 @@ public class CustomerRecordController extends BaseController {
 	public void btnAbandon() {
 		String id=getPara("id");
 		if (id==null || id.equals("")) {
-			renderText("请选择至少一条记录！！！");
+			renderJson(createErrorJsonResonse("请选择至少一条记录！"));
 			return;
 		}
 		// 接收要放弃维护的id数组
@@ -254,11 +282,11 @@ public class CustomerRecordController extends BaseController {
 		map.put("update_org_name", user.getStr("belong_org_name"));
 		try {
 			updateByIds(CuObjectCustomer.class, ids, map);
-			renderText("操作成功！！");;
+			renderJson(createSuccessJsonResonse());
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
-			renderText("操作失败！！");
+			renderJson(createErrorJsonResonse("操作失败！"));
 		}
 
 	}

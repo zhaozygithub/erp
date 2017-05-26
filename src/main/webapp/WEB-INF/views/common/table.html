@@ -152,6 +152,7 @@ function getfields(){
 		tableHeaders:cnths,
 		tableFields:ths,
 		queryItem:'',
+		querySql:'',
 		page:p};
 	return ths;
 }
@@ -201,6 +202,7 @@ function setdatacountandtotal(resp){
 	//vpnum.datacount=datacount;
 	vxd.datacount=datacount;
 	requestPara.queryItem=respJson['data']['queryItem'];
+	requestPara.querySql=respJson['data']['querySql'];
 }
 (function initdata(){
 	var xhr=new XMLHttpRequest();

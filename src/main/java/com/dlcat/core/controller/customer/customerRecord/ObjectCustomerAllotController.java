@@ -15,6 +15,7 @@ import com.dlcat.common.entity.TableHeader;
 import com.dlcat.common.utils.DateUtil;
 import com.dlcat.common.utils.OptionUtil;
 import com.dlcat.common.utils.PageUtil;
+import com.dlcat.common.utils.StringUtils;
 import com.dlcat.core.model.CuObjectCustomer;
 import com.dlcat.core.model.CuPossibleCustomer;
 import com.dlcat.core.model.SysMenu;
@@ -23,14 +24,19 @@ import com.dlcat.core.model.SysUser;
 import com.dlcat.core.model.ToCodeLibrary;
 import com.jfinal.aop.Before;
 import com.jfinal.plugin.activerecord.tx.Tx;
-
+/**
+ * @ClassName ObjectCustomerAllotController  
+ * @Description 正式客户分配   
+ * @author liuran  
+ * @time 2017年5月26日上午9:53:05
+ */
 public class ObjectCustomerAllotController extends BaseController {
 
 	
 	public void index() {
 		// 首先注意：此处的列表页面应该是在Tab下面的，所以加载Tab中的url，
 		// Tab的url中需要将Tab的id拼接到url最后
-		// 1.定义列表的表头和字段 注意：字段名称必须是数据库中的实际存在
+		// 定义列表的表头和字段 注意：字段名称必须是数据库中的实际存在
 		// 的字段名称或者虚拟字段名称，如cn_status
 		TableHeader tableHeader = new TableHeader();
 		tableHeader.setFieldNames(new String[] { "id", "name", "phone","cn_type","cn_card_type","card_id",
@@ -40,13 +46,13 @@ public class ObjectCustomerAllotController extends BaseController {
 				"管户人名称", "管户机构编号", "管户机构名称", "客户状态"});
 		// 多选框
 		tableHeader.setMultiple(true);
-		// 2.定义检索区域检索框 注意：字段名称必须是实际存在的字段名称，
+		// 定义检索区域检索框 注意：字段名称必须是实际存在的字段名称，
 		// CNName中文标示这个检索字段的含义，type标示检索框的类型
 		Search search = new Search();
 		search.setFieldNames(new String[] { "id", "name","type" ,"card_type","card_id"});
 		search.setCNNames(new String[] { "客户编号", "名称" ,"客户类型","证件类型","证件编号"});
 		search.setTypes(new String[] { "text", "text" ,"select","select","text"});
-		// 3.定义下拉数据源 如果检索区域中存在select，必须定义下拉数据源
+		// 定义下拉数据源 如果检索区域中存在select，必须定义下拉数据源
 		// 注意：这里的资源必须和表头字段中的一致，可以定义多个
 		Map<String, List<Map>> clListMap = new HashMap<String, List<Map>>();
 		clListMap.put("type", OptionUtil.getOptionListByCodeLibrary(
@@ -57,7 +63,7 @@ public class ObjectCustomerAllotController extends BaseController {
 		DyResponse response = null;
 
 		try {
-			// 4.构造页面结构并返回，注意：第一个参数标示请求列表数据时候的url，必须是存在的
+			// 构造页面结构并返回，注意：第一个参数标示请求列表数据时候的url，必须是存在的
 			// 第二个参数是这个列表数据的名称，如果页面中存在这个导出功能，这个名称就是导出的
 			// excel文件的文件名称
 			response = PageUtil.createTablePageStructure(
@@ -67,18 +73,18 @@ public class ObjectCustomerAllotController extends BaseController {
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
-		// 5.返回数据到页面 response不可改变,页面名称也不可改变
+		// 返回数据到页面 response不可改变,页面名称也不可改变
 		this.setAttr("response", response);
 		this.render("common/table.html");
 	}
 
 	public void data() {
-		// .从页面获取参数 condition参数名称固定 key=condition 格式为：name:ms,age:24
+		// 从页面获取参数 condition参数名称固定 key=condition 格式为：name:ms,age:24
 		// 获取分页参数 固定格式 key=page
 		String conditation = this.getPara("condition");
 		String page = this.getPara("page");
 		System.out.println("查询条件：" + conditation);
-		// .获取参数Map，处理字符串拼接
+		// 获取参数Map，处理字符串拼接
 		Map whereMap = super.getWhereMap(conditation);
 		// 定义查询对象
 		QueryItem item = new QueryItem();
@@ -111,11 +117,7 @@ public class ObjectCustomerAllotController extends BaseController {
 		whereList.add(new QueryWhere("belong_org_id", LIKE_RIGHT,getCurrentUserBelongID()));
 		item.setOrder("update_time desc");
 		item.setWhereList(whereList);
-		// 4.获取数据 格式为List<Record>
 		DyResponse dyResponse = super.getTableData(item, page);
-		// 5.返回数据到页面 response 固定值 不可改变
-		this.setAttr("response", dyResponse);
-
 		renderJson(dyResponse);
 	}
 
@@ -129,7 +131,7 @@ public class ObjectCustomerAllotController extends BaseController {
 		String type = getPara(0);
 		String id = getPara("id");
 		if(type == null){
-			renderHtml("<h1>数据库错误，请联系管理员。</h1>");
+			renderJson(createErrorJsonResonse("数据库错误，请联系管理员！"));
 			return;
 		}
 		List<FormField> formFieldList = new ArrayList<FormField>();
@@ -145,16 +147,20 @@ public class ObjectCustomerAllotController extends BaseController {
 
 		if (type.equals("add")) {
 			formFieldList.add(new FormField("type", "客户类型", "select", "",OptionUtil.getOptionListByCodeLibrary("CustomerType", true, ""),true));
-			response = PageUtil.createFormPageStructure("正式客户分配添加",formFieldList, "/distribution/toAdd");
+			//由于代码相同，这里使用CustomerRecordControllor里面的toAdd方法去添加，如果有差异可以使用本类的toAdd方法去改造
+			//response = PageUtil.createFormPageStructure("正式客户分配添加",formFieldList, "/distribution/toAdd");
+			response = PageUtil.createFormPageStructure("正式客户分配添加",formFieldList, "/record/toAdd");
 		} else if (type.equals("edit")) {
 			if (id==null || id.equals("")) {
-				renderHtml("<h1>请先选择一条记录。</h1>");
+				renderJson(createErrorJsonResonse("请先选择一条记录！"));
 				return;
 			}
-			response = PageUtil.createFormPageStructure("正式客户分配编辑",formFieldList, "/distribution/toEdit");
+			//由于代码相同，这里使用CustomerRecordControllor里面的toEdit方法去更新，如果有差异可以使用本类的toEdit方法去改造
+			//response = PageUtil.createFormPageStructure("正式客户分配编辑",formFieldList, "/distribution/toEdit");
+			response = PageUtil.createFormPageStructure("正式客户分配编辑",formFieldList, "/record/toEdit");
 		} else if (type.equals("detail")) {
 			if (id==null || id.equals("")) {
-				renderHtml("<h1>请先选择一条记录。</h1>");
+				renderJson(createErrorJsonResonse("请先选择一条记录！"));
 				return;
 			}
 			formFieldList.add(new FormField("type", "客户类型", "select", "",OptionUtil.getOptionListByCodeLibrary("CustomerType", true, "")));
@@ -164,22 +170,39 @@ public class ObjectCustomerAllotController extends BaseController {
 					formFieldList, "/detail");
 		}
 		if (response == null) {
-			renderHtml("<h1>数据库错误，请联系管理员。</h1>");
+			renderJson(createErrorJsonResonse("数据库错误，请联系管理员！"));
 			return;
 		}
 		this.setAttr("response", response);
 		this.render("common/form.html");
 	}
 
-	public void toAdd() {
+	/*public void toAdd() {
 		SysUser user = getSessionAttr("user");
+		String card_type =getPara("card_type");//证件类型
+		String card_id =getPara("card_id");//证件编号
 		String type = getPara("type");//客户类型
-		CuObjectCustomer cuObjectCustomer = getModel(CuObjectCustomer.class, "");
-		if (type.equals("1")) {
-			cuObjectCustomer.set("id", "COR" + DateUtil.getCurrentTime());//公司客户
+		if (StringUtils.isBlank(card_type)) {
+			renderJson(createErrorJsonResonse("证件类型不能为空，请重新输入"));
+			return;
 		}
-		if(type.equals("2")) {
-			cuObjectCustomer.set("id", "IND" + DateUtil.getCurrentTime());//个人客户
+		if (StringUtils.isBlank(card_id)) {
+			renderJson(createErrorJsonResonse("证件编号不能为空，请重新输入"));
+			return;
+		}
+		
+		CuObjectCustomer cuObjectCustomer = getModel(CuObjectCustomer.class, "");
+		
+		if (StringUtils.isNotBlank(type)) {
+			if (type.equals("1")) {
+				cuObjectCustomer.set("id", "COR" + DateUtil.getCurrentTime());//公司客户
+			}
+			if(type.equals("2")) {
+				cuObjectCustomer.set("id", "IND" + DateUtil.getCurrentTime());//个人客户
+			}
+		}else {
+			renderJson(createErrorJsonResonse("客户类型不能为空，请重新输入"));
+			return;
 		}
 		cuObjectCustomer.set("input_time", DateUtil.getCurrentTime());
 		cuObjectCustomer.set("update_time", DateUtil.getCurrentTime());
@@ -193,26 +216,25 @@ public class ObjectCustomerAllotController extends BaseController {
 
 		try {
 			cuObjectCustomer.save();
-			renderHtml("<h1>操作成功！！</h1>");
+			renderJson(createSuccessJsonResonse());
 		} catch (Exception e) {
-			renderHtml("<h1>操作失败！！</h1>");
+			renderJson(createErrorJsonResonse("操作失败！"));
 		}
-	}
+	}*/
 
 	/**
 	 * 删除
 	 * @author liuran
 	 * @time 2017年5月17日 下午4:44:10 void
 	 */
-	@Before(Tx.class)
+	/*@Before(Tx.class)
 	public void del() {
 		String id=getPara("id");
 		if (id==null || id.equals("")) {
-			renderText("请选择至少一条记录！！！");
+			renderJson(createErrorJsonResonse("请选择至少一条记录！"));		
 			return;
-		}
-		
-		String[] ids = id.split(",");		
+		}		
+		String[] ids = id.split(",");
 		// 批量删除
 		CuObjectCustomer cuObjectCustomer = new CuObjectCustomer();
 
@@ -220,17 +242,18 @@ public class ObjectCustomerAllotController extends BaseController {
 			for (String id1 : ids) {
 				cuObjectCustomer.deleteById(id1);
 			}
-			renderText("操作成功！！");
+			renderJson(createSuccessJsonResonse());
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
-			renderText("操作失败！！");
+			renderJson(createErrorJsonResonse("操作失败！"));
 		}
 	}
-
+	
 	public void toEdit() {
 		SysUser user = getSessionAttr("user");
 		CuObjectCustomer cuObjectCustomer = getModel(CuObjectCustomer.class, "");
+		
 		try {
 			cuObjectCustomer.set("update_time", DateUtil.getCurrentTime());
 			cuObjectCustomer.set("update_user_id", user.getInt("id"));
@@ -238,13 +261,13 @@ public class ObjectCustomerAllotController extends BaseController {
 			cuObjectCustomer.set("update_org_id", user.getInt("belong_org_id"));
 			cuObjectCustomer.set("update_org_name", user.getStr("belong_org_name"));
 			cuObjectCustomer.update();
-			renderHtml("<h1>操作成功！！</h1>");
+			renderJson(createSuccessJsonResonse());
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
-			renderHtml("<h1>操作失败！！</h1>");
+			renderJson(createErrorJsonResonse("操作失败！"));
 		}
-	}
+	}*/
 	
 	
 	/**
@@ -260,7 +283,7 @@ public class ObjectCustomerAllotController extends BaseController {
 		Integer id=getParaToInt("id");
 		
 		if (id==null || id.equals("")) {
-			renderText("请选择至少一条记录！！！");
+			renderJson(createErrorJsonResonse("请选择至少一条记录！"));
 			return;
 		}
 		SysUser user = getSessionAttr("user"); //当前用户
@@ -277,11 +300,10 @@ public class ObjectCustomerAllotController extends BaseController {
 		map.put("update_org_name", user.getStr("belong_org_name"));
 		try {
 			updateByIds(CuObjectCustomer.class, ids, map);
-			renderText("操作成功！！");
+			renderJson(createSuccessJsonResonse());
 		} catch (Exception e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
-			renderText("操作失败！！");
+			renderJson(createErrorJsonResonse("操作失败！"));
 		}
 	}
 

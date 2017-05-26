@@ -16,30 +16,31 @@ import com.jfinal.plugin.activerecord.ActiveRecordPlugin;
 public class _MappingKit {
 
 	public static void mapping(ActiveRecordPlugin arp) {
-		arp.addMapping("cu_corp_info", "cu_corp_id", CuCorpInfo.class);
-		arp.addMapping("cu_ind_info", "cu_ind_id", CuIndInfo.class);
-		arp.addMapping("cu_object_customer", "id", CuObjectCustomer.class);
-		arp.addMapping("cu_partners", "id", CuPartners.class);
-		arp.addMapping("cu_possible_customer", "id", CuPossibleCustomer.class);
-		arp.addMapping("cu_property", "id", CuProperty.class);
-		arp.addMapping("flow_data", "id", FlowData.class);
-		arp.addMapping("flow_model", "id", FlowModel.class);
-		arp.addMapping("flow_node", "node_no", FlowNode.class);
-		arp.addMapping("flow_object", "object_no", FlowObject.class);
-		arp.addMapping("flow_task", "task_no", FlowTask.class);
-		arp.addMapping("loan_apply_approve", "id", LoanApplyApprove.class);
-		arp.addMapping("loan_apply_approve_data", "id", LoanApplyApproveData.class);
-		arp.addMapping("loan_business_category", "id", LoanBusinessCategory.class);
-		arp.addMapping("loan_product_category", "id", LoanProductCategory.class);
-		arp.addMapping("loan_repay_type", "id", LoanRepayType.class);
-		arp.addMapping("sys_admin_log",  "id",SysAdminLog.class);
-		arp.addMapping("sys_menu", "id", SysMenu.class);
-		arp.addMapping("sys_org", "org_id", SysOrg.class);
-		arp.addMapping("sys_role", "id", SysRole.class);
-		arp.addMapping("sys_user", "id", SysUser.class);
+		arp.addMapping("cu_corp_info", "cu_corp_id", CuCorpInfo.class);//对公客户详情表  
+		arp.addMapping("cu_ind_info", "cu_ind_id", CuIndInfo.class);//个人客户详情表 
+		arp.addMapping("cu_object_customer", "id", CuObjectCustomer.class);//正式客户表
+		arp.addMapping("cu_partners", "id", CuPartners.class);//合作渠道客户表
+		arp.addMapping("cu_possible_customer", "id", CuPossibleCustomer.class);//意向客户表
+		arp.addMapping("cu_property", "id", CuProperty.class);//客户财产表
+		arp.addMapping("flow_data", "id", FlowData.class);//流程数据表
+		arp.addMapping("flow_model", "id", FlowModel.class);//流程模型表
+		arp.addMapping("flow_node", "node_no", FlowNode.class);//流程节点表
+		arp.addMapping("flow_object", "object_no", FlowObject.class);//流程对象表
+		arp.addMapping("flow_task", "task_no", FlowTask.class);//流程任务表
+		arp.addMapping("loan_apply_approve", "id", LoanApplyApprove.class);//借款申请审批表
+		arp.addMapping("loan_apply_approve_data", "id", LoanApplyApproveData.class);//借款申请资料表
+		arp.addMapping("loan_business_category", "id", LoanBusinessCategory.class);//借款业务种类表
+		arp.addMapping("loan_product_category", "id", LoanProductCategory.class);//借款产品类型表
+		arp.addMapping("loan_repay_type", "id", LoanRepayType.class);//还款类型表
+		arp.addMapping("sys_admin_log",  "id",SysAdminLog.class);//用户操作日志表
+		arp.addMapping("sys_login_log",  "id",SysLoginLog.class);//用户登录日志表
+		arp.addMapping("sys_menu", "id", SysMenu.class);//菜单表
+		arp.addMapping("sys_org", "org_id", SysOrg.class);//机构表
+		arp.addMapping("sys_role", "id", SysRole.class);//角色表
+		arp.addMapping("sys_user", "id", SysUser.class);//用户表
 		// Composite Primary Key order: code_no,item_no
-		arp.addMapping("to_code_library", "code_no,item_no", ToCodeLibrary.class);
-		arp.addMapping("to_task", "id", ToTask.class);
+		arp.addMapping("to_code_library", "code_no,item_no", ToCodeLibrary.class);//数据字典代码表
+		arp.addMapping("to_task", "id", ToTask.class);//定时任务表
 		
 	}
 }

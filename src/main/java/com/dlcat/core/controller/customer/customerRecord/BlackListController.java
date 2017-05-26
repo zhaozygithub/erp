@@ -15,13 +15,19 @@ import com.dlcat.common.utils.DateUtil;
 import com.dlcat.common.utils.OptionUtil;
 import com.dlcat.common.utils.PageUtil;
 import com.dlcat.core.model.CuObjectCustomer;
+import com.dlcat.core.model.SysAdminLog;
 import com.dlcat.core.model.SysMenu;
 import com.dlcat.core.model.SysUser;
 import com.dlcat.core.model.ToCodeLibrary;
 import com.jfinal.aop.Before;
 import com.jfinal.kit.JMap;
 import com.jfinal.plugin.activerecord.tx.Tx;
-
+/**
+ * @ClassName BlackListController  
+ * @Description 黑名单客户管理    
+ * @author liuran  
+ * @time 2017年5月26日上午9:51:32
+ */
 public class BlackListController extends BaseController {
 	public void index() {
 		// 首先注意：此处的列表页面应该是在Tab下面的，所以加载Tab中的url，
@@ -98,11 +104,7 @@ public class BlackListController extends BaseController {
 		whereList.add(new QueryWhere("belong_org_id", LIKE_RIGHT, getCurrentUserBelongID()));
 		item.setOrder("update_time desc");
 		item.setWhereList(whereList);
-		// 获取数据 格式为List<Record>
 		DyResponse dyResponse = super.getTableData(item, page);
-		// 返回数据到页面 response 固定值 不可改变
-		this.setAttr("response", dyResponse);
-
 		renderJson(dyResponse);
 	}
 
@@ -115,8 +117,9 @@ public class BlackListController extends BaseController {
 	@Before(Tx.class)
 	public void btnRemoveBlackList() {
 		String id=getPara("id");
+		String btnID=getPara("btnid");
 		if (id==null || id.equals("")) {
-			renderText("请选择至少一条记录！！！");
+			renderJson(createErrorJsonResonse("请选择至少一条记录！"));
 			return;
 		}
 		
@@ -134,11 +137,11 @@ public class BlackListController extends BaseController {
 		
 		try {
 			updateByIds(CuObjectCustomer.class, ids, map);
-			renderText("操作成功！！");
+			SysAdminLog.SetAdminLog(user, btnID, "移除黑名单客户id："+id);
+			renderJson(createSuccessJsonResonse());
 		} catch (Exception e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
-			renderText("操作失败！！");
+			renderJson(createErrorJsonResonse("操作失败！"));
 		}
 	}
 

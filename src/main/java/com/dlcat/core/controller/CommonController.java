@@ -9,6 +9,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.apache.shiro.codec.Base64;
+
 import com.dlcat.common.BaseController;
 import com.dlcat.common.entity.QueryItem;
 import com.dlcat.common.utils.DateUtil;
@@ -52,7 +54,7 @@ public class CommonController extends BaseController {
 				tableFields = tableFields.substring(tableFields.indexOf("[")+1, tableFields.lastIndexOf("]"));
 			}
 			//获取json格式的QueryItem字符串
-			String queryItem = requestParaMap.get("queryItem").toString();
+			String queryItem =Base64.decodeToString( requestParaMap.get("queryItem").toString());
 			//获取当前分页数 为空则为默认值1
 			int currentPage = requestParaMap.get("currentPage") == null ?  1 :
 								Integer.parseInt(requestParaMap.get("page").toString());
@@ -102,12 +104,5 @@ public class CommonController extends BaseController {
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
-	}
-	public static void main(String[] args) {
-		String a = "[*[*]*]";
-		System.out.println(a.indexOf("["));
-		System.out.println(a.lastIndexOf("]"));
-		
-		System.out.println(a.substring(1,0));
 	}
 }

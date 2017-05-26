@@ -32,6 +32,7 @@ public class _MappingKit {
 		arp.addMapping("loan_business_category", "id", LoanBusinessCategory.class);
 		arp.addMapping("loan_product_category", "id", LoanProductCategory.class);
 		arp.addMapping("loan_repay_type", "id", LoanRepayType.class);
+		arp.addMapping("sys_admin_log",  "id",SysAdminLog.class);
 		arp.addMapping("sys_menu", "id", SysMenu.class);
 		arp.addMapping("sys_org", "org_id", SysOrg.class);
 		arp.addMapping("sys_role", "id", SysRole.class);

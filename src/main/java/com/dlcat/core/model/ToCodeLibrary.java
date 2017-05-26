@@ -43,6 +43,7 @@ public class ToCodeLibrary extends BaseModel<ToCodeLibrary> {
 				sql = sql.substring(0, sql.length()-3);
 			}
 			sql +=whereList;
+			sql += "order by sort_no";
 			codeLibraries = getCodeLibrariesBySQL(sql);
 		}
 		return codeLibraries;

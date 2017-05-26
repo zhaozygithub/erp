@@ -1,57 +1,67 @@
 
 #@jquery()
-<script type="text/javascript">
-/* clear();
-function clear(){
-	$("#userNamelabel").text("") 
-} */
- function check(){  
-	 var txt_userName = document.forms["setForm"]["userName"].value;
-	 var txt_oldpassword = document.forms["setForm"]["oldPassword"].value;
-	 var txt_newpassword = document.forms["setForm"]["newPassword"].value;
-	 var txt_newpassword2 = document.forms["setForm"]["newPassword2"].value;
-	 var txt_phone = document.forms["setForm"]["phone"].value;
-  //  debugger;
-   /*  $("#firstnameLabel").text("")  
-    $("#lastnameLabel").text("") */  
+<script type="text/javascript">  
+$("#submit").click(function () { //按钮单击事件
+    
+    var txt_userName = document.forms["setForm"]["userName"].value;
+    var txt_oldpassword = document.forms["setForm"]["oldPassword"].value;
+    var txt_newpassword = document.forms["setForm"]["newPassword"].value;
+    var txt_newpassword2 = document.forms["setForm"]["newPassword2"].value;
+    var txt_phone = document.forms["setForm"]["phone"].value;
+    
     var pattern = /^1[34578]\d{9}$/;
-    var isSuccess = 1;  
-   // debugger;
+    
     if(txt_userName.length == 0){
-    	$("#userNamelabel").text(" 用户名不能为空！")  
-        /* $("#userNamelabel").css({"color":"red"}); */
-    	isSuccess = 0;
+        $("#userNamelabel").text(" 用户名不能为空，请重新输入！ ") ;
+        return;
     }
     
     if(txt_oldpassword == txt_newpassword && txt_oldpassword.length !=0)  
     {  
         $("#passwordlabel1").text("新密码不能和旧密码相同，请重新输入！")  
-        isSuccess = 0;  
+        return; 
     }  
     
     if(txt_newpassword != txt_newpassword2)  
     {  
         $("#passwordlabel2").text("两次输入新密码不同，请重新输入！")  
-        isSuccess = 0;  
+        return;
     }  
-   // pattern.test(txt_phone) ||
+   
     if (! txt_phone.match("^1[3|4|5|7|8]([0-9])\\d{8}$") ) {
-    	$("#phonelabel").text("手机号码格式不正确 ，请重新输入！")  
-        isSuccess = 0;
+        $("#phonelabel").text("手机号码格式不正确 ，请重新输入！")  
+        return;
     } 
-    
-    if(isSuccess == 1){
-    	return true; 
-    }  
-    return false;
-    }  
+    debugger;
+    //开始发送数据
+    $.ajax
+    ({ //请求登录处理页
+     type:"POST",
+     url: "/set/submit", //处理url 
+     
+     //传送请求数据
+     data: {userName:txt_userName,oldPassword:txt_oldpassword,
+    	 newPassword:txt_newpassword,newPassword2:txt_newpassword2,phone:txt_phone},
+     success: function (data) { //登录成功后返回的数据
+      //根据返回值进行状态显示  
+     $("#userNamelabel").text(data.msguserName) ;
+     $("#passwordlabel1").text(data.msgpassword1) ;
+     $("#passwordlabel2").text(data.msgpassword2) ;
+     $("#phonelabel").text(data.msgphone) ;
+     if(data.msg !=null){
+    	 window.location.reload(); 
+     }
+    	    
+     }
+    })
+   })
 </script> 
     <div class="modal-header">
           <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
           <h4 class="modal-title" id="mySmallModalLabel">用户信息</h4>
   	</div>
     <div id="main" class="modal-body">
-	   <form class="form-horizontal" role="form" name="setForm" action="/set/submit"  method="post" onsubmit="return check()">
+	   <form class="form-horizontal" role="form" name="setForm">
 		   <input type="hidden" name="user.id" value="#(user.id ??)">
 		   
 		    <div  class="form-group">
@@ -99,7 +109,7 @@ function clear(){
 		    <br>
 		    <div class="form-group">
 		    	<div class="col-md-4 col-md-offset-8">
-		    	<button type="submit" class="btn btn-primary" style="padding:6px 12px;">更新</button>
+		    	<button id="submit" type="button" class="btn btn-primary" style="padding:6px 12px;">更新</button>
 	   	        <button type="button"  class="btn btn-default" data-dismiss="modal" style="padding:6px 12px;">关闭</button>
 		    	</div>
 		    </div>  

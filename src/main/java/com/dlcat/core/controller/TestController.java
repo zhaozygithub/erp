@@ -1,9 +1,12 @@
 package com.dlcat.core.controller;
 
 import java.util.ArrayList;
+import java.util.Enumeration;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+
+import javax.servlet.http.HttpServletRequest;
 
 import com.dlcat.common.BaseController;
 import com.dlcat.common.entity.DyResponse;
@@ -21,6 +24,7 @@ import com.dlcat.service.flow.FlowService;
 import com.dlcat.service.flow.impl.FlowServiceImpl;
 import com.jfinal.plugin.activerecord.Db;
 import com.jfinal.plugin.activerecord.Record;
+import com.jfinal.upload.UploadFile;
 
 public class TestController extends BaseController{
 	public void index(){
@@ -35,15 +39,16 @@ public class TestController extends BaseController{
 		//2.定义检索区域检索框 注意：字段名称必须是实际存在的字段名称，
 		//CNName中文标示这个检索字段的含义，type标示检索框的类型
 		Search search = new Search();
-		search.setFieldNames(new String[]{"name","status","remark","add_time"});
-		search.setCNNames(new String[]{"名称","是否有效","备注","时间"});
-		search.setTypes(new String[]{"text","select","select","date"});
+		search.setFieldNames(new String[]{"name","status","remark","add_time","testM"});
+		search.setCNNames(new String[]{"名称","是否有效","备注","时间","测试"});
+		search.setTypes(new String[]{"text","select","select","date","select"});
 		//3.定义下拉数据源 如果检索区域中存在select，必须定义下拉数据源
 		//注意：这里的资源必须和表头字段中的一致，可以定义多个
 		Map<String,List<Map>> clListMap = new HashMap<String, List<Map>>();
 
 		clListMap.put("status", OptionUtil.getOptionListByCodeLibrary("YesNo",true,null));
-		clListMap.put("remark", OptionUtil.getOptionListByOther("id", "name", "loan_business_category", null));
+		//clListMap.put("remark", OptionUtil.getOptionListByOther("id", "name", "loan_business_category", null));
+		clListMap.put("testM", OptionUtil.getOptionListByManual(new String[]{"shang","xia","wan"}, new String[]{"上午","下午","晚上"}));
 		/*clListMap.put("status", ToCodeLibrary.getCodeLibrariesBySQL("YesNo",true,null));*/
 		search.setOptionListMap(clListMap);
 		
@@ -97,9 +102,9 @@ public class TestController extends BaseController{
 	   //4.获取数据  格式为List<Record>
 	   DyResponse dyResponse = super.getTableData(item , page);
 	   //5.返回数据到页面	response 固定值 不可改变
-	   this.setAttr("response", dyResponse);
+	   //this.setAttr("response", dyResponse);
 	   
-	   renderJson();
+	   renderJson(dyResponse);
    }
    
    public void formTest(){
@@ -109,9 +114,21 @@ public class TestController extends BaseController{
 	   formFieldGroup.add(new FormField("textarea","ar","textarea","1\n2"));
 	   formFieldGroup.add(FormField.createFormField("名字","name2","text","",null,true) );
 	   formFieldGroup.addAll(FormBuilder.formBuilderTest());
-	   DyResponse response = PageUtil.createFormPageStructure("表单测试", formFieldGroup,  "aaa");
+	   DyResponse response = PageUtil.createFormPageStructure("表单测试", formFieldGroup,  "/test/testReceive");
        this.setAttr("response", response);
-       this.render("common/form_editarea.html");
+       this.render("common/form.html");
+   }
+   public void testReceive() {
+	   HttpServletRequest  req=getRequest();
+	   Enumeration<String> es=getRequest().getHeaderNames();
+	   Map<String, String[]> map=getParaMap();
+	   System.out.println(map);
+	   //renderJson(map);
+	   try{List<UploadFile> lstFiles=getFiles();}
+	   catch(Exception e){e.printStackTrace();}
+	   map=getParaMap();
+	   System.out.println(map);
+	   renderJson(map);
    }
    public void mm() throws Exception{
 	   String aa = this.getPara("aa", "aa");

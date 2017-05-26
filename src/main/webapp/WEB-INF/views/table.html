@@ -3,44 +3,26 @@
 <head>
 <meta charset="UTF-8">
 <title>show Table</title>
-<script type="text/javascript" src="/js/jqueryUI/jquery.js"></script>
+<!--<script type="text/javascript" src="/js/jqueryUI/jquery.js"></script>
 <script type="text/javascript" src="/js/jqueryUI/jquery-ui.js"></script>
 <link type="text/css" rel="stylesheet" href="/js/jqueryUI/jquery-ui.css">
 <script type="text/javascript" src="/js/table2excel.js"></script>
-
+ -->
 </head>
 <body>
 
 <!-- ui-dialog -->
-<div id="dialog" title="Dialog Title">
+<!-- <div id="dialog" title="Dialog Title">
 	<p>Lorem ipsum dolor sit amet, consectetur adipisicing mco laboris nisi ut aliquip ex ea commodo consequat.</p>
-</div>
+</div> -->
 
 	<h3>图片上传</h3>
-	###@pluploadTag()
-
-<table border="2px">
-<tbody>
-<tr class="h"><td>11</td><td>12</td></tr>
-<tr><td>21</td><td>22</td></tr>
-</tbody>
-</table>
-
+	#@pluploadTag()
 	
 	<script type="text/javascript">
 		$(function() {
-			
-			$("tr").click(function () {
-				alert("tr");
-			});
-			
-			$(".h").click(function () {
-				alert("h");
-			});
-			
-			
 
-			$("#dialog").dialog({
+			/* $("#dialog").dialog({
 				autoOpen: true,
 				width: 400,
 				buttons: [
@@ -48,16 +30,18 @@
 						text: "Ok",
 						click: function() {
 							$(this).dialog( "close" );
+							alert("OK");
 						}
 					},
 					{
 						text: "Cancel",
 						click: function() {
 							$(this).dialog( "close" );
+							alert("Cancel");
 						}
 					}
 				]
-			});
+			}); */
 
 			
 		});

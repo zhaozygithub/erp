@@ -37,22 +37,41 @@ public class FlowNode extends BaseModel<FlowNode> {
 	}
 	
 	/**
-	 * 根据流程对象编号获取流程节点
+	 * @Title getFlowNodeByObjectNo 
+	 * @Description 根据流程编号获取流程节点
+	 * @param objectNo 流程编号
+	 * @return List<FlowNode> 节点list
+	 * @author liuran 
+	 * @time 2017年5月24日下午1:45:41
 	 */
 	public static  List<FlowNode> getFlowNodeByObjectNo(String objectNo) {
-	    int modelId= FlowObject.getFlowObjectsById(objectNo).getInt("flow_model_id");	
-		return getFlowNodeByModelId(modelId);
+		List<FlowNode> flowNodeList = null;
+		if (StringUtils.isNotBlank(objectNo)) {
+			int modelId= FlowObject.getFlowObjectsById(objectNo).getInt("flow_model_id");
+			flowNodeList = getFlowNodeByModelId(modelId);
+			return flowNodeList;
+		}else {
+			return flowNodeList;
+		}
+	    
 	}
 	/**
-	 * 根据流程模型编号获取流程节点
-	 * @author liuran
-	 * @time 2017年5月4日 下午12:14:46
-	 * @param modelId
-	 * @return List<FlowNode>
+	 * @Title getFlowNodeByModelId 
+	 * @Description 根据流程模型编号获取流程节点
+	 * @param modelId 流程模型编号 
+	 * @return List<FlowNode> 节点list
+	 * @author liuran 
+	 * @time 2017年5月24日下午1:46:36
 	 */
-	public static List<FlowNode> getFlowNodeByModelId(int modelId){
-		List<FlowNode> nodes=FlowNode.dao.find("select * from flow_node where flow_model_id = ? AND status = '1' ORDER BY node_sort_order ASC",modelId);
-		return nodes;
+	public static List<FlowNode> getFlowNodeByModelId(Integer modelId){
+		List<FlowNode> flowNodeList = null;
+		if (modelId != null) {
+			flowNodeList=FlowNode.dao.find("select * from flow_node where flow_model_id = ? AND status = '1' ORDER BY node_sort_order ASC",modelId);
+			return flowNodeList;
+		}else {
+			return flowNodeList;
+		}
+		
 	}
 	
 	/**

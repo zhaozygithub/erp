@@ -85,6 +85,7 @@ public class FormField implements Serializable {
 	//构造方法
 	public FormField(){
 	}
+	//推荐使用表态方法createFormField来构造,此方法支持输入的内容的校验.
 	/**
 	 * 构造添加函数.最核心的三个参数,适用于除select和radio以外的构造
 	 * @param name
@@ -152,7 +153,34 @@ public class FormField implements Serializable {
 	 * @return
 	 */
 	public static FormField createFormField(String name ,String text,String type,String value,List<Map> options,boolean isRequired){
+		FormField formField=createFormField( name , text, type, value, options, isRequired,null);
+		return formField;
+		
+	}
+	public static FormField createFormField(String name ,String text,String type,String value,boolean isRequired){
+		FormField formField=createFormField( name , text, type, value, null, isRequired,null);
+		return formField;
+		
+	}
+	/**
+	 * 
+	 * @param name
+	 * @param text
+	 * @param type
+	 * @param value
+	 * @param options 此参数仅用于select和radio类,非select和radio类请设为null
+	 * @param isRequired
+	 * @param inType 校验类型分三种:decimal digital string 分别是小数 整数 字符串
+	 * @return
+	 */
+	public static FormField createFormField(String name ,String text,String type,String value,boolean isRequired,String inType){
+		FormField formField=createFormField(name, text, type, value, null, isRequired, inType) ;
+		return formField;
+		
+	}
+	public static FormField createFormField(String name ,String text,String type,String value,List<Map> options,boolean isRequired,String inType){
 		FormField formField=new FormField( name , text, type, value, options, isRequired);
+		formField.setInType(inType);
 		return formField;
 		
 	}

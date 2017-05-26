@@ -141,15 +141,23 @@ public class ExportExcelUtil {
 
 		// 标题总列数
 		int colNum = heards.getPhysicalNumberOfCells();
+		
 		// 标题总行数
 		int rowNum = sheet.getLastRowNum();
 		String column = "";
 		for (int i = 1; i <= rowNum; i++) {
 			row = sheet.getRow(i);
 			Record record = new Record();
+			//给每一列赋值
 			for (int j = 0; j < colNum; j++) {
 				column = heards.getCell(j).getStringCellValue();
-				record.set(map.get(column), getCellFormatValue(row.getCell(j)));
+				//有可能map中找不到此列名
+				try {
+					record.set(map.get(column), getCellFormatValue(row.getCell(j)));
+				} catch (Exception e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
 			}
 			recordList.add(record);
 		}

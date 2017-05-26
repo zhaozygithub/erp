@@ -24,11 +24,22 @@ public class SysRole extends BaseModel<SysRole> {
 	}
 	
 	/**
-	 * 根据用户id获取用户角色名称
+	 * @Title getRoleNameByUserId 
+	 * @Description 根据用户id获取用户角色名称
+	 * @param userId 用户id
+	 * @return String 所属机构名称
+	 * @author liuran 
+	 * @time 2017年5月24日下午1:58:42
 	 */
-	public static String getRoleNameByUserId(int userId){
-		SysUser user = SysUser.dao.findById(userId);
-		String rolename = SysRole.dao.findById(user.getInt("role_id")).getStr("role_name");
-		return rolename;
+	public static String getRoleNameByUserId(Integer userId){
+		String roleName = null;
+		if (userId != null) {
+			SysUser user = SysUser.dao.findById(userId);
+			roleName = SysRole.dao.findById(user.getInt("role_id")).getStr("role_name");
+			return roleName;
+		}else {
+			return roleName;
+		}
+		
 	}
 }

@@ -8,4 +8,14 @@ import com.dlcat.common.BaseModel;
 @SuppressWarnings("serial")
 public class LoanProductCategory extends BaseModel<LoanProductCategory> {
 	public static final LoanProductCategory dao = new LoanProductCategory().dao();
+	/**
+	 * 根据id获取借款产品记录
+	 * @param id
+	 * @return
+	 * @author masai
+	 * @time 2017年5月24日 下午2:57:50
+	 */
+	public static LoanProductCategory getLoanProductById(Integer id){
+		return	(id == null || id < 0) ? null : LoanProductCategory.dao.findById(id);
+	}
 }

@@ -182,7 +182,23 @@ public class BaseModel<M extends Model<M>> extends Model<M> implements IBean {
 	public int baseUpdate(Class<? extends Model> clazz ,String primaryKey , Record record){
 		int result = 0 ;
 		try {
-			result = Db.update(TableMapping.me().getTable(clazz).getName(), primaryKey, record)  == true ? 1 : 0;
+			result = Db.update(TableMapping.me().getTable(clazz).getName(), primaryKey, record) == true ? 1 : 0;
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return result;
+	}
+	/**
+	 * 通过model更新记录
+	 * @param entity
+	 * @return
+	 * @author masai
+	 * @time 2017年5月23日 下午12:30:31
+	 */
+	public int baseUpdateByEntity(Model entity){
+		int result = 0 ;
+		try {
+			result = entity.update() == true ? 1 : 0;
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -212,6 +228,22 @@ public class BaseModel<M extends Model<M>> extends Model<M> implements IBean {
 		int result = 0 ;
 		try {
 			result = Db.save(TableMapping.me().getTable(clazz).getName(), primaryKey, record)  == true ? 1 : 0;
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return result;
+	}
+	/**
+	 * 通过model插入记录
+	 * @param entity
+	 * @return
+	 * @author masai
+	 * @time 2017年5月23日 下午12:27:51
+	 */
+	public int baseInsertByEntity(Model entity){
+		int result = 0 ;
+		try {
+			result = entity.save() == true ? 1 : 0;
 		} catch (Exception e) {
 			e.printStackTrace();
 		}

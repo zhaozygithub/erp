@@ -1,5 +1,6 @@
 package com.dlcat.core.controller.index;
 
+import java.net.SocketException;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
@@ -8,23 +9,21 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import com.dlcat.core.model.FlowModel;
-import com.dlcat.core.model.FlowNode;
-import com.dlcat.core.model.FlowTask;
+import com.dlcat.common.utils.DateUtil;
+import com.dlcat.common.utils.IpUtil;
+import com.dlcat.core.Interceptor.SSOJfinalInterceptor;
 import com.dlcat.core.model.SysMenu;
 import com.dlcat.core.model.SysOrg;
 import com.dlcat.core.model.SysRole;
 import com.dlcat.core.model.SysUser;
 import com.dlcat.service.echarts.IndexEchartsService;
 import com.dlcat.service.echarts.impl.IndexEchartsImpl;
+import com.jfinal.aop.Before;
 import com.jfinal.captcha.CaptchaRender;
 import com.jfinal.core.Controller;
 import com.jfinal.kit.HashKit;
 import com.jfinal.kit.JsonKit;
 import com.jfinal.plugin.activerecord.Db;
-import com.jfinal.plugin.activerecord.Record;
-import com.jfinal.plugin.activerecord.TableMapping;
-import com.jfinal.template.stat.ast.For;
 
 /** 
 * @author zhaozhongyuan
@@ -32,12 +31,13 @@ import com.jfinal.template.stat.ast.For;
 * @Description: TODO  
 */
 public class IndexController extends Controller {
-	
+
 	private IndexEchartsService indexEchartsService=new IndexEchartsImpl();
 
 	/**
 	 * 默认方法
 	 */
+	@Before(SSOJfinalInterceptor.class)
 	public void index() {
 		SysUser user = (SysUser) getSessionAttr("user");
 		if (user != null) {
@@ -58,6 +58,7 @@ public class IndexController extends Controller {
 		setAttr("message", messageMap);
 		setAttr("orgName", SysOrg.getNameByUserId(userId));
 		setAttr("roleName", SysRole.getRoleNameByUserId(userId));
+		
 		render("/WEB-INF/index.html");
 	}
 	
@@ -144,6 +145,7 @@ public class IndexController extends Controller {
 	 * 登录验证
 	 */
 	public void doLogin() {
+		
 		String loginId = getPara("userName");
 		String loginPwd = getPara("pwd");
 
@@ -190,7 +192,17 @@ public class IndexController extends Controller {
 			toLogin();
 			return;
 		}
-		setSessionAttr("user", user);
+		//验证通过后，登录次数+1 ,并更新登录ip和登录时间
+		String ip = null;
+		try {
+			ip = IpUtil.getRealIp();		
+		} catch (SocketException e) {
+			e.printStackTrace();			
+		}
+		Db.update("update sys_user set login_count = login_count+1 ,last_login_time = ? ,last_login_ip = ? where id =?",DateUtil.getCurrentTime(),ip,user.getInt("id"));
+		SysUser user2 = SysUser.dao.findById(user.getInt("id"));
+		setSessionAttr("user", user2);
+		
 		redirect("/");
 	}
 

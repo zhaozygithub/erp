@@ -25,4 +25,17 @@ public class LoanApplyApprove extends BaseModel<LoanApplyApprove>{
 	public static LoanApplyApprove getLoanApplyApproveById(String loanApplyId){
 		return StringUtils.isNotBlank(loanApplyId) ? LoanApplyApprove.dao.findById(loanApplyId) : null;
 	}
+	/**
+	 * 判断借款申请名称是否存在
+	 * @param loanName
+	 * @return
+	 * @author masai
+	 * @time 2017年5月23日 下午6:06:21
+	 */
+	public static Boolean isLoanApplyNameExist(String loanName){
+		if(StringUtils.isNotBlank(loanName)){
+			return  null;
+		}
+		return LoanApplyApprove.dao.findFirst("select * from loan_apply_approve where loan_name=?",loanName) != null ? true : false;
+	}
 }

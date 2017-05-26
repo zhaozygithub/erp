@@ -17,6 +17,25 @@ public class SysMenu extends BaseModel<SysMenu> {
 	public static final SysMenu dao = new SysMenu().dao();
 	
 	/**
+	* @author:zhaozhongyuan 
+	* @Description:根据菜单的ID获取名字
+	* @return String   
+	* @date 2017年5月26日 上午11:04:16  
+	*/
+	public static String getNamebyID(String btnId) {
+		String name="";
+		SysMenu sysMenu=dao.findById(btnId);
+		if (sysMenu!=null) {
+			name=sysMenu.getStr("name");
+		}
+		
+		return name;
+		
+	}
+	
+	
+	
+	/**
 	 * 用于递归查询菜单
 	 */
 	private List<SysMenu> children=new ArrayList<SysMenu>();

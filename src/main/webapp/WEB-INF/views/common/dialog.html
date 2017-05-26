@@ -7,9 +7,13 @@
 <script type="text/javascript" src='/js/jquery-3.2.0.min.js'></script>
 <script type="text/javascript" src='/js/bootstrap-3.3.7-dist/js/bootstrap.min.js'></script>
 <script type="text/javascript" src='/js/toast.js'></script>
-<style>
+<link rel="stylesheet" type="text/css" href='/js/jqueryUI/skin/layer.css'>
+<script type="text/javascript" src="/js/jqueryUI/layer.min.js"></script>
+<style  type="text/css">
 <!--
 #xw{height: 25px; width:25px;    background: gray;}
+#win {cursor: move;}
+#wintitle{user-select:none;}
 -->
 </style>
 <div id='xxdialog'></div>
@@ -27,7 +31,7 @@
 					</button>
 					<h4 class="modal-title" id2="myModalLabel" id='wintitle' onload='setmove(this)'>表单</h4>
 				</div>
-				<div class="modal-body" style="    height: 599px;">
+				<div class="modal-body" style="    height: 450px;">
 					
                <iframe v-bind:src="src" style="width: 100%; height: 100%;" frameborder="no" border="0" framespacing="0"></iframe>
 				</div>
@@ -45,34 +49,57 @@
 		keyboard: true
 	})});*/
 	</script>
-	<script type="text/javascript">
+<script type="text/javascript">
 	//isMultiple定义在table.html中 
 	function showwin(src){
 		return showwin(document.body,src)
 	}
-	function showwin(node,src){
+	function showwin(node,src,utp){
+		/*参数表形式:
+			1:节点,路径[,类型] 
+			2:路径,类型 
+			3:路径
+		*/
 		//console.log(this);
+		if(arguments.length<3)
 		try{usetype=node.getAttribute('usetype');}
 		catch(e){//只有一个src参数时,默认node=document.body;
-			usetype=0;src=node;node=document.body;}
+			usetype=(src||0);src=node;node=document.body;}
+		var b=src.match('\\?');
+		var conc=b?'&':'?';
+		try{key=ths[0]}
+		catch(e){ths=[];ths[0]='id';}
+		var btnid=null;
+		try{btnid=node.id.substring(3);}
+		catch(e){}
 		//下载文件
 		if(usetype=='1'){
-			location.href=src+'?requestPara='+JSON.stringify(requestPara);
+			location.href=src+conc+'requestPara='+JSON.stringify(requestPara);
 			return;
 		}
 		//请求阿贾克斯 
 		else if(usetype=='2'){
 			var isDel=src.toLowerCase().match('del');
-			
+			if(isDel)
+				layer.confirm('确认执行删除操作 ?',function(){layer.closeAll();run();return true;},function(){return false});
+			else{
+				run();
+			}
+			function run(){
 			var xhr=new XMLHttpRequest();
-			xhr.open('post',src+'?');
+			xhr.open('post',src);//+'?'
 			//post要加这一句
 			xhr.setRequestHeader('Content-type','application/x-www-form-urlencoded');
-			xhr.send(ths[0]+'='+getchecked());
+			xhr.send((!src.match(/(?:\?|&)id=/)?ths[0]+'='+getchecked():null)+'&btnid='+btnid);
 			xhr.onload=function(resp){
-				//var userdata=JSON.parse( resp.target.responseText);
-				toast(resp.target.responseText);
-			}
+				try{var rsl=JSON.parse(resp.responseText);
+				//加.toString()是为了确保此字段存在.
+			    if(rsl.status.toString()==200)layer.msg('操作成功. ',2,1);
+			    else layer.msg(rsl.description.toString() ,2,2);
+			    }catch(e){
+				layer.msg(resp.responseText,2,0);}
+				setTimeout('location.href=location.href;',1000);
+			}}
 		}
 		//弹框 
 		else{
@@ -87,12 +114,13 @@
 			xd =new Vue({
 				el:'#otstw',
 				data:{a:2,//typeof(ths)=="undefined"  	ths instanceof Array
-					src:src==null?'/test/formTest':src+'?'+ chkpara },
+					src:(src==null?'/test/formTest':src+conc+ chkpara)+'&btnid='+btnid },
 				template:'#tpl'
 			});
 			setTimeout("setDragable(document.getElementById('win'))",800);
 			}
 	}
+	//删除弹窗 
 	function delwindowbyid(id){
 		document.getElementById(id).parentNode.removeChild(document.getElementById(id));
 		location.href=location.href;
@@ -113,6 +141,10 @@
 		for(var i=0;i<chk.length;i++){
 		    if(chk[i].checked)
 		        ckd.push(chk[i].value);}
+		//如果没选择,会返回单选的结果
+		if(ckd.length==0)
+			try{ckd=[select_user[ths[0]]];}
+			catch(e){ckd=[];}
 		return ckd;
 	}
 	function setmove(w){
@@ -154,7 +186,7 @@
                 nx = e.clientX;
                 ny = e.clientY;
                 oDrag.style.left = (dx + (nx - ox)) + "px";
-                oDrag.style.top = (dy + (ny - oy)) + "px";
+                oDrag.style.top = Math.max(0, (dy + (ny - oy)) )+ "px";
                 ox = nx;
                 oy = ny;
             }

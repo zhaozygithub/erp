@@ -29,6 +29,7 @@ import com.dlcat.common.utils.OptionUtil;
 import com.dlcat.common.utils.PageUtil;
 import com.dlcat.core.model.CuPossibleCustomer;
 import com.dlcat.core.model.SysMenu;
+import com.dlcat.core.model.SysOrg;
 import com.dlcat.core.model.SysUser;
 import com.dlcat.core.model.ToCodeLibrary;
 import com.jfinal.aop.Before;
@@ -108,6 +109,7 @@ public class CustomerAllotControllor extends BaseController {
 		List<QueryWhere> whereList = new ArrayList<QueryWhere>();
 		
 		whereList.add(new QueryWhere("belong_user_id",0));
+		whereList.add(new QueryWhere("status",'1'));
 
 		// 注意：此处whereMap在页面初始化的时候为null，此处有必要判空
 		if (whereMap != null) {
@@ -128,8 +130,9 @@ public class CustomerAllotControllor extends BaseController {
 		// 4.获取数据 格式为List<Record>
 		DyResponse dyResponse = super.getTableData(item, page);
 		// 5.返回数据到页面 response 固定值 不可改变
-		this.setAttr("response", dyResponse);
-		renderJson();
+		/*this.setAttr("response", dyResponse);
+		renderJson();*/
+		 renderJson(dyResponse);
 	}
 	
 	/**
@@ -143,9 +146,14 @@ public class CustomerAllotControllor extends BaseController {
 		String[] ids=getIdarrays();
 		//分配给某一个用户的用户ID
 		int id=getParaToInt("id");
-		
 		Map<String, Object> map = new HashMap<String, Object>();
+		//获取选择用户的信息
+		SysUser user = SysUser.dao.findById(id);
 		map.put("belong_user_id", id);
+		map.put("belong_user_name", user.getStr("name"));
+		
+		map.put("belong_org_id",user.getInt("belong_org_id"));
+		map.put("belong_org_name", user.getStr("belong_org_name")); 
 		try {
 			updateByIds(CuPossibleCustomer.class, ids, map);
 			renderText("操作成功");
@@ -163,13 +171,15 @@ public class CustomerAllotControllor extends BaseController {
 	 * @date 2017年5月15日 上午11:44:25  
 	 */
 	public void getUsers() {
-		//获取当前登录用户的所属部门ID
-		String[] ids=getPara("id").toString().split(",");
-		
-		if (ids[0].equals("")) {
-			renderHtml("<h1>请选择至少一条记录。</h1>");
+		String id=getPara("id");
+		if (id==null||id.equals("")) {
+			renderHtml("<h1>请至少选择一条记录。</h1>");
 			return;
 		}
+		
+		//获取当前登录用户的所属部门ID
+		String[] ids=id.split(",");
+		
 		setIdarrays(ids);
 		
 		TableHeader tableHeader = new TableHeader();
@@ -180,8 +190,6 @@ public class CustomerAllotControllor extends BaseController {
 		// 3.定义下拉数据源 如果检索区域中存在select，必须定义下拉数据源
 		
 		//注意：这里的资源必须和表头字段中的一致，可以定义多个
-		
-		
 		
 		DyResponse response = null;
 
@@ -198,12 +206,10 @@ public class CustomerAllotControllor extends BaseController {
 		// 5.返回数据到页面 response不可改变,页面名称也不可改变
 		this.setAttr("response", response);
 		this.render("common/table.html");
-		
-		
-		
-		
-		
 	}
+	
+	
+	
 	public void userdata() {
 		// 1.从页面获取参数 condition参数名称固定 key=condition 格式为：name:ms,age:24
 		// 获取分页参数 固定格式 key=page
@@ -223,7 +229,8 @@ public class CustomerAllotControllor extends BaseController {
 		List<QueryWhere> whereList = new ArrayList<QueryWhere>();
 		//获取本部门以及以下部门
 		whereList.add(new QueryWhere("belong_org_id", LIKE_RIGHT, getCurrentUserBelongID()));
-
+		//检索出有效用户
+		whereList.add(new QueryWhere("status",'1'));
 		
 
 		item.setWhereList(whereList);
@@ -231,8 +238,7 @@ public class CustomerAllotControllor extends BaseController {
 		// 4.获取数据 格式为List<Record>
 		DyResponse dyResponse = super.getTableData(item, page);
 		// 5.返回数据到页面 response 固定值 不可改变
-		this.setAttr("response", dyResponse);
-		renderJson();
+		 renderJson(dyResponse);
 	}
 	
 	/**
@@ -244,40 +250,62 @@ public class CustomerAllotControllor extends BaseController {
 	public void form() {
 		String type = getPara(0);
 		String id=getPara("id");
+		if(type == null){
+			renderHtml("<h1>数据库错误，请联系管理员。</h1>");
+			return;
+		}
 		List<FormField> formFieldList = new ArrayList<FormField>();
 
 		formFieldList.add(new FormField("id", "", "hidden"));
 		formFieldList.add(new FormField("name", "客户姓名", "text"));
 		formFieldList.add(new FormField("phone", "电话", "text"));
-		formFieldList.add(new FormField("type", "客户类型", "select", "",OptionUtil.getOptionListByCodeLibrary("CustomerType", true, "")));
 
 		DyResponse response = null;
 		if (type.equals("add")) {
+			formFieldList.add(new FormField("type", "客户类型", "select", "",OptionUtil.getOptionListByCodeLibrary("CustomerType", true, ""),true));
 			response = PageUtil.createFormPageStructure("意向客户添加", formFieldList, "/customerAllot/toAdd");
 		} else if (type.equals("edit")) {
-			if (id.equals("")) {
-				renderText("请选择一条记录来编辑！");
+			if (id==null||id.equals("")) {
+				renderHtml("<h1>请先选择一条记录。</h1>");
 				return;
 			}
-			response = PageUtil.createFormPageStructure("意向客户编辑", formFieldList, "/customerAllot/toEdit");
+			//由于代码相同，这里使用possibleCustomerControllor里面的toEdit方法去更新，如果有差异可以使用本类的toEdit方法去改造
+			response = PageUtil.createFormPageStructure("意向客户编辑", formFieldList, "/possibleCustomer/toEdit");
 		}else if (type.equals("detail")) {
-			if (id.equals("")) {
-				renderText("请选择一条记录来查看！");
+			formFieldList.add(new FormField("type", "客户类型", "select", "",OptionUtil.getOptionListByCodeLibrary("CustomerType", true, "")));
+			if (id==null||id.equals("")) {
+				renderHtml("<h1>请先选择一条记录。</h1>");
 				return;
 			}
 			//第三个参数 由于校验非空，所以要随便写点什么即可
 			response = PageUtil.createFormPageStructure("查看详细信息", formFieldList, "/u");
 		}
+		if (response == null) {
+			renderHtml("<h1>数据库错误，请联系管理员。</h1>");
+			return;
+		}
 		this.setAttr("response", response);
-		this.render("common/form_editarea.html");
+		this.render("common/form.html");
 	}
 
 	public void toAdd() {
 		SysUser sysUser = getSessionAttr("user");
 		CuPossibleCustomer cuPossibleCustomer = getModel(CuPossibleCustomer.class, "");
-		cuPossibleCustomer.set("id", "dct" + DateUtil.getCurrentTime());
+		//个人客户
+		if(cuPossibleCustomer.getStr("type").equals("2")){
+			cuPossibleCustomer.set("id", "IND" + DateUtil.getCurrentTime());
+		//对公客户	
+		}else if (cuPossibleCustomer.getStr("type").equals("1")) {
+			cuPossibleCustomer.set("id", "COR" + DateUtil.getCurrentTime());
+			
+		};
 		cuPossibleCustomer.set("belong_org_id", getCurrentUserBelongID());
-		cuPossibleCustomer.set("belong_user_name", sysUser.getStr("name"));
+		cuPossibleCustomer.set("belong_org_name", sysUser.getStr("belong_org_name"));
+		
+		cuPossibleCustomer.set("input_user_id", sysUser.getInt("id"));
+		cuPossibleCustomer.set("input_user_name", sysUser.getStr("name"));
+		cuPossibleCustomer.set("input_org_id", sysUser.getInt("belong_org_id"));
+		cuPossibleCustomer.set("input_org_name", sysUser.getStr("belong_org_name"));
 		cuPossibleCustomer.set("input_time", DateUtil.getCurrentTime());
 
 		try {
@@ -296,47 +324,49 @@ public class CustomerAllotControllor extends BaseController {
 	 * @return void
 	 * @date 2017年5月16日 下午2:36:39
 	 */
-	public void toEdit() {
+	/*public void toEdit() {
 		CuPossibleCustomer cuPossibleCustomer = getModel(CuPossibleCustomer.class, "");
 		try {
 			cuPossibleCustomer.update();
-			renderText("操作成功");
+			renderHtml("<h1>操作成功！！</h1>");
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
-			renderText("操作成功");
+			renderHtml("<h1>操作失败！！</h1>");
 		}
-	}
+	}*/
 	
-	@Before(Tx.class)
+	/*@Before(Tx.class)
 	public void del() {
-		String[] ids = getPara("id").toString().split(",");
-		
-		if (ids[0].equals("")) {
-			renderText("请选择至少一条记录！！！");
+		String id=getPara("id");
+		if (id==null) {
+			renderHtml("<h1>请至少选择一条记录。</h1>");
 			return;
 		}
+		
+		String[] ids = id.split(",");
+		
 		// 批量删除
 		CuPossibleCustomer cuPossibleCustomer = new CuPossibleCustomer();
 
 		try {
-			for (String id : ids) {
-				cuPossibleCustomer.deleteById(id);
+			for (String id1 : ids) {
+				cuPossibleCustomer.deleteById(id1);
 			}
-			renderText("操作成功");
+			renderHtml("<h1>操作成功！！</h1>");
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
-			renderText("操作失败");
+			renderHtml("<h1>操作失败！！</h1>");
 		}
-	}
+	}*/
 	
 	public void toImport() {
 		List<FormField> formFieldList = new ArrayList<FormField>();
 		formFieldList.add(new FormField("file", "请选择xls格式的Excel文件", "file"));
 		DyResponse response = PageUtil.createFormPageStructure("导入", formFieldList, "importExcel");
 		this.setAttr("response", response);
-		this.render("common/form_editarea.html");
+		this.render("common/form.html");
 	}
 	
 	public void importExcel() {
@@ -367,12 +397,5 @@ public class CustomerAllotControllor extends BaseController {
 		CustomerAllotControllor.fields = fields;
 	}
 
-	/*public static String[] getIdarrays() {
-		return idarrays;
-	}
-
-	public static void setIdarrays(String[] idarrays) {
-		CustomerAllotControllor.idarrays = idarrays;
-	}*/
 	
 }

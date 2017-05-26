@@ -1,4 +1,4 @@
-package com.dlcat.core.controller;
+package com.dlcat.core.controller.system;
 
 import java.util.List;
 

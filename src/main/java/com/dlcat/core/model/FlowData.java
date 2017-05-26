@@ -29,7 +29,7 @@ public class FlowData extends BaseModel<FlowData> {
 	 * 根据ID获取数据
 	 * @author liuran
 	 * @time 2017年4月22日 上午9:43:24
-	 * @param id
+	 * @param id 流程数据id
 	 * @return
 	 */
 	public  static FlowData getFlowDatasById(String id) {

@@ -65,11 +65,12 @@ th,td{margin:0 5px;}
 			</form>
 		</div>
 		<!--<p>按钮区域</p>  -->
-		<div class="examine-table">
+		<div class="examine-table" id='btnarea'>
 	         <div class="examine-btn"  style="padding-top:20px; padding-bottom:6px;" id='operations'>
 	             	#if(btnList)
 						#for(btn:btnList)<!-- disabled -->
-							<button type="button" id='btn#(btn.id)' class="btn btn-warning" onclick=" showwin(this,'#(btn.url)')"  usetype='#(btn.use_type)' >#(btn.name)</button>
+							<button type="button" id='btn#(btn.id)' class="btn btn-warning" onclick=" showwin(this,'#(btn.url)')"  usetype='#(btn.use_type)' 
+								needselrow='#(btn.is_select_row)' title='#(btn.is_select_row==1?"请选择一条记录":"")'>#(btn.name)</button>
 						#end
 					#end
 	         </div>
@@ -81,7 +82,7 @@ th,td{margin:0 5px;}
 		             <thead style='background-color: #7bF;' keys>
 					#if(tableHeaderList)
 						<tr id='datafieldname'>
-							<th class="text-center">#if(thdata.isMultiple())
+							<th class="text-center" style='max-width: 60px;'>#if(thdata.isMultiple())
 							<input type='checkbox' onchange='selectall(this)'  class='bigchk'>
 							#end</th>
 							#for(header:tableHeaderList)
@@ -169,8 +170,9 @@ var vxd=new Vue({
 	},
 	methods:{
 		get_select_name:function(user){
-			//toast( user.id);
-			vxd.select_user=select_user=user;			
+			//layer.msg( user.id);
+			vxd.select_user=select_user=user;	
+			btnenable();
 		}
 	},
 	watch:{
@@ -190,21 +192,21 @@ function getps(p){
 		return ps;
 }
 function setdatacountandtotal(resp){
+	var userdata=JSON.parse( resp.target.responseText);
+	vxd.userdatas={'response':userdata};
 	respJson=JSON.parse( resp.target.responseText);		
-	datacount=JSON.parse( resp.target.responseText)['response']['data']['dataCount'];
-	vxd.page=page=JSON.parse( resp.target.responseText)['response']['data']['page'];
+	datacount=JSON.parse( resp.target.responseText)['data']['dataCount'];
+	vxd.page=page=JSON.parse( resp.target.responseText)['data']['page'];
 	total=Math.max(Math.ceil(datacount/page),1);
 	//vpnum.datacount=datacount;
 	vxd.datacount=datacount;
-	requestPara.queryItem=respJson.response.data.queryItem;
+	requestPara.queryItem=respJson['data']['queryItem'];
 }
 (function initdata(){
 	var xhr=new XMLHttpRequest();
 	xhr.open('get','#(dataUrl)');
 	xhr.send();
 	xhr.onload=function(resp){
-		var userdata=JSON.parse( resp.target.responseText);
-		vxd.userdatas=userdata;
 		setdatacountandtotal(resp);
 }})()
 function getconditions(){
@@ -223,7 +225,10 @@ function getconditions(){
 	var conditions='';
 	for(var i=0;i<inputs.length;i++ ){
 		if(inputs[i].value!=null&&inputs[i].value!='')
+			if(inputs[i].type!='date')
 			conditions+=inputs[i].name+':\''+inputs[i].value.trim()+'\',';
+			else
+			conditions+=inputs[i].name+':\''+Math.round(new Date(inputs[i].value.trim()+' 0:0').getTime()/1000)+'\',';
 	}
 	if(conditions != ''){
 		conditions = conditions.substring(0,conditions.length-1);
@@ -238,12 +243,11 @@ function seek(p){
 			+'&'+(p==null?'':"page="+p));
 	xhr.send();//'condition='+conditions);
 	xhr.onload=function(resp){
-		if(JSON.parse( resp.target.responseText)['response']['status']==200){
-		 	vxd.userdatas=JSON.parse( resp.target.responseText);
+		if(JSON.parse( resp.target.responseText)['status']==200){
 			setdatacountandtotal(resp);
 		}
 		else
-			toast(JSON.parse( resp.target.responseText)['response']['description']);
+			layer.msg(JSON.parse( resp.target.responseText)['description']);
 	}
 }
 function jumppage(p){
@@ -261,6 +265,20 @@ function selectall(ev){
 function reversechecked(node){
 	var inp=node.getElementsByTagName('input')[0];
 	inp.checked=!inp.checked;
+}
+btnarea=document.getElementById('btnarea');
+btns=btnarea.getElementsByTagName('button');
+btns_dis=[];
+for(var j=0;j<btns.length;j++){
+	if(btns[j].getAttribute('needselrow')=='1'){
+		btns_dis.push(btns[j]);
+		btns[j].disabled=true;
+	}
+}
+function btnenable(){
+	for(var j=0;j<btns_dis.length;j++){
+		btns_dis[j].disabled=false;
+	}
 }
 </script>
 	

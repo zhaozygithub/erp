@@ -46,7 +46,7 @@
 			<artifactId>jetty-webapp</artifactId>
 			<version>8.1.8.v20121106</version>
 		</dependency>
-		<!-- =========================jetty start================================= -->
+		<!-- =========================jetty end================================= -->
 		<dependency>
 			<groupId>com.alibaba</groupId>
 			<artifactId>druid</artifactId>
@@ -133,7 +133,18 @@
 			<version>1.2.0</version>
 		</dependency>
 
-		
+		<!-- kisso begin -->
+		<dependency>
+			<groupId>com.baomidou</groupId>
+			<artifactId>kisso</artifactId>
+			<version>3.6.13</version>
+		</dependency>
+		<dependency>
+			<groupId>com.alibaba</groupId>
+			<artifactId>fastjson</artifactId>
+			<version>1.2.15</version>
+		</dependency>
+		<!-- kisso end -->
 
 	</dependencies>
 	<build>

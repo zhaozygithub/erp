@@ -1,4 +1,4 @@
-package com.dlcat.core.controller;
+package com.dlcat.core.controller.system;
 
 import java.util.*;
 
@@ -12,6 +12,8 @@ import com.dlcat.core.model.SysMenu;
 import com.dlcat.core.model.SysUser;
 import com.jfinal.core.Controller;
 import com.jfinal.plugin.activerecord.Db;
+import com.jfinal.plugin.activerecord.DbPro;
+import com.jfinal.plugin.activerecord.Record;
 //系统管理菜单下的功能
 public class SystemManageController extends BaseController {
 	public void menuManage(){
@@ -33,12 +35,16 @@ public class SystemManageController extends BaseController {
 	public void delsubmenu() {
 		//传来一些ID,将level最末的删掉.
 		String ids=getPara("id");
-		int level=SysMenu.dao.findFirst("SELECT  max(`level`) as max FROM  sys_menu WHERE id in (?)  ",ids).getInt("max");
+		SysMenu tempMenu=SysMenu.dao.findFirst("SELECT  max(level) as max FROM  sys_menu WHERE id in ("+ids+")  ;");
+		int level=tempMenu.getInt("max");
 		String sqlString="delete from sys_menu where `level`='?' and `id` in (?)  ";
-		boolean del=Db.queryBoolean(sqlString, level,ids);
-		SysMenu sysMenu=getModel(SysMenu.class ,"");
+		//sql的问号两边不可加单引号
+		//List<Record> lrList=Db.find("select * from sys_menu where `level`=? and `id` in ("+ids+")  ", level);
+		//boolean del=true;
+		int del=new  DbPro().update("delete from sys_menu where `level`=? and `id` in ("+ids+")  ", level);
+		//SysMenu sysMenu=getModel(SysMenu.class ,"");
 		// SysMenu.dao.deleteById(sysMenu.get("id"))
-		renderText(  del?"成功":"失败");
+		renderText(  del>0?"成功!"+del+"条数据被删除.":"失败");
 	}
 	public void submenuform(){
 		//String pid=getPara("pid");
@@ -55,10 +61,11 @@ public class SystemManageController extends BaseController {
 		//formField.setDisable(true);
 		formFieldGroup.add(formField);
 		formFieldGroup.add(new FormField("url","菜单访问地址","text","",true));
-		List<Map> opts=OptionUtil.getOptionListByOther("item_no", "item_name", "to_code_library", "code_no='BtnType' ");
+		List<Map> opts=OptionUtil.getOptionListByOther("item_no", "item_name", "to_code_library", "code_no='BtnType' ",null);
 		formFieldGroup.add(new FormField("use_type","类型","radio","0",opts));
 		formFieldGroup.add(new FormField("sort_no","排序","text","30"));
 		formFieldGroup.add(new FormField("status","状态","text","1"));
+		formFieldGroup.add(new FormField("is_select_row","是否需要选择条目","text"));
 		formFieldGroup.add(new FormField("remark","备注","text"));
 		Map<String , String> map=new HashMap<String, String>();
 		map.put("add", "添加");
@@ -67,6 +74,6 @@ public class SystemManageController extends BaseController {
 		String cndesc=map.get(type);
 		DyResponse response = PageUtil.createFormPageStructure(cndesc+"菜单", formFieldGroup,  "/systemManage/"+type+"submenu");
 	    this.setAttr("response", response);
-	    this.render("common/form_editarea.html");
+	    this.render("common/form.html");
 	}
 }

@@ -2,8 +2,13 @@ package com.dlcat.core.controller.system;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Enumeration;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Map.Entry;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import com.dlcat.common.BaseController;
 import com.dlcat.common.entity.DyResponse;
@@ -24,8 +29,8 @@ public class UserManageController extends BaseController {
 	}
 	public void index(){
 		TableHeader tableHeader = new TableHeader();
-		tableHeader.setFieldNames(new String[]{"id","name","phone"});
-		tableHeader.setCNNames (new String[]{"id","名字","手机号"});
+		tableHeader.setFieldNames(new String[]{"id","name","phone","status","role_id"});
+		tableHeader.setCNNames (new String[]{"id","名字","手机号","status","role_id"});
 		Search search = new Search();
 		search.setFieldNames(new String[]{"name","phone","role_id","update_time"});
 		search.setCNNames(new String[]{"名称","手机号","角色","时间"});
@@ -36,7 +41,7 @@ public class UserManageController extends BaseController {
 			//第二个参数是这个列表数据的名称，如果页面中存在这个导出功能，这个名称就是导出的
 			//excel文件的文件名称
 			response = PageUtil.createTablePageStructure("/userManage/data", "用户数据", tableHeader, 
-					search,"18",(Map<Integer, SysMenu>)this.getSessionAttr("menus"));
+					search,"125",(Map<Integer, SysMenu>)this.getSessionAttr("menus"));
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -77,6 +82,22 @@ public class UserManageController extends BaseController {
 		   
 		   renderJson();
 	}
+	public void form() {
+		String type=getPara(0);//getPara("type");
+		if("".equals(type)||type==null)
+			type="add";
+		List<FormField> formFieldGroup=new ArrayList<FormField>();
+		formFieldGroup.add(FormField.createFormField("status", "status", "text", null, true,"digital"));
+		formFieldGroup.add(FormField.createFormField("phone", "phone", "text", null, false,"digital"));
+		Map<String , String> map=new HashMap<String, String>();
+		map.put("add", "添加");
+		map.put("edit", "编辑");
+		map.put("detail", "查看");
+		String cndesc=map.get(type);
+		DyResponse response = PageUtil.createFormPageStructure(cndesc+"用户", formFieldGroup,  "/userManage/"+type+"user");
+	    this.setAttr("response", response);
+	    this.render("common/form.html");
+	}
 	public void adduser(){
 		SysUser sysUser=getBean(SysUser.class, "");
 		try {
@@ -104,10 +125,20 @@ public class UserManageController extends BaseController {
 		formFieldGroup.add(new FormField("名字","name","text",""));
 		DyResponse response = PageUtil.createFormPageStructure("添加用户", formFieldGroup,  "adduser");
 	    this.setAttr("response", response);
-	    this.render("common/form_editarea.html");
+	    this.render("common/form.html");
 	}
 	public void edituser() {
-		
+		String referer= getRequest().getHeader("Referer");
+		Pattern p=Pattern.compile("(?=\\?|&)id=(\\d+)");
+		Matcher matcher=p.matcher(referer);
+		String strid=matcher.group(1);
+		Map<String, String[]> paras= getParaMap();
+		//SysUser sysUser=getModel(SysUser.class,"");
+		SysUser sysUser=SysUser.dao.findById(strid);
+		for (Entry<String, String[]> iterable_element : paras.entrySet()) {
+			sysUser.set(iterable_element.getKey(), iterable_element.getValue()[0]);
+		}
+		renderJson( sysUser.save()?createSuccessJsonResonse(this):createErrorJsonResonse("发生错误."));
 	}
 
 }

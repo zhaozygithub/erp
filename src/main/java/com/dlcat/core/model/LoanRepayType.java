@@ -8,4 +8,14 @@ import com.dlcat.common.BaseModel;
 @SuppressWarnings("serial")
 public class LoanRepayType extends BaseModel<LoanRepayType> {
 	public static final LoanRepayType dao = new LoanRepayType().dao();
+	/**
+	 * 根据id获取还款方式
+	 * @param id
+	 * @return
+	 * @author masai
+	 * @time 2017年5月24日 下午3:20:39
+	 */
+	public static LoanRepayType getLoanRepayTypeById(Integer id){
+		return (id == null || id < 0) ? null : LoanRepayType.dao.findById(id);
+	}
 }

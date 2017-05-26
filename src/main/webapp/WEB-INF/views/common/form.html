@@ -14,15 +14,19 @@
 <link rel="stylesheet" type="text/css" href="/js/My97DatePicker/skin/WdatePicker.css">
 <script language="javascript" type="text/javascript" src="/js/My97DatePicker/WdatePicker.js"></script>
 <script type="text/javascript" src='/js/toast.js'></script>
+<link rel="stylesheet" type="text/css" href='/js/jqueryUI/skin/layer.css'>
+<script type="text/javascript" src="/js/jqueryUI/layer.min.js"></script>
+<link rel="stylesheet" type="text/css" href="/js/ext-5.1.0\packages\ext-theme-neptune\build\resources\ext-theme-neptune-all.css">
+<script type="text/javascript" src='/js/ext-5.1.0/ext-all.js'></script>
 <style type="text/css">
-fieldset{max-width:800px;min-width: 400px;margin 5px auto;padding:3px;}
+fieldset{/*max-width:800px;*/min-width: 500px;margin 5px auto;padding:9px;}
 </style>
 </head>
 <body xclass="well" style='min-height:100%'>
 #set(data=response.data)
 #set(formFieldList=response.data.formFieldList)
 <fieldset style id='fd'>
-	<form action="#(data.submitUrl )" class='form-horizontal' style='padding:0 20px;' 
+	<form  action="#(data.submitUrl )" class='form-horizontal' style='padding:0 20px;column-count: #(data.columnAmount??1);' 
 		method='post' id='mainform' 
 		#for(input : formFieldList)
 		#if(input.type=='file')enctype="multipart/form-data" #break
@@ -50,10 +54,10 @@ fieldset{max-width:800px;min-width: 400px;margin 5px auto;padding:3px;}
 	 		 title='#(input.hint)' placeholder='#(input.inNotice)'  necessity='#(input.isRequired)'
 	 		 class="Wdate form-control"  onClick="WdatePicker()">
 	 	#else
-	       <input v-for type='#(input.type=="datetime"?"datetime-local":input.type)' name='#(input.filedName  )'  #(input.disable?"readonly":"")
+	       <input v-for id='#(input.filedName )' type='#(input.type=="datetime"?"datetime-local":input.type)' name='#(input.filedName  )'  #(input.disable?"readonly":"")
 	       value='#(input.defaultValue)' title='#(input.hint)' placeholder='#(input.inNotice)'  necessity='#(input.isRequired)'
-	       inType='#(input.inType)' onblur='checkintype(this)'
-		 class='#(input.type=="radio"?"":"form-control")' >
+	       inType='#(input.inType)' onblur='checkintype(this)' #if(input.type=='file') multiple  accept  onchange='showthumb(this)' #end
+		 class='#(input.type=="radio"?"":"form-control")' ><!-- ="image/*" -->
     	#end ###if
 	#else
 	<select class="form-control"  name='#(input.filedName  )'  #(input.disable?"readonly":"")
@@ -62,23 +66,63 @@ fieldset{max-width:800px;min-width: 400px;margin 5px auto;padding:3px;}
 	       #for(option : input.optionList)
 			<option value="#(option.item_no)" #(option.item_no==input.defaultValue?"selected":"")>#(option.item_name)</option>
 			#end</select>
-	#end #(input.unit)	&nbsp&nbsp&nbsp&nbsp;
+	#end #(input.unit)	&nbsp;&nbsp;&nbsp;&nbsp;
 	<abbr title='#(input.notice)' style='float: right;display:#((input.notice==null)?"none":"");'>提示</abbr>
 	</div>
 	 
 	#if(input.isRequired)
 	<label class=" col-xs-2 control-label input-label" style='color:red; padding: 7px 0px;'>*必填</label>
 	#end 
+	#if(input.type=='file')
+	<style type='text/css'>
+		#thumb img{width:90px;height:90px;}
+		#thumb img:hover{width:390px;height:390px;position: absolute;left:-50px;top:90px;z-index:900;}
+	</style>
+	<div id='thumb'  class="col-xs-11">
+		<ul id='thumbul'></ul>
 	</div>
-	</div>
+	<script type="text/javascript">
+		if (typeof FileReader == "undefined") {  
+	        alert('您的浏览器不支持预览啊');  
+	    } 
+		fr=new FileReader();
+		fr.onloadend=function(e){
+			//ev=e;
+		 	 //console.debug(e);
+		 	 var img=document.createElement('img');
+		 	 if(e.target.result.substring(0,20).match(/(image|data:;base64,)/))
+		 	 img.src=e.target.result;
+		 	 document.getElementById('thumbul').appendChild(img);
+			return e.target.result;
+		}
+		tmp=0;
+		function showthumb(node){
+			document.getElementById('thumbul').innerHTML='';
+			var fs=node.files;
+			function read(file){
+				console.debug(file);
+				if(tmp==0||fr.readyState==2)
+					fr.readAsDataURL(file);
+				else{
+					setTimeout(function(/*file*/){read(file);},500);}
+				tmp++;}
+			window.read=read;
+			for(var f=0;f<fs.length;f++){
+				read(fs[f]);
+			}
+		}
+	</script>
 	#end
+	</div>
+	</div>
+	#end</form>
 	  <div class="form-group">
-            <div class="col-xs-8 col-xs-offset-2" id='btsgrp'>
-			<button class="btn btn-primary  " style="padding:6px 22px;margin:1px 10px;" type='submit'>提交</button>
-			<button class="btn btn-primary  " style="padding:6px 22px;margin:1px 10px;" type='reset'>复原</button>
+            <div class="col-xs-8 col-xs-offset-3" id='btsgrp'>
+			<button class="btn btn-primary  " style="padding:6px 22px;margin:1px 10px;width: 40%;" onclick='sendform()'>提交</button>
+			<!-- <button class="btn btn-primary  " style="padding:6px 22px;margin:1px 10px;" type='reset'>复原</button> -->
 			</div>
         </div>  
-	</form>
+	
 </fieldset>
 </body>
 <script type="text/javascript">
@@ -92,14 +136,14 @@ function checknotnull(){
 	var inp=mainform.getElementsByTagName('input');
 	for( i=0;i<inp.length;i++){
 		if(inp[i].getAttribute('necessity')=='true'&&(inp[i].value==null||inp[i].value=='')){
-			toast('标红星号的字段不可为空!');
+			layer.msg('标红星号的字段不可为空!');
 			return false;
 		}
 	}
 	inp=mainform.getElementsByTagName('select');
 	for( i=0;i<inp.length;i++){
 		if(inp[i].getAttribute('necessity')=='true'&&(inp[i].value==null||inp[i].value=='')){
-			toast('标红星号的字段不可为空!');
+			layer.msg('标红星号的字段不可为空!');
 			return false;
 		}
 	}
@@ -136,10 +180,70 @@ function setDisable(){
 function checkintype(node){
 	//三种: decimal digital string  分别是小数 整数 字符串
 	var inType=node.getAttribute('inType').toLowerCase();
-	if(inType.match(/(int|digital)/)&&node.value.match(/^\d*$/))
-		toast('只接受整数');
-	else if(inType.match(/(float|decimal)/)&&node.value.match(/^\d*\.\d*$/)&&node.value!='.')
-		toast('只接受小数');
+	if(inType.match(/(int|digital)/)&&!node.value.match(/^\d*$/))
+		layer.msg('只接受整数');
+	else if(inType.match(/(float|decimal)/)&&!node.value.match(/^\d*\.\d*$/)&&node.value!='.')
+		layer.msg('只接受小数');
+}
+function sendform(){
+	if(checknotnull(mainform)==false)
+		return;
+	fm=document.getElementById('mainform');
+	inps=fm,ok=[],fd=new FormData();
+	for(x=0;x<  inps.length;x++){
+	if(inps[x].name&&(inps[x].value||inps[x].getAttribute('necessity')=='true'))//''==0//||inps[x].value==0
+	if(!inps[x].type.match(/(checkbox|radio)/)||
+	(inps[x].type.match(/(checkbox|radio)/)&&inps[x].checked)){
+	   fd.append(inps[x].name,inps[x].type=='file'?inps[x].files:inps[x].value);
+		ok.push(inps[x].name+'='+inps[x].value);
+	 	//console.log(x,inps[x]);
+	}}
+	rqpara=ok.join('&');//JSON.stringify(ok);
+	var src=fm.action;
+	var xhr=new XMLHttpRequest();
+	xhr.open('post',src);//+'?'
+	//post要加这一句
+	if(mainform.enctype!="multipart/form-data"){
+		//用FormData时不要设置这一句.
+		xhr.setRequestHeader('Content-type',	'application/x-www-form-urlencoded');
+		}
+	else{
+		//xhr.setRequestHeader('Content-type','multipart/form-data; boundary=---/Jiang zemin is a big toad/');
+		uploadform();
+		return;}
+	//Jiang zemin is a big toad
+	//multipart/form-data
+    //application/x-www-form-urlencoded
+    //application/octet-stream
+	xhr.send(rqpara);
+	xhr.onload=function(resp){
+		//var userdata=JSON.parse( resp.target.responseText);
+		//layer.msg(resp.target.responseText,8,1);//1,ok,2,error.
+		//setTimeout('location.href=location.href;',1500);
+		showrsl(resp);
+		}
+	function uploadform(){
+	Ext.Ajax.request({
+	    url:'/test/testReceive',
+		isUpload:true,
+	    method:'POST',
+	    form:'mainform',
+	    success:function (resp,conf){
+	        //debugger
+			showrsl(resp);
+	    }});
+	}
+}
+function showrsl(resp){
+	//参数可能是原生的resp也可能是ext的resp
+	resp=resp.target||resp;
+	console.debug(resp);
+	try{var rsl=JSON.parse(resp.responseText);
+	//加.toString()是为了确保此字段存在.
+    if(rsl.status.toString()==200)layer.msg('操作成功. ',2,1);
+    else layer.msg(rsl.description.toString() ,2,2);
+    }catch(e){
+	layer.msg(resp.responseText,2,0);}
 }
 </script>
 </html>

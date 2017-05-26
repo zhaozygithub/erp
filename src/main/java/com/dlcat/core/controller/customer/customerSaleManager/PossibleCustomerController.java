@@ -20,6 +20,7 @@ import com.dlcat.common.utils.DateUtil;
 import com.dlcat.common.utils.OptionUtil;
 import com.dlcat.common.utils.PageUtil;
 import com.dlcat.core.model.CuPossibleCustomer;
+import com.dlcat.core.model.SysAdminLog;
 import com.dlcat.core.model.SysMenu;
 import com.dlcat.core.model.SysUser;
 import com.dlcat.core.model.ToCodeLibrary;
@@ -101,6 +102,8 @@ public class PossibleCustomerController extends BaseController {
 		whereList.add(new QueryWhere("belong_user_id", id));
 		// 未处理
 		whereList.add(new QueryWhere("op_status", "1"));
+		//意向客户必须有效
+		whereList.add(new QueryWhere("status",'1'));
 
 		// 注意：此处whereMap在页面初始化的时候为null，此处有必要判空
 		if (whereMap != null) {
@@ -113,11 +116,11 @@ public class PossibleCustomerController extends BaseController {
 			}
 		}
 		item.setWhereList(whereList);
+		item.setOrder("input_time desc");
 		// 4.获取数据 格式为List<Record>
 		DyResponse dyResponse = super.getTableData(item, page);
 		// 5.返回数据到页面 response 固定值 不可改变
-		this.setAttr("response", dyResponse);
-		renderJson();
+		 renderJson(dyResponse);
 	}
 
 	public void tab2() {
@@ -193,9 +196,10 @@ public class PossibleCustomerController extends BaseController {
 		List<QueryWhere> whereList = new ArrayList<QueryWhere>();
 		whereList.add(new QueryWhere("belong_org_id", LIKE_RIGHT, org_id));
 		whereList.add(new QueryWhere("belong_user_id", id));
-		//
+		//状态不等于1的都显示
 		whereList.add(new QueryWhere("op_status",NEQ, "1"));
-
+		//意向客户必须有效
+		whereList.add(new QueryWhere("status",'1'));
 		// 注意：此处whereMap在页面初始化的时候为null，此处有必要判空
 		if (whereMap != null) {
 			whereList.add(new QueryWhere("phone", LIKE_RIGHT, whereMap.get("phone")));
@@ -207,11 +211,11 @@ public class PossibleCustomerController extends BaseController {
 			}
 		}
 		item.setWhereList(whereList);
+		item.setOrder("input_time desc");
 		// 4.获取数据 格式为List<Record>
 		DyResponse dyResponse = super.getTableData(item, page);
 		// 5.返回数据到页面 response 固定值 不可改变
-		this.setAttr("response", dyResponse);
-		renderJson();
+		 renderJson(dyResponse);
 	}
 
 	/**
@@ -222,8 +226,13 @@ public class PossibleCustomerController extends BaseController {
 	 */
 	@Before(Tx.class)
 	public void btnCustomeFollowUp() {
+		String id=getPara("id");
+		if (id==null||id.equals("")) {
+			renderHtml("<h1>请选择至少一条记录。</h1>");
+			return;
+		}
 		// 获取要更新的主键数组
-		String[] ids = getPara("id").toString().split(",");
+		String[] ids = id.split(",");
 
 		// 更新op_status 值为2
 		Map<String, Object> map = new HashMap<String, Object>();
@@ -245,8 +254,13 @@ public class PossibleCustomerController extends BaseController {
 	 */
 	@Before(Tx.class)
 	public void btnCustomeToInvalid() {
+		String id=getPara("id");
+		if (id==null||id.equals("")) {
+			renderHtml("<h1>请选择至少一条记录。</h1>");
+			return;
+		}
 		// 获取要更新的主键数组
-		String[] ids = getPara("id").toString().split(",");
+		String[] ids = id.split(",");
 
 		// 更新op_status 值为4
 		Map<String, Object> map = new HashMap<String, Object>();
@@ -267,8 +281,13 @@ public class PossibleCustomerController extends BaseController {
 	 */
 	@Before(Tx.class)
 	public void btnCustomeToFormal() {
+		String id=getPara("id");
+		if (id==null||id.equals("")) {
+			renderHtml("<h1>请选择至少一条记录。</h1>");
+			return;
+		}
 		// 获取要更新的主键数组
-		String[] ids = getPara("id").toString().split(",");
+		String[] ids = id.split(",");
 
 		// 更新op_status 值为3
 		Map<String, Object> map = new HashMap<String, Object>();
@@ -279,12 +298,22 @@ public class PossibleCustomerController extends BaseController {
 			CuPossibleCustomer cuPossibleCustomer = null;
 			Record record = null;
 			// 并把这些客户加入正式客户表
-			for (String id : ids) {
-				cuPossibleCustomer = CuPossibleCustomer.dao.findById(id);
+			for (String id1 : ids) {
+				cuPossibleCustomer = CuPossibleCustomer.dao.findById(id1);
 				record = cuPossibleCustomer.toRecord();
+				//个人客户
+				if(record.getStr("type").equals("2")){
+					record.set("id", "IND" + DateUtil.getCurrentTime());
+				//对公客户	
+				}else if (record.getStr("type").equals("1")) {
+					record.set("id", "COR" + DateUtil.getCurrentTime());
+				};
 				record.set("cu_possible_id", record.get("id"));
-				record.set("id", "fomal" + DateUtil.getCurrentTime());
+				//默认转化为白名单
+				record.set("status", "1");
 				record.set("input_time", DateUtil.getCurrentTime());
+				record.set("update_time", DateUtil.getCurrentTime());
+				
 				record.remove("op_status", "remark");
 
 				try {
@@ -312,47 +341,68 @@ public class PossibleCustomerController extends BaseController {
 	public void form() {
 		String type = getPara(0);
 		String id=getPara("id");
+		String btnID=getPara("btnid");
 		
 		List<FormField> formFieldList = new ArrayList<FormField>();
 		formFieldList.add(new FormField("id", "", "hidden"));
 		formFieldList.add(new FormField("name", "客户姓名", "text"));
 		formFieldList.add(new FormField("phone", "电话", "text"));
-		formFieldList.add(new FormField("type", "客户类型", "select", "",
-				OptionUtil.getOptionListByCodeLibrary("CustomerType", true, "")));
 
 		DyResponse response = null;
 		if (type.equals("add")) {
-			response = PageUtil.createFormPageStructure("意向客户添加", formFieldList, "/possibleCustomer/toAdd");
+			formFieldList.add(new FormField("type", "客户类型", "select", "",OptionUtil.getOptionListByCodeLibrary("CustomerType", true, ""),true));
+
+			response = PageUtil.createFormPageStructure("意向客户添加", formFieldList, "/possibleCustomer/toAdd?btnId="+btnID);
 		} else if (type.equals("edit")) {
-			if (id.equals("")) {
-				renderText("请选择一条记录来编辑！");
+			if (id==null||id.equals("")) {
+				renderHtml("<h1>请先选择一条记录。</h1>");
 				return;
 			}
 			response = PageUtil.createFormPageStructure("意向客户编辑", formFieldList, "/possibleCustomer/toEdit");
 		}else if (type.equals("detail")) {
-			if (id.equals("")) {
-				renderText("请选择一条记录来查看！");
+			formFieldList.add(new FormField("type", "客户类型", "select", "",OptionUtil.getOptionListByCodeLibrary("CustomerType", true, "")));
+
+			if (id==null||id.equals("")) {
+				renderHtml("<h1>请先选择一条记录。</h1>");
 				return;
 			}
 			//第三个参数 由于校验非空，所以要随便写点什么即可
 			response = PageUtil.createFormPageStructure("查看详细信息", formFieldList, "/s");
 		}
 		this.setAttr("response", response);
-		this.render("common/form_editarea.html");
+		this.render("common/form.html");
 	}
 
 	public void toAdd() {
 		SysUser sysUser = getSessionAttr("user");
-		CuPossibleCustomer cuPossibleCustomer = getModel(CuPossibleCustomer.class, "");
-		cuPossibleCustomer.set("id", "dct" + DateUtil.getCurrentTime());
+		CuPossibleCustomer cuPossibleCustomer = getModel(CuPossibleCustomer.class, "",true);
+		String btnID=getPara("btnId");
+		
+		String id="";
+		//个人客户
+		if(cuPossibleCustomer.getStr("type").equals("2")){
+			id="IND" + DateUtil.getCurrentTime();
+		//对公客户	
+		}else if (cuPossibleCustomer.getStr("type").equals("1")) {
+			id="COR" + DateUtil.getCurrentTime();
+			
+		};
+		cuPossibleCustomer.set("id",id);
 		cuPossibleCustomer.set("belong_org_id", getCurrentUserBelongID());
+		cuPossibleCustomer.set("belong_org_name", sysUser.getStr("belong_org_name"));
 		cuPossibleCustomer.set("belong_user_name", sysUser.getStr("name"));
-		cuPossibleCustomer.set("input_time", DateUtil.getCurrentTime());
 		cuPossibleCustomer.set("belong_user_id", sysUser.getInt("id"));
+		
+		cuPossibleCustomer.set("input_user_id", sysUser.getInt("id"));
+		cuPossibleCustomer.set("input_user_name", sysUser.getStr("name"));
+		cuPossibleCustomer.set("input_org_id", sysUser.getInt("belong_org_id"));
+		cuPossibleCustomer.set("input_org_name", sysUser.getStr("belong_org_name"));
+		cuPossibleCustomer.set("input_time", DateUtil.getCurrentTime());
 
 		try {
 			cuPossibleCustomer.save();
-			renderHtml("<h1>操作成功！！</h1>");
+			SysAdminLog.SetAdminLog(sysUser, btnID, id);
+			renderText("操作成功");
 		} catch (Exception e) {
 			renderHtml("<h1>操作失败！！</h1>");
 		}
@@ -366,19 +416,19 @@ public class PossibleCustomerController extends BaseController {
 	 */
 	@Before(Tx.class)
 	public void del() {
-		String[] ids = getPara("id").toString().split(",");
-		
-		if (ids[0].equals("")) {
-			renderText("请选择至少一条记录！！！");
+		String id=getPara("id");
+		if (id==null||id.equals("")) {
+			renderHtml("<h1>请先选择一条记录。</h1>");
 			return;
 		}
 		
+		String[] ids = id.split(",");
 		// 批量删除
 		CuPossibleCustomer cuPossibleCustomer = new CuPossibleCustomer();
 
 		try {
-			for (String id : ids) {
-				cuPossibleCustomer.deleteById(id);
+			for (String id1 : ids) {
+				cuPossibleCustomer.deleteById(id1);
 			}
 			renderText("操作成功");
 		} catch (Exception e) {

@@ -1,5 +1,6 @@
 package com.dlcat.core.model;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import com.dlcat.common.BaseModel;
@@ -67,19 +68,19 @@ public class SysOrg extends BaseModel<SysOrg> {
 	/**
 	* @author:zhaozhongyuan 
 	* @Description:获得id集合
-	* @return String   
+	* @return List<Integer>   
 	* @date 2017年5月4日 上午11:26:26  
 	*/
-	public static String  getChildrenIds(int org_id,String sqlWhere) {
-		StringBuilder sb=new StringBuilder();
+	public static List<Integer>  getChildrenIds(int org_id,String sqlWhere) {
+		List<Integer> sb=new ArrayList<Integer>();
 		String sql = "select * from sys_org where belong_org_id = ? "+sqlWhere;
 		List<SysOrg> list=SysOrg.dao.find(sql,org_id);
 		if (list.size()>0) {
 			for (SysOrg sysOrg : list) {
-				sb.append(sysOrg.getInt("org_id")+",");
+				sb.add(sysOrg.getInt("org_id"));
 			}
 		}
-		return sb.toString();
+		return sb;
 		
 	}
 	
@@ -90,9 +91,9 @@ public class SysOrg extends BaseModel<SysOrg> {
 	
 	public static int getPid(int org_id) {
 		String sql = "select * from sys_org where org_id = ?";
-		
-		if (SysOrg.dao.find(sql,org_id).size()>0) {
-			return SysOrg.dao.find(sql,org_id).get(0).getInt("belong_org_id");
+		List<SysOrg> list=SysOrg.dao.find(sql,org_id);
+		if (list.size()>0) {
+			return list.get(0).getInt("belong_org_id");
 		}
 		return -1;
 		
@@ -136,8 +137,8 @@ public class SysOrg extends BaseModel<SysOrg> {
 	 * 根据用户编号获取 所属组织机构名称
 	 * @author liuran
 	 * @time 2017年5月4日 下午6:38:28
-	 * @param userId
-	 * @return String
+	 * @param userId 用户编号
+	 * @return String 机构名称
 	 */
 	public static String getNameByUserId(int userId){
 		SysUser user = SysUser.dao.findById(userId);

@@ -4,13 +4,12 @@ import com.alibaba.druid.filter.stat.StatFilter;
 import com.alibaba.druid.util.JdbcUtils;
 import com.alibaba.druid.wall.WallFilter;
 import com.dlcat.core.Interceptor.LoginInterceptor;
+import com.dlcat.core.controller.CommonController;
 import com.dlcat.core.controller.CrudController;
 import com.dlcat.core.controller.FlowController;
-import com.dlcat.core.controller.DataController;
-import com.dlcat.core.controller.SystemManageController;
 import com.dlcat.core.controller.TestController;
 import com.dlcat.core.controller.TestUserController;
-import com.dlcat.core.controller.index.SetController;
+import com.dlcat.core.controller.index.PersonalInfoSetController;
 import com.dlcat.core.controller.customer.customerRecord.BlackListController;
 import com.dlcat.core.controller.customer.customerRecord.CustomerRecordController;
 import com.dlcat.core.controller.customer.customerRecord.MyCustomerController;
@@ -18,11 +17,18 @@ import com.dlcat.core.controller.customer.customerRecord.ObjectCustomerAllotCont
 import com.dlcat.core.controller.customer.customerSaleManager.CustomerAllotControllor;
 import com.dlcat.core.controller.customer.customerSaleManager.PossibleCustomerController;
 import com.dlcat.core.controller.collateral.CollateralController;
-import com.dlcat.core.controller.index.FileController;
 import com.dlcat.core.controller.index.IndexController;
+import com.dlcat.core.controller.index.LoginController;
+import com.dlcat.core.controller.loan.LoanApplyController;
+import com.dlcat.core.controller.loan.LoanFlowApproveController;
+import com.dlcat.core.controller.loan.LoanShowController;
+import com.dlcat.core.controller.system.DataController;
 import com.dlcat.core.controller.system.RoleManageController;
+import com.dlcat.core.controller.system.SystemManageController;
 import com.dlcat.core.controller.system.UserManageController;
+import com.dlcat.core.model.LoanApplyApprove;
 import com.dlcat.core.model._MappingKit;
+import com.dlcat.core.plugins.KissoJfinalPlugin;
 import com.jfinal.config.Constants;
 import com.jfinal.config.Handlers;
 import com.jfinal.config.Interceptors;
@@ -30,11 +36,14 @@ import com.jfinal.config.JFinalConfig;
 import com.jfinal.config.Plugins;
 import com.jfinal.config.Routes;
 import com.jfinal.core.JFinal;
+import com.jfinal.ext.interceptor.LogInterceptor;
 import com.jfinal.ext.interceptor.SessionInViewInterceptor;
 import com.jfinal.kit.PropKit;
 import com.jfinal.plugin.activerecord.ActiveRecordPlugin;
 import com.jfinal.plugin.activerecord.CaseInsensitiveContainerFactory;
 import com.jfinal.plugin.activerecord.dialect.MysqlDialect;
+import com.jfinal.plugin.activerecord.tx.TxByActionKeyRegex;
+import com.jfinal.plugin.activerecord.tx.TxByActionKeys;
 import com.jfinal.plugin.druid.DruidPlugin;
 import com.jfinal.plugin.druid.DruidStatViewHandler;
 import com.jfinal.template.Engine;
@@ -51,13 +60,16 @@ public class Run extends JFinalConfig {
 	public void configRoute(Routes me) {
 		// 所有的html文件都放在WEB-INF下
 		me.setBaseViewPath("/WEB-INF/views");
-
+		//通用路由
+		me.add("/common",CommonController.class);
+		
 		// 控制台模块
 		// 登录，首页
 		me.add("/", IndexController.class);
+		me.add("/login", LoginController.class);
 
 		// 个人信息设置
-		me.add("/set", SetController.class, "/console");
+		me.add("/set", PersonalInfoSetController.class, "/console");
 
 		// 客户管理模块
 		// 客户营销管理
@@ -84,14 +96,18 @@ public class Run extends JFinalConfig {
 		me.add("/role", RoleManageController.class, "/");
 		me.add("/userManage", UserManageController.class, "/");
 
+		//业务管理模块
+		me.add("/loanShow", LoanShowController.class, "/");//借款展示
+		me.add("/loanApply", LoanApplyController.class, "/");//借款申请
+		me.add("/loanFlowApprove", LoanFlowApproveController.class, "/");//借款流程审批
+		
 		// 测试路由
 		me.add("/test", TestController.class, "/");
-		// 测试路由
 		me.add("/flow", FlowController.class, "/views");
-		// 测试路由
 		me.add("/user", TestUserController.class, "/views");
 		me.add("/data", DataController.class);
-
+		me.add("/form",CrudController.class);
+		
 	}
 
 	@Override
@@ -124,6 +140,10 @@ public class Run extends JFinalConfig {
 		me.addGlobalActionInterceptor(new SessionInViewInterceptor());
 		// 登录验证
 		// me.addGlobalActionInterceptor(new LoginInterceptor());
+		
+		//拦截带此URL的添加log日志
+		//me.addGlobalActionInterceptor(new SysLogInterceptor("/toEdit","/possibleCustomer/toAdd","/del"));
+		
 
 	}
 
@@ -131,6 +151,9 @@ public class Run extends JFinalConfig {
 	public void configPlugin(Plugins me) {
 		ActiveRecordPlugin arp = addDataSource(me, "dlcat_erp", JdbcUtils.MYSQL);
 		_MappingKit.mapping(arp);
+		
+		//kisso 初始化
+		me.add(new KissoJfinalPlugin());
 
 	}
 

@@ -243,7 +243,7 @@ public class PageUtil {
 	public static DyResponse createFormPageStructure(String formName,List<FormField> formFieldList,String submitUrl){
 		return  createFormPageStructure( formName, formFieldList, submitUrl,1);
 	}
-	public static DyResponse createFormPageStructure(String formName,List<FormField> formFieldList,String submitUrl,Integer columnsAmount){
+	public static DyResponse createFormPageStructure(String formName,List<FormField> formFieldList,String submitUrl,Integer columnAmount){
 		//参数校验
 		if(formFieldList == null || formFieldList.size() == 0 || StringUtils.isBlank(submitUrl)){
 			return null;
@@ -254,7 +254,7 @@ public class PageUtil {
 		}
 		formData.setFormFieldList(formFieldList);
 		formData.setSubmitUrl(submitUrl);
-		formData.setColumnAmount(columnsAmount == null || columnsAmount <= 1 ? 1:columnsAmount);
+		formData.setColumnAmount(columnAmount == null || columnAmount <= 1 ? 1:columnAmount);
 		
 		DyResponse response = new DyResponse();
 		response.setStatus(DyResponse.OK);
@@ -264,7 +264,7 @@ public class PageUtil {
 	}
 
 	/**
-	 * 构造列表页面结构
+	 * 构造列表页面结构（单表）
 	 * 适用于单表数据显示
 	 * @param name	列表页面名称
 	 * @param isSingleTable		是否单表查询
@@ -284,11 +284,11 @@ public class PageUtil {
 		}
 		//获取列表数据sql语句
 		//String querySql = StringUtils.getQuerySql(strObj, tableHeader.getFildNames());
-		return createTablePageStructure(dataUrl , name ,tableHeader,search,menuId,menus);
+		return createTablePageStructure(dataUrl , name , tableHeader , search , menuId , menus);
 	}
 	/**
-	 * 构造列表页面结构
-	 * sql语句需要自己写完整传入，适用于多表情况
+	 * 构造列表页面结构（通用）
+	 * sql语句需要自己写完整传入，适用于多表或者单表情况
 	 * @param dataUrl	请求数据地址
 	 * @param name	列表页面名称
 	 * @param tableHeader	表头

@@ -7,6 +7,9 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+import org.apache.commons.lang3.Validate;
+import org.apache.shiro.codec.Base64;
+
 import com.dlcat.common.entity.DyResponse;
 import com.dlcat.common.entity.QueryItem;
 import com.dlcat.common.utils.JsonUtils;
@@ -76,7 +79,8 @@ public class BaseController extends Controller {
 			 Map<String,Object> resultData = new HashMap<String, Object>();
 			 resultData.put("dataCount", dataCount); //本次请求总条数
 			 resultData.put("dataList", res);        //数据
-			 resultData.put("queryItem", JsonUtils.object2JsonNoEscaping(item));   //查询Item转化成json返回到页面（配合导出）
+			//进行简单的加密
+			 resultData.put("queryItem", Base64.encodeToString(JsonUtils.object2JsonNoEscaping(item).getBytes()));   //查询Item转化成json返回到页面（配合导出）
 			 resultData.put("page", item.getLimit());//分页步长
 			 //QueryItem qi = JsonUtils.fromJson(a, QueryItem.class);
 			 dyResponse.setData(resultData);
@@ -213,6 +217,16 @@ public class BaseController extends Controller {
 		SysUser sysUser=getSessionAttr("user");
 		return sysUser.getInt("belong_org_id");
 	}
+	/**
+	 * 获取当前登录用户
+	 * @return
+	 * @author masai
+	 * @time 2017年5月25日 下午6:48:29
+	 */
+	protected SysUser getCurrentUser() {
+		SysUser sysUser=getSessionAttr("user");
+		return sysUser;
+	}
 	
 	/**
 	* @author:zhaozhongyuan 
@@ -246,7 +260,6 @@ public class BaseController extends Controller {
 			Db.batchUpdate(tableName, recordList, ids.length);
 			renderText("操作成功");
 		} catch (Exception e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 			renderText("操作失败");
 		}
@@ -278,6 +291,82 @@ public class BaseController extends Controller {
 		BaseController.idarrays = idarrays;
 	}
 	
-
+	/**
+	 * 非空校验
+	 * @param obj 要做校验的数据 
+	 * @param texts 提示信息
+	 * @return
+	 */
+	@SuppressWarnings("unchecked")
+	public static String validateNull(Object[] obj, String[] texts) {
+		//校验参数
+		if(obj == null || texts == null || texts.length <= 0 || obj.length != texts.length){
+			return null;
+		}
+		String errorMsg = null;
+		for(int i=0;i<obj.length;i++){
+			Object value = obj[i];
+			boolean isNull = false;
+			if(value != null){
+				if(value instanceof String){
+					isNull = StringUtils.isBlank(value.toString()) ? true : false;
+				}
+			}else{
+				isNull = true;
+			}
+			if(isNull){
+				errorMsg = texts[i]+"不能为空";
+				break;
+			}
+		}
+		return errorMsg;
+	}
+	/**
+	 * 响应信息
+	 * @return
+	 * @author masai
+	 * @time 2017年5月25日 下午8:41:20
+	 */
+	public DyResponse createSuccessJsonResonse() {
+		return createSuccessJsonResonse(null);
+	}
+	/**
+	 * 响应信息
+	 * @param data
+	 * @return
+	 * @author masai
+	 * @time 2017年5月23日 下午6:01:07
+	 */
+	public DyResponse createSuccessJsonResonse(Object data) {
+		return createSuccessJsonResonse(data, "OK");
+	}
+	/**
+	 * 响应信息
+	 * @param data
+	 * @param description
+	 * @return
+	 * @author masai
+	 * @time 2017年5月23日 下午6:02:17
+	 */
+	public DyResponse createSuccessJsonResonse(Object data, Object description) {
+		DyResponse response = new DyResponse();
+		response.setStatus(200);
+		response.setDescription(description);
+		response.setData(data);
+		return response;
+	}
+	/**
+	 * 响应错误信息
+	 * @param errorMsg
+	 * @return
+	 * @author masai
+	 * @time 2017年5月23日 下午6:02:24
+	 */
+	public DyResponse createErrorJsonResonse(Object errorMsg) {
+		DyResponse response = new DyResponse();
+		response.setStatus(100);
+		response.setDescription(errorMsg);
+		return response;
+	}
 	
 }

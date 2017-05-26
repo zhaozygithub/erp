@@ -246,11 +246,18 @@ public class DateUtil {
 		}
 		return null;
 	}
-
+	/**
+	 * 获取时间戳 精确到秒
+	 */
 	public static Long getCurrentTime() {
 		return System.currentTimeMillis()/1000;
 	}
-	
+	/**
+	 * 获取时间戳 精确到毫秒
+	 */
+	public static Long getCurrentTimeMS() {
+		return System.currentTimeMillis();
+	}
 	public static Date getCurrentDate() {
 		try {
 			return dateFormat.get().parse(dateFormat.get().format(new Date()));

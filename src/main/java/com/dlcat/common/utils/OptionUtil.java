@@ -20,9 +20,9 @@ public class OptionUtil {
 	public static BaseModel baseModel = new BaseModel();
 	/**
 	 * 从字典表中获取option列表（此方法禁止修改）
-	 * @param codeNo		 字典表码值
-	 * @param isEffectStatus状态是否有效 true表示有效则限制了status=1，false或者null则不限制status
-	 * @param whereList		 where条件，多个条件使用and间隔，第一个条件前面，最后一个条件后面无and，会自动去除
+	 * @param codeNo		 	字典表码值
+	 * @param isEffectStatus	状态是否有效 true表示有效则限制了status=1，false或者null则不限制status
+	 * @param whereList		 	where条件，多个条件使用and间隔，第一个条件前面，最后一个条件后面无and，会自动去除
 	 * @return
 	 * @author masai
 	 * @time 2017年5月13日 下午5:09:45
@@ -50,6 +50,7 @@ public class OptionUtil {
 				sql = sql.substring(0, sql.length()-3);
 			}
 			sql +=whereList;
+			sql += "order by sort_no";
 			try {
 				codeLibraries = baseModel.baseFind(Map.class, sql , null);;
 			} catch (Exception e) {
@@ -70,7 +71,11 @@ public class OptionUtil {
 	 * @throws Exception 
 	 * @time 2017年5月13日 下午5:34:29
 	 */
+	@SuppressWarnings("unchecked")
 	public static List<Map> getOptionListByOther(String key , String value , String table , String whereList){
+		return getOptionListByOther(key, value, table, whereList,null);
+	}
+	public static List<Map> getOptionListByOther(String key , String value , String table , String whereList , String order){
 		//（1）.参数校验
 		if(StringUtils.isBlank(key) || StringUtils.isBlank(value) || StringUtils.isBlank(table)){
 			try {
@@ -89,6 +94,10 @@ public class OptionUtil {
 		if(StringUtils.isNotBlank(whereList)){
 			strBuffer.append(" where ");
 			strBuffer.append(whereList);
+		}
+		if(StringUtils.isNotBlank(order)){
+			strBuffer.append(" order by ");
+			strBuffer.append(order);
 		}
 		//（3）.获取查询结果
 		List<Map> resList = new ArrayList<Map>();
@@ -122,10 +131,12 @@ public class OptionUtil {
 		}
 		//生成
 		List<Map> resList = new ArrayList<Map>();
-		Map map = null;
+		Map<String, Object> map = null;
 		for(int i = 0 ; i < keys.length ; i++){
 			map = new HashMap<String, Object>();
-			map.put(keys[i], values[i]);
+			//页面中统一按照item_no作为key，item_name作为value
+			map.put("item_no", keys[i]);
+			map.put("item_name", values[i]);
 			resList.add(map);
 		}
 		return resList;

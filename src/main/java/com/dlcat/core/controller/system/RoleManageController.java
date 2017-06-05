@@ -19,6 +19,7 @@ import com.dlcat.common.utils.OptionUtil;
 import com.dlcat.common.utils.PageUtil;
 import com.dlcat.core.model.CuObjectCustomer;
 import com.dlcat.core.model.CuProperty;
+import com.dlcat.core.model.SysAdminLog;
 import com.dlcat.core.model.SysMenu;
 import com.dlcat.core.model.SysRole;
 import com.dlcat.core.model.SysUser;
@@ -30,7 +31,6 @@ import com.jfinal.plugin.activerecord.tx.Tx;
 
 /**
  * 角色管理
- * 
  * @ClassName RoleManageController
  * @author liuran
  * @time 2017年5月11日 下午5:51:08
@@ -70,27 +70,15 @@ public class RoleManageController extends BaseController {
 		this.setAttr("response", response);
 		this.render("common/table.html");
 	}
-
 	public void data() {
-		// 1.从页面获取参数 condition参数名称固定 key=condition 格式为：name:ms,age:24
-		// 获取分页参数 固定格式 key=page
 		String conditation = this.getPara("condition");
 		String page = this.getPara("page");
 		System.out.println("查询条件：" + conditation);
-		// 2.列表数据sql 特别注意：如果需要如果需要转化成为字典值调用getCodeItemName()数据库函数，
-		// 字典值别名一律为 cn_原名称
-		/*
-		 * StringBuffer sql = new
-		 * StringBuffer("select *, getCodeItemName('YesNo',status) " +
-		 * "as cn_status from loan_product_category where 1=1 ");
-		 */
-		// 3.获取参数Map，处理字符串拼接
 		Map whereMap = super.getWhereMap(conditation);
-		// 定义查询对象
 		QueryItem item = new QueryItem();
 		// 设置表名（多表用逗号间隔）
 		item.setTableNames("sys_role");
-		// 设置查询字段（可以使用函数包括聚合函数）
+		// 设置查询字段（可以使用函数包括聚合函数） 字典值别名一律为 cn_原名称
 		item.setFields("*, getCodeItemName('YesNo',status) as cn_status");
 		// 设置分页步长 如果不设置 或者 值<=0，则会默认歩长为20
 		// item.setLimit(10);
@@ -104,22 +92,20 @@ public class RoleManageController extends BaseController {
 
 		item.setWhereList(whereList);
 		DyResponse dyResponse = super.getTableData(item, page);
-		this.setAttr("response", dyResponse);
-
 		renderJson(dyResponse);
 	}
 
 	/**
 	 * 构建表单页面，增改查
-	 * 
 	 * @author liuran
 	 * @time 2017年5月16日 下午5:24:47 void
 	 */
 	public void form() {
 		String type = getPara(0);
 		String id = getPara("id");
+		String btnId=getPara("btnid");
 		if(type == null){
-			renderHtml("<h1>数据库错误，请联系管理员。</h1>");
+			renderJson(createErrorJsonResonse("数据库错误，请联系管理员！"));
 			return;
 		}
 		List<FormField> formFieldList = new ArrayList<FormField>();
@@ -134,17 +120,17 @@ public class RoleManageController extends BaseController {
 
 		if (type.equals("add")) {
 			response = PageUtil.createFormPageStructure("角色添加", formFieldList,
-					"/role/toAdd");
+					"/role/toAdd?btnId="+btnId);
 		} else if (type.equals("edit")) {
 			if (id==null) {
-				renderHtml("<h1>请先选择一条记录。</h1>");
+				renderJson(createErrorJsonResonse("请先选择一条记录！"));
 				return;
 			}
 			response = PageUtil.createFormPageStructure("角色编辑", formFieldList,
-					"/role/toEdit");
+					"/role/toEdit?btnId="+btnId);
 		} else if (type.equals("detail")) {
 			if (id==null) {
-				renderHtml("<h1>请先选择一条记录。</h1>");
+				renderJson(createErrorJsonResonse("请先选择一条记录！"));
 				return;
 			}
 			// 第三个参数 由于校验非空，所以要随便写点什么即可
@@ -152,7 +138,7 @@ public class RoleManageController extends BaseController {
 					formFieldList, "/detail");
 		}
 		if (response == null) {
-			renderHtml("<h1>数据库错误，请联系管理员。</h1>");
+			renderJson(createErrorJsonResonse("数据库错误，请联系管理员！"));
 			return;
 		}
 		this.setAttr("response", response);
@@ -160,9 +146,10 @@ public class RoleManageController extends BaseController {
 	}
 
 	public void toAdd() {
+		String btnId = getPara("btnId");
 		SysUser sysUser = getSessionAttr("user");
 		// String customerId = getPara("cu_id");
-		SysRole role = getModel(SysRole.class, "");
+		SysRole role = getModel(SysRole.class, "",true);
 		// cuProperty.set("id", "cpr" + DateUtil.getCurrentTime());
 		role.set("input_user_id", sysUser.getInt("id"));
 		role.set("input_user_name", sysUser.getStr("name"));
@@ -172,20 +159,22 @@ public class RoleManageController extends BaseController {
 
 		try {
 			role.save();
-			renderHtml("<h1>操作成功！！</h1>");
+			SysAdminLog.SetAdminLog(sysUser, btnId, "添加角色，编号为："+role.getInt("id"));
+			renderJson(createSuccessJsonResonse());
 		} catch (Exception e) {
-			renderHtml("<h1>操作失败！！</h1>");
+			renderJson(createErrorJsonResonse("操作失败！"));
 		}
 	}
 
 	/**
 	 * 删除
-	 * 
 	 * @author liuran
 	 * @time 2017年5月16日 下午7:01:32 void
 	 */
 	@Before(Tx.class)
 	public void del() {
+		String btnId = getPara("btnid");
+		SysUser user = getSessionAttr("user");
 		String id = getPara("id");
 		if (id == null) {
 			renderText("请选择至少一条记录！！");
@@ -200,56 +189,57 @@ public class RoleManageController extends BaseController {
 			for (String id1 : ids) {
 				role.deleteById(id1);
 			}
-			renderText("操作成功！！");
+			SysAdminLog.SetAdminLog(user, btnId, "删除角色，编号为："+id);
+			renderJson(createSuccessJsonResonse());
 		} catch (Exception e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
-			renderText("操作失败！！");
+			renderJson(createErrorJsonResonse("操作失败！"));
 		}
 	}
 
 	/**
 	 * 编辑
-	 * 
 	 * @author liuran
 	 * @time 2017年5月18日 下午1:42:59 void
 	 */
 	public void toEdit() {
+		String btnId = getPara("btnId");
 		SysUser user = getSessionAttr("user");
-		SysRole role = getModel(SysRole.class, "");
-		try {
-			role.set("update_time", DateUtil.getCurrentTime());
-			role.set("update_user_id", user.getInt("id"));
+		SysRole role = getModel(SysRole.class, "",true);
+		role.set("update_time", DateUtil.getCurrentTime());
+		role.set("update_user_id", user.getInt("id"));
+		try {		
 			role.update();
-			renderHtml("<h1>操作成功！！</h1>");
+			SysAdminLog.SetAdminLog(user, btnId, "编辑角色，角色编号为："+role.getInt("id")+"，内容为："+role.toString());
+			renderJson(createSuccessJsonResonse());
 		} catch (Exception e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
-			renderHtml("<h1>操作失败！！</h1>");
+			renderJson(createErrorJsonResonse("操作失败！"));
 		}
 	}
 
-	// 菜单权限分配
+	
 	public void menuAllot() {
 		SysMenu sysMenus = getSessionAttr("menuTree");
 		
-		// 转到分配权限的页面或表单
+		// 转到分配权限的页面
 //		 render("systemManage/menuAllot.html");
 	}
 
 	// 权限更新
 	public void assignUpdate() {
-				// 从前台传用户id 和  能操作的menu id 集合
-//		String userId = getPara("userid");
-//		String menu_id = getPara("id");
-//		
-//		try {
-//			Db.update("update sys_role set role_menus = ?  where id=?",menu_id,userId);
-//			renderText("操作成功！！");
-//		} catch (Exception e) {
-//			// TODO Auto-generated catch block
-//			e.printStackTrace();
-//			renderText("操作失败！！");
-//		}
+		String btnId = getPara("btnId");
+		SysUser user = getSessionAttr("user");
+		// 从前台传用户id 和  能操作的menu id 集合
+		String id = getPara("id");
+		String menu_id = getPara("id");
+		try {
+			Db.update("update sys_role set role_menus = ?  where id=?",menu_id,id);
+			SysAdminLog.SetAdminLog(user, btnId, "更新角色："+id+"的权限为："+menu_id);
+			renderJson(createSuccessJsonResonse());
+		} catch (Exception e) {
+			e.printStackTrace();
+			renderJson(createErrorJsonResonse("操作失败！"));
+		}
 	}
 }

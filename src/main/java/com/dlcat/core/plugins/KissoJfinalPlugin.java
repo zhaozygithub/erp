@@ -25,7 +25,7 @@ import com.jfinal.plugin.IPlugin;
  * Kisso jfinal 插件形式初始化
  * </p>
  * 
- * jfinal 拦截器不够灵活，因此写在 demo 中，方便您自己修改。
+ * 单点登录框架kisso
  * 
  * @author hubin
  * @Date 2015-02-06

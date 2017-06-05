@@ -117,7 +117,7 @@ public class BlackListController extends BaseController {
 	@Before(Tx.class)
 	public void btnRemoveBlackList() {
 		String id=getPara("id");
-		String btnID=getPara("btnid");
+		String btnId=getPara("btnid");
 		if (id==null || id.equals("")) {
 			renderJson(createErrorJsonResonse("请选择至少一条记录！"));
 			return;
@@ -137,7 +137,7 @@ public class BlackListController extends BaseController {
 		
 		try {
 			updateByIds(CuObjectCustomer.class, ids, map);
-			SysAdminLog.SetAdminLog(user, btnID, "移除黑名单客户id："+id);
+			SysAdminLog.SetAdminLog(user, btnId, "移除黑名单客户编号："+id);
 			renderJson(createSuccessJsonResonse());
 		} catch (Exception e) {
 			e.printStackTrace();

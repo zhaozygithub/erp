@@ -149,7 +149,15 @@ public final class CastUtil {
             return null;
         }
     }
-    
+    /**
+     * 类型转化公用方法
+     * @param obj
+     * @param destClass
+     * @param charset
+     * @return
+     * @author masai
+     * @time 2017年6月1日 下午6:56:06
+     */
     @SuppressWarnings("unchecked")
 	public static Object cast(Object obj, Class destClass, String charset) {
         if(obj == null || destClass == null || destClass == Void.class || destClass == Void.TYPE) return null;

@@ -226,9 +226,11 @@ public class PossibleCustomerController extends BaseController {
 	 */
 	@Before(Tx.class)
 	public void btnCustomeFollowUp() {
+		String btnId=getPara("btnid");
+		SysUser user = getSessionAttr("user");
 		String id=getPara("id");
 		if (id==null||id.equals("")) {
-			renderHtml("<h1>请选择至少一条记录。</h1>");
+			renderJson(createErrorJsonResonse("请选择至少一条记录！"));
 			return;
 		}
 		// 获取要更新的主键数组
@@ -239,9 +241,12 @@ public class PossibleCustomerController extends BaseController {
 		map.put("op_status", 2);
 		try {
 			updateByIds(CuPossibleCustomer.class, ids, map);
+			SysAdminLog.SetAdminLog(user, btnId, "跟进客户："+id);
+			renderJson(createSuccessJsonResonse());
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
+			renderJson(createErrorJsonResonse("操作失败！"));
 		}
 	}
 
@@ -254,9 +259,11 @@ public class PossibleCustomerController extends BaseController {
 	 */
 	@Before(Tx.class)
 	public void btnCustomeToInvalid() {
+		String btnId=getPara("btnid");
+		SysUser user = getSessionAttr("user");
 		String id=getPara("id");
 		if (id==null||id.equals("")) {
-			renderHtml("<h1>请选择至少一条记录。</h1>");
+			renderJson(createErrorJsonResonse("请选择至少一条记录！"));
 			return;
 		}
 		// 获取要更新的主键数组
@@ -267,9 +274,12 @@ public class PossibleCustomerController extends BaseController {
 		map.put("op_status", 4);
 		try {
 			updateByIds(CuPossibleCustomer.class, ids, map);
+			SysAdminLog.SetAdminLog(user, btnId, "把客户："+id+"转为无效客户");
+			renderJson(createSuccessJsonResonse());
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
+			renderJson(createErrorJsonResonse("操作失败！"));
 		}
 	}
 
@@ -281,9 +291,11 @@ public class PossibleCustomerController extends BaseController {
 	 */
 	@Before(Tx.class)
 	public void btnCustomeToFormal() {
+		String btnId=getPara("btnid");
+		SysUser user = getSessionAttr("user");
 		String id=getPara("id");
 		if (id==null||id.equals("")) {
-			renderHtml("<h1>请选择至少一条记录。</h1>");
+			renderJson(createErrorJsonResonse("请选择至少一条记录！"));
 			return;
 		}
 		// 获取要更新的主键数组
@@ -318,17 +330,18 @@ public class PossibleCustomerController extends BaseController {
 
 				try {
 					Db.save("cu_object_customer", record);
-					renderText("操作成功");
+					
 				} catch (Exception e) {
 					// TODO Auto-generated catch block
 					e.printStackTrace();
-					renderText("操作失败");
 				}
-
 			}
+			SysAdminLog.SetAdminLog(user, btnId, "把客户："+id+"转为正式客户");
+			renderJson(createSuccessJsonResonse());
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
+			renderJson(createErrorJsonResonse("操作失败！"));
 		}
 	}
 
@@ -355,15 +368,15 @@ public class PossibleCustomerController extends BaseController {
 			response = PageUtil.createFormPageStructure("意向客户添加", formFieldList, "/possibleCustomer/toAdd?btnId="+btnID);
 		} else if (type.equals("edit")) {
 			if (id==null||id.equals("")) {
-				renderHtml("<h1>请先选择一条记录。</h1>");
+				renderJson(createErrorJsonResonse("请先选择一条记录！"));
 				return;
 			}
-			response = PageUtil.createFormPageStructure("意向客户编辑", formFieldList, "/possibleCustomer/toEdit");
+			response = PageUtil.createFormPageStructure("意向客户编辑", formFieldList, "/possibleCustomer/toEdit?btnId="+btnID);
 		}else if (type.equals("detail")) {
 			formFieldList.add(new FormField("type", "客户类型", "select", "",OptionUtil.getOptionListByCodeLibrary("CustomerType", true, "")));
 
 			if (id==null||id.equals("")) {
-				renderHtml("<h1>请先选择一条记录。</h1>");
+				renderJson(createErrorJsonResonse("请先选择一条记录！"));
 				return;
 			}
 			//第三个参数 由于校验非空，所以要随便写点什么即可
@@ -401,10 +414,10 @@ public class PossibleCustomerController extends BaseController {
 
 		try {
 			cuPossibleCustomer.save();
-			SysAdminLog.SetAdminLog(sysUser, btnID, id);
-			renderText("操作成功");
+			SysAdminLog.SetAdminLog(sysUser, btnID, "添加意向客户，客户编号为："+cuPossibleCustomer.getStr("id"));
+			renderJson(createSuccessJsonResonse());
 		} catch (Exception e) {
-			renderHtml("<h1>操作失败！！</h1>");
+			renderJson(createErrorJsonResonse("操作失败！"));
 		}
 	}
 
@@ -416,9 +429,11 @@ public class PossibleCustomerController extends BaseController {
 	 */
 	@Before(Tx.class)
 	public void del() {
+		String btnId = getPara("btnid");
+		SysUser user = getSessionAttr("user");
 		String id=getPara("id");
 		if (id==null||id.equals("")) {
-			renderHtml("<h1>请先选择一条记录。</h1>");
+			renderJson(createErrorJsonResonse("请先选择一条记录！"));
 			return;
 		}
 		
@@ -430,11 +445,10 @@ public class PossibleCustomerController extends BaseController {
 			for (String id1 : ids) {
 				cuPossibleCustomer.deleteById(id1);
 			}
-			renderText("操作成功");
+			SysAdminLog.SetAdminLog(user, btnId, "删除意向客户，客户编号为："+id);
+			renderJson(createSuccessJsonResonse());
 		} catch (Exception e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-			renderText("操作失败");
+			renderJson(createErrorJsonResonse("操作失败！"));
 		}
 	}
 
@@ -445,14 +459,15 @@ public class PossibleCustomerController extends BaseController {
 	 * @date 2017年5月16日 下午2:36:39
 	 */
 	public void toEdit() {
-		CuPossibleCustomer cuPossibleCustomer = getModel(CuPossibleCustomer.class, "");
+		String btnId = getPara("btnid");
+		SysUser user = getSessionAttr("user");
+		CuPossibleCustomer cuPossibleCustomer = getModel(CuPossibleCustomer.class, "",true);
 		try {
 			cuPossibleCustomer.update();
-			renderText("操作成功");
+			SysAdminLog.SetAdminLog(user, btnId, "编辑客户，客户编号为："+cuPossibleCustomer.getStr("id")+"，内容为："+cuPossibleCustomer.toString());
+			renderJson(createSuccessJsonResonse());
 		} catch (Exception e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-			renderText("操作成功");
+			renderJson(createErrorJsonResonse("操作失败！"));
 		}
 	}
 

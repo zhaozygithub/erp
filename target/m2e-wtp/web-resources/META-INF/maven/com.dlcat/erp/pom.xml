@@ -35,17 +35,17 @@
 		</dependency>
 		<!-- =========================jetty start================================= -->
 		<!-- https://mvnrepository.com/artifact/org.eclipse.jetty/jetty-server -->
-		<dependency>
+		<!-- <dependency>
 			<groupId>org.eclipse.jetty</groupId>
 			<artifactId>jetty-server</artifactId>
 			<version>8.1.8.v20121106</version>
 		</dependency>
-		<!-- https://mvnrepository.com/artifact/org.eclipse.jetty/jetty-webapp -->
+		https://mvnrepository.com/artifact/org.eclipse.jetty/jetty-webapp
 		<dependency>
 			<groupId>org.eclipse.jetty</groupId>
 			<artifactId>jetty-webapp</artifactId>
 			<version>8.1.8.v20121106</version>
-		</dependency>
+		</dependency> -->
 		<!-- =========================jetty end================================= -->
 		<dependency>
 			<groupId>com.alibaba</groupId>
@@ -145,7 +145,11 @@
 			<version>1.2.15</version>
 		</dependency>
 		<!-- kisso end -->
-
+		<dependency>
+		    <groupId>javax.servlet</groupId>
+		    <artifactId>javax.servlet-api</artifactId>
+		    <version>3.1.0</version>
+		</dependency>
 	</dependencies>
 	<build>
 		<finalName>erp</finalName>

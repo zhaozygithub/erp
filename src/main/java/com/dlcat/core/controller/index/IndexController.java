@@ -9,6 +9,9 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+
+import com.baomidou.kisso.SSOHelper;
+import javax.servlet.http.HttpServletRequest;
 import com.dlcat.common.utils.DateUtil;
 import com.dlcat.common.utils.IpUtil;
 import com.dlcat.core.Interceptor.SSOJfinalInterceptor;
@@ -195,12 +198,14 @@ public class IndexController extends Controller {
 		}
 		//验证通过后，登录次数+1 ,并更新登录ip和登录时间
 		String ip = "";
-		try {
-			ip = IpUtil.getRealIp();		
-		} catch (SocketException e) {
-			System.out.println("获取用户IP失败。");
-			e.printStackTrace();			
-		}
+			try {
+				ip = IpUtil.getRemoteIp(this.getRequest());
+			} catch (Exception e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+				System.out.println("获取用户IP失败。");
+			}	
+		
 		Db.update("update sys_user set login_count = login_count+1 ,last_login_time = ? ,last_login_ip = ? where id =?",DateUtil.getCurrentTime(),ip,user.getInt("id"));
 		//登录日志
 		SysLoginLog log = new SysLoginLog();
@@ -271,12 +276,8 @@ public class IndexController extends Controller {
 				sysMenus.getChildren().add(child);
 			}
 		}
-
 		sysMenus.set("name", "顶级菜单");
-
 		setSessionAttr("menuTree", sysMenus);
-		
-		
 	}
 
 	/**
@@ -290,6 +291,9 @@ public class IndexController extends Controller {
 	 * 退出登录
 	 */
 	public void doExit() {
+		//单用户登录，退出的时候删除cookies
+		SSOHelper.clearLogin(getRequest(), getResponse());
+		//删除session
 		removeSessionAttr("user");
 		removeSessionAttr("menuTree");
 		redirect("/");

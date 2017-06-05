@@ -6,25 +6,18 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
-
-import org.apache.commons.lang3.Validate;
 import org.apache.shiro.codec.Base64;
-
 import com.dlcat.common.entity.DyResponse;
 import com.dlcat.common.entity.QueryItem;
 import com.dlcat.common.utils.JsonUtils;
 import com.dlcat.common.utils.StringUtils;
-import com.dlcat.core.model.SysMenu;
 import com.dlcat.core.model.SysUser;
-import com.google.gson.Gson;
-import com.jfinal.aop.Before;
 import com.jfinal.core.Controller;
 import com.jfinal.kit.JMap;
 import com.jfinal.plugin.activerecord.Db;
 import com.jfinal.plugin.activerecord.Model;
 import com.jfinal.plugin.activerecord.Record;
 import com.jfinal.plugin.activerecord.TableMapping;
-import com.jfinal.plugin.activerecord.tx.Tx;
 
 /**
  * controller基础类
@@ -77,10 +70,11 @@ public class BaseController extends Controller {
 			 //获取sql语句，并查询总数
 			 Long dataCount = baseModel.baseFindFrist(queryCountSql).getLong("count");
 			 //获取sql语句，并查询数据
-			 List<Record> res = baseModel.baseFind(queryItemSql, new Object[]{(p-1)*item.getLimit()});
+			 List<Map> res = baseModel.baseFind(Map.class, queryItemSql, new Object[]{(p-1)*item.getLimit()});
 			 //返回数据
 			 resultData.put("dataCount", dataCount); //本次请求总条数
-			 resultData.put("dataList", res);        //数据
+			 //处理字段反射
+			 resultData.put("dataList", handleFieldReflect(item.getFieldsReflect(), res));        //列表数据
 			//进行简单的加密
 			 resultData.put("queryItem", Base64.encodeToString(JsonUtils.object2JsonNoEscaping(item).getBytes()));   //查询Item转化成json返回到页面（配合导出）
 			 resultData.put("page", item.getLimit());//分页步长
@@ -90,6 +84,63 @@ public class BaseController extends Controller {
 			return createErrorJsonResonse("请求数据出错");
 		}
 		return createSuccessJsonResonse(resultData);
+	}
+	/**
+	 * 处理列表数据反射
+	 * 注意：fieldReflect 必须按照规定的格式来传参数，否则会出错，见QueryItem.fieldsReflect用法
+	 * @param fieldReflect	反射参数列表
+	 * @param dataList		带发射数据集合
+	 * @author masai
+	 * @time 2017年5月29日 上午11:18:20
+	 */
+	public List<Map> handleFieldReflect(String fieldsReflect , List<Map> dataList){
+		try {
+			if(dataList != null){
+				 if(StringUtils.isNotBlank(fieldsReflect)){
+					 fieldsReflect = fieldsReflect.trim();
+					 //所有字段映射map集合
+					 Map<String, Map<String, Object>> reflectMap = new HashMap<String, Map<String, Object>>();
+					 //单个字段映射结果map集合
+					 Map<String , Object> resultMap = null;
+					 String[] allReflect = fieldsReflect.split(";");
+					 List<String> listSql = new ArrayList<String>();
+					 StringBuffer sb = null;
+					 for(String temp : allReflect){
+						 temp = temp.trim();
+						 String[] singleFieldReflect = temp.split(":");
+						 String reflectKey = singleFieldReflect[0].trim();
+						 String[] tableInfo = singleFieldReflect[1].trim().split(",");//获取反射的单个字段的数据源，包括 表名，key,keyField
+						 //拼接反射查询字符串
+						 sb = new StringBuffer(" select ");
+						 sb.append(" "+tableInfo[1].trim()+" ");
+						 sb.append(" , ");
+						 sb.append(" "+tableInfo[2].trim()+" ");
+						 sb.append(" from ");
+						 sb.append(" "+tableInfo[0].trim()+" ");
+						 //将查询到的反射值转为map类型， 反射结果分别作为key和value
+						 List<Map> mapList = this.baseModel.baseFind(Map.class , sb.toString() , null);
+						 resultMap = new HashMap<String, Object>();
+						 for(Map m : mapList){//, 
+							 resultMap.put(m.get(tableInfo[1].trim()).toString() ,m.get(tableInfo[2].trim()));//将查询的两个字段值分别作为key和value
+						 }
+						 reflectMap.put(reflectKey, resultMap);
+					 }
+					 //处理字段发射
+					 for(String key : reflectMap.keySet()){
+						 Map fieldRef = reflectMap.get(key);
+						 for(Map m : dataList){
+							 Object value = fieldRef.get(m.get(key).toString());
+							 if(m.containsKey(key) && value != null){
+								 m.put(key, value);
+							 }
+						 }
+					 }
+				 }
+			 }
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return dataList;
 	}
 	/**
 	 * 请求列表数据（手动组装sql）（默认分页歩长20，无需手动加）

@@ -71,14 +71,17 @@ public class LoanApplyController  extends BaseController {
 		//校验借款名称
 		if(StringUtils.isBlank(loanName)){
 			renderJson(createErrorJsonResonse("借款名称不能为空"));
+			return;
 		}
 		if(!LoanApplyApprove.isLoanApplyNameExist(loanName)){
 			renderJson(createErrorJsonResonse("借款名称已存在"));
+			return;
 		}
 		//校验借款产品种类
 		LoanProductCategory loanProductCategory = LoanProductCategory.getLoanProductById(loanProductType);
 		if(loanProductCategory == null){
 			renderJson(createErrorJsonResonse("借款种类不存在"));
+			return;
 		}
 		//校验还款方式
 		if(LoanRepayType.getLoanRepayTypeById(repayType) == null){
@@ -88,16 +91,19 @@ public class LoanApplyController  extends BaseController {
 		CuObjectCustomer loanCustomer = CuObjectCustomer.getEffectCustomer(cuId);
 		if(loanCustomer == null){
 			renderJson(createErrorJsonResonse("借款人不存在或处于黑名单"));
+			return;
 		}
 		//获取抵押物，并校验抵押物合法性
 		CuProperty cuProperty = CuProperty.getPropertyById(collateralId); 
 		if(cuProperty == null || StringUtils.isBlank(cuProperty.getStr("certificate_type")) ||
 								  StringUtils.isBlank(cuProperty.getStr("certificate_no"))){
 			renderJson(createErrorJsonResonse("抵押物不合法"));
+			return;
 		}
 		//校验抵押物能发发起借款抵押
 		if(!(cuProperty.getStr("status").equals("A") && cuProperty.getStr("status").equals("B21"))){
 			renderJson(createErrorJsonResonse("抵押物无法发起抵押"));
+			return;
 		}
 		//生成借款编号
 		String createloanId = DateUtil.dateSimpleFormat(new Date());
@@ -137,5 +143,6 @@ public class LoanApplyController  extends BaseController {
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
+		renderJson(createSuccessJsonResonse());
 	}
 }

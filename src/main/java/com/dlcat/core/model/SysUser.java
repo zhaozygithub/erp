@@ -5,6 +5,7 @@ import com.dlcat.common.BaseModel;
 import com.dlcat.common.utils.CommonUtils;
 import com.dlcat.common.utils.StringUtils;
 import com.jfinal.kit.HashKit;
+import com.jfinal.plugin.activerecord.Db;
 import com.sun.org.apache.regexp.internal.recompile;
 
 /**
@@ -107,8 +108,9 @@ public class SysUser extends BaseModel<SysUser> {
 	 */
 	public static boolean isRepeatPhone(Integer userId,String phone){
 		if ((userId != null) && (CommonUtils.checkPhone(phone) || CommonUtils.checkTelPhone(phone))) {
-			List<SysUser> user = SysUser.dao.find("select * from sys_user where status = '1' and phone = ? and id !=?",phone,userId);
-			if (user.size() != 0 ) {
+			//List<SysUser> user = SysUser.dao.find("select * from sys_user where status = '1' and phone = ? and id !=?",phone,userId);
+			long count = Db.queryLong("select count(*) as count  from sys_user where status = '1' and phone = ? and id !=?",phone,userId);
+			if (count != 0 ) {
 				return true;
 			}else {
 				return false;

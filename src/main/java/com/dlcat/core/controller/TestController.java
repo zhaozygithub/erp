@@ -96,6 +96,8 @@ public class TestController extends BaseController{
 	   item.setFields("*, getCodeItemName('YesNo',status) as cn_status");
 	   //设置分页步长  如果不设置 或者 值<=0，则会默认歩长为20
 	   item.setLimit(10);
+	   //处理字段反射(注意格式)
+	   item.setFieldsReflect("repay_type:loan_repay_type,id,name;business_id:loan_business_category,id,name");
 	   //注意：此处whereMap在页面初始化的时候为null，此处有必要判空
 	   List<QueryWhere> whereList = new ArrayList<QueryWhere>();
 	   //检索条件
@@ -159,8 +161,12 @@ public class TestController extends BaseController{
    public void formTest(){
 	   List<FormField> formFieldGroup=new ArrayList<FormField>();
 	   formFieldGroup.add(new FormField("name","名字","text",""));
+	   formFieldGroup.add(new FormField("date","date","date",""));
 	   formFieldGroup.add(new FormField("f","文件","file",""));
-	   formFieldGroup.add(new FormField("textarea","ar","textarea","1\n2"));
+	   formFieldGroup.add(FormField.createFormField("cnt", "计数", "text", "", true, "digital"));
+	   formFieldGroup.add(new FormField("ck","checkbox","checkbox","checkbox1"));
+	   formFieldGroup.add(new FormField("ck","checkbox","checkbox","checkbox2"));
+	   formFieldGroup.add(new FormField("textarea","ar","textarea","1\n2\n泽民"));
 	   formFieldGroup.add(FormField.createFormField("名字","name2","text","",null,true) );
 	   formFieldGroup.addAll(FormBuilder.formBuilderTest());
 	   DyResponse response = PageUtil.createFormPageStructure("表单测试", formFieldGroup,  "/test/testReceive");

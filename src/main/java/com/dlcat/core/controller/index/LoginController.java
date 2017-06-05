@@ -6,6 +6,11 @@ import com.baomidou.kisso.common.IpHelper;
 import com.baomidou.kisso.common.util.HttpUtil;
 import com.dlcat.common.BaseController;
 
+/** 
+* @author zhaozhongyuan
+* @date 2017年5月27日 上午9:14:04 
+* @Description: 添加单点登录支持
+*/
 public class LoginController extends BaseController {
 	public void index() {
 		SSOToken mt = SSOHelper.getToken(getRequest());
@@ -13,11 +18,15 @@ public class LoginController extends BaseController {
 			redirect("/");
 			return;
 		}
-
+		
 		/**
 		 * 登录 生产环境需要过滤sql注入
 		 */
 		if ( HttpUtil.isPost(getRequest()) ) {
+			
+			
+			
+			
 				mt = new SSOToken();
 				mt.setId(1354L);
 				mt.setUid("1888");

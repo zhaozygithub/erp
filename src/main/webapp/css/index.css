@@ -6,10 +6,6 @@ body {
 	overflow-x: hidden;
 }
 
-*{
-	font-family:"Microsoft YaHei";
-}
-
 a, a:link, a:visited, a:hover {
 	text-decoration: none;
 }
@@ -294,6 +290,9 @@ label {
 }
 .slider-right .nav-tabs>li.active>a,.slider-right .nav-tabs>li>a{
 	padding:19px !important;
+}
+.menu-li:hover,.dropdown:hover{
+	background-color:rgb(211, 134, 6);
 }
 /*消息框*/
 .news-box{

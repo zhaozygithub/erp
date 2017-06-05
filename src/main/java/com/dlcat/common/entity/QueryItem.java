@@ -45,6 +45,12 @@ public class QueryItem {
 	 * otherWhere必须以 and 或者 or 开头，否则会顾虑该条件
 	 */
 	private String otherWhere;	
+	/**
+	 * 字段key反射
+	 * 注：将表中字段的key值，反射为value（格式为：字段名：表名，字段名，映射字段名；字段名：表名，字段名，映射字段名...）
+	 * 一条映射与另一条映射之间用分号间隔，表名，字段名，映射字段名
+	 */
+	private String fieldsReflect;
 	
 	//表名的过滤:防止出现/*和点(.),出现点会导致表名变成类似'/*表名*/mysql.user'这种
 	final static String TABREG="^(\\w|\\d|_|\\s|,|\\(|\\)|\\*)+$";
@@ -190,6 +196,14 @@ public class QueryItem {
 	public String toString() {
 		return "QueryItem [tableNames=" + tableNames + ", fields=" + fields + ", order=" + order + ", group=" + group
 				+ ", having=" + having + ", limit=" + limit + ", whereList=" + whereList + "]";
+	}
+
+	public String getFieldsReflect() {
+		return fieldsReflect;
+	}
+
+	public void setFieldsReflect(String fieldsReflect) {
+		this.fieldsReflect = fieldsReflect;
 	}
 	
 }

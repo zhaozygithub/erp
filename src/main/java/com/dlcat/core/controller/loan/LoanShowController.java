@@ -30,7 +30,7 @@ public class LoanShowController extends BaseController {
 		//要求：所有借款 和 我发起的借款：构造页面的url是一个；给出数据的url也是一个
 		//思路：1.通过url后面拼接参数来控制  构造的页面是 所有借款  or   我的借款
 		TableHeader tableHeader = new TableHeader();
-		tableHeader.setFieldNames(new String[]{"id","loan_name","loan_product_id","cu_id","cu_name","card_type","card_id","amount","period","apr","repay_type","collateral_type","collateral_no","apply_user_name","apply_org_name","apply_time"});
+		tableHeader.setFieldNames(new String[]{"id","loan_name","cn_loan_product","cu_id","cu_name","cn_card_type","card_id","amount","period","apr","cn_repay_type","cn_collateral_type","collateral_no","apply_user_name","apply_org_name","apply_time"});
 		tableHeader.setCNNames(new String []{"借款编号","借款名称","产品种类","借款客户编号","借款客户名称","证件类型","证件号码","金额","期数(月)","年化收益(%)","还款方式","抵押物类型","抵押物编号","申请人","申请机构","申请时间"});
 		tableHeader.setMultiple(false);
 		
@@ -39,13 +39,10 @@ public class LoanShowController extends BaseController {
 		search.setCNNames(new String[]{"借款编号","借款名称","客户编号","客户名称","发起人","发起机构","发起开始时间","发起结束时间"});
 		search.setTypes(new String[]{"text","text","text","text","text","text","date","date"});
 		//第一个参数为1表示我发起的借款，为2表示当前机构发起的借款，为0表示所有借款
-		String dataUrl = "/loan/getLoanApproveData/";
+		String dataUrl = "/loanShow/getLoanApproveData/";
 		String applyObject = this.getPara(0);
 		//如果参数不为0、1、2 则默认为 1
-		if(StringUtils.isBlank(applyObject) || 
-				!(applyObject.equals("0") || applyObject.equals("1") || applyObject.equals("2"))){
-			dataUrl += "1";
-		}else{
+		if(StringUtils.isNotBlank(applyObject)){
 			dataUrl += applyObject;
 		}
 		DyResponse response = null;
@@ -64,7 +61,7 @@ public class LoanShowController extends BaseController {
 	 * @time 2017年5月25日 下午12:37:59
 	 */
 	public void getLoanApproveData(){
-		//获取查询数据类型  0表示所有借款，1表示我发起的借款（有效），10表示我发起的借款（无效），
+		//获取查询数据类型  0表示所有借款；1表示我发起的借款（有效），10表示我发起的借款（无效）；
 		//2表示当前机构及其下属机构发起的借款，20表示当前机构发起的借款
 	   String temp = this.getPara(0);
 	   if(StringUtils.isBlank(temp)){
@@ -80,12 +77,15 @@ public class LoanShowController extends BaseController {
 	   if(whereMap.get("sta_apply_time") != null && whereMap.get("end_apply_time") != null){
 		   if(Long.valueOf(whereMap.get("sta_apply_time").toString()) > Long.valueOf(whereMap.get("end_apply_time").toString())){
 			   renderJson(createErrorJsonResonse("开始时间不能大于结束时间"));
+			   return;
 		   }
 	   }
 	   QueryItem item = new QueryItem();
 	   item.setTableNames("loan_apply_approve");
 	   item.setLimit(10);
-	   item.setFields("*");
+	   item.setFields(" *,FROM_UNIXTIME(apply_time) as cn_apply_time,"
+	   				+ "	getCodeItemName('CuProperty',collateral_type) as cn_collateral_type, "
+	   				+ " getCodeItemName('CertType',card_type) as cn_card_type, ");
 	   item.setOrder("apply_time desc");
 	   List<QueryWhere> whereList = new ArrayList<QueryWhere>();
 	   if(whereMap != null){
@@ -136,10 +136,12 @@ public class LoanShowController extends BaseController {
 		String loanId = this.getPara("id");
 		if(StringUtils.isNotBlank(loanId)){
 			renderJson(createErrorJsonResonse("借款申请编号不能为空"));
+			return;
 		}
 		LoanApplyApprove applyApprove = LoanApplyApprove.getLoanApplyApproveById(loanId);
 		if(applyApprove == null || "-10".equals(applyApprove.get("status"))){
 			renderJson(createErrorJsonResonse("借款申请不存在或无法废弃"));
+			return;
 		}
 		applyApprove.set("status", "-10");
 		try {
@@ -159,10 +161,12 @@ public class LoanShowController extends BaseController {
 		String loanId = this.getPara("id");
 		if(StringUtils.isNotBlank(loanId)){
 			renderJson(createErrorJsonResonse("借款申请编号不能为空"));
+			return;
 		}
 		LoanApplyApprove applyApprove = LoanApplyApprove.getLoanApplyApproveById(loanId);
 		if(applyApprove == null || "10".equals(applyApprove.get("status"))){
 			renderJson(createErrorJsonResonse("借款申请不存在或无法恢复"));
+			return;
 		}
 		applyApprove.set("status", "10");
 		try {

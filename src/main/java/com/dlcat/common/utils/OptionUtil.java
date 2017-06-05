@@ -6,8 +6,6 @@ import java.util.List;
 import java.util.Map;
 
 import com.dlcat.common.BaseModel;
-import com.dlcat.core.model.ToCodeLibrary;
-import com.jfinal.plugin.activerecord.Db;
 
 /**
  * Option字典生成工具类
@@ -59,7 +57,12 @@ public class OptionUtil {
 		}
 		return codeLibraries;
 	}
-	
+	public static List<Map> getOptionListByCodeLibrary(String codeNo , Boolean isEffectStatus){
+		return getOptionListByCodeLibrary(codeNo, isEffectStatus, null);
+	}
+	public static List<Map> getOptionListByCodeLibrary(String codeNo){
+		return getOptionListByCodeLibrary(codeNo, false, null);
+	}
 	/**
 	 * 从其他表中获取option列表（此方法禁止修改）
 	 * @param key		字典的Key	
@@ -74,6 +77,9 @@ public class OptionUtil {
 	@SuppressWarnings("unchecked")
 	public static List<Map> getOptionListByOther(String key , String value , String table , String whereList){
 		return getOptionListByOther(key, value, table, whereList,null);
+	}
+	public static List<Map> getOptionListByOther(String key , String value , String table){
+		return getOptionListByOther(key, value, table, null,null);
 	}
 	public static List<Map> getOptionListByOther(String key , String value , String table , String whereList , String order){
 		//（1）.参数校验

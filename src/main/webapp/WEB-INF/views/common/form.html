@@ -1,6 +1,55 @@
 <!DOCTYPE html>
 <html>
 <head>
+<style>
+*{
+
+}
+.xs2{
+	font-size: 14px;
+	line-height: 34px;
+	width:20%;
+	min-width:100px;
+}
+.xs9{
+	width:30%;
+}
+.form-group{
+	margin:0 !important;
+}
+.tips{
+    position: absolute;
+    right: -40px;
+    display: inline-block;
+    top: 0;
+    padding: 10px;
+    background-color: #e1e1e1;
+    border-radius: 4px;
+}
+.tips:before{
+	content: '';
+    width: 0;
+    height: 0;
+    border-top: 10px solid transparent;
+    border-right: 20px solid #e1e1e1;
+    border-bottom: 10px solid transparent;
+    position: absolute;
+    left: -20px;
+    top: 8px;
+    z-index: 100;
+}
+.tips-box{
+	position: relative;
+	height:51px;
+}
+#bigimg img{
+	width:300px;
+	height:300px;
+}
+#bigimg{
+	text-align:center;
+}
+</style>
 <meta charset="UTF-8">
 <title>对话框编辑区</title>
 <meta http-equiv="X-UA-Compatible" content="IE=Edge">
@@ -19,14 +68,14 @@
 <link rel="stylesheet" type="text/css" href="/js/ext-5.1.0\packages\ext-theme-neptune\build\resources\ext-theme-neptune-all.css">
 <script type="text/javascript" src='/js/ext-5.1.0/ext-all.js'></script>
 <style type="text/css">
-fieldset{/*max-width:800px;*/min-width: 500px;margin 5px auto;padding:9px;}
+fieldset{/*max-width:800px;*/min-width: 600px;margin 5px auto;padding:9px;}
 </style>
 </head>
 <body xclass="well" style='min-height:100%'>
 #set(data=response.data)
 #set(formFieldList=response.data.formFieldList)
 <fieldset style id='fd'>
-	<form  action="#(data.submitUrl )" class='form-horizontal' style='padding:0 20px;column-count: #(data.columnAmount??1);' 
+	<form  action="#(data.submitUrl )" style='padding:0 ;column-count: #(data.columnAmount??1);' 
 		method='post' id='mainform' 
 		#for(input : formFieldList)
 		#if(input.type=='file')enctype="multipart/form-data" #break
@@ -35,29 +84,32 @@ fieldset{/*max-width:800px;*/min-width: 500px;margin 5px auto;padding:9px;}
 		 onsubmit='return checknotnull()'>
 	#for(input : formFieldList)
 	<div class="form-group" style='display:#((input.type=="hidden"||input.isHide ==true)?"none":"");'>
-	<label class=' xs2  control-label input-label'>#(input.text  )</label>
+	<label class=' xs2  control-label input-label'>
+	<span style='float:right;'>#(input.text  )</span>#if(input.isRequired)
+	<span class=" col-xs-2 control-label input-label" style='color:red; padding: 7px 0px;float:right;line-height: 24px;'>*&nbsp;</span>
+	#end</label>
 	<div class=" xs9">   
-	<div class="col-xs-9">  
+	<div class="col-xs-9 tips-box">  
 	#if(input.type!="select")
 		#if(input.type=="radio")
 		 	#for(option : input.optionList)
 		 		<span style='margin-right: 15px;'>#(option.item_name)
 		 		<input v-for type='#(input.type)' name='#(input.filedName  )' value='#(option.item_no)' #(input.disable?"readonly":"")
-		 		 #(option.item_no==input.defaultValue?"checked":"") necessity='#(input.isRequired)'>
+		 		 #(option.item_no==input.defaultValue?"checked":"") necessity='#(input.isRequired)' style='width:24px;height: 24px;    vertical-align: bottom;'>
 		 		</span>
 	    	#end ###for
 	 	#elseif(input.type=="textarea")
 	 		<textarea rows="6" cols="" name='#(input.filedName  )' class="form-control"   #(input.disable?"readonly":"")
 	 			title='#(input.hint)' placeholder='#(input.inNotice)' necessity='#(input.isRequired)'>#(input.defaultValue)</textarea>
 	 	#elseif(input.type=="date")
-	 		<input  type='#(input.type)' name='#(input.filedName  )' value='#(option.item_no)' #(input.disable?"readonly":"")
+	 		<input  type='#(input.type)' name='#(input.filedName  )' value='#(option.defaultValue??)' #(input.disable?"readonly":"")
 	 		 title='#(input.hint)' placeholder='#(input.inNotice)'  necessity='#(input.isRequired)'
-	 		 class="Wdate form-control"  onClick="WdatePicker()">
+	 		 class="Wdate form-control"  onClick="WdatePicker()" style="height:34px;">
 	 	#else
 	       <input v-for id='#(input.filedName )' type='#(input.type=="datetime"?"datetime-local":input.type)' name='#(input.filedName  )'  #(input.disable?"readonly":"")
 	       value='#(input.defaultValue)' title='#(input.hint)' placeholder='#(input.inNotice)'  necessity='#(input.isRequired)'
 	       inType='#(input.inType)' onblur='checkintype(this)' #if(input.type=='file') multiple  accept  onchange='showthumb(this)' #end
-		 class='#(input.type=="radio"?"":"form-control")' ><!-- ="image/*" -->
+		 class='#(input.type=="radio"?"":"form-control")' style='#if(input.type=="checkbox") width: 20px;#end'><!-- ="image/*" -->
     	#end ###if
 	#else
 	<select class="form-control"  name='#(input.filedName  )'  #(input.disable?"readonly":"")
@@ -67,21 +119,27 @@ fieldset{/*max-width:800px;*/min-width: 500px;margin 5px auto;padding:9px;}
 			<option value="#(option.item_no)" #(option.item_no==input.defaultValue?"selected":"")>#(option.item_name)</option>
 			#end</select>
 	#end #(input.unit)	&nbsp;&nbsp;&nbsp;&nbsp;
-	<abbr title='#(input.notice)' style='float: right;display:#((input.notice==null)?"none":"");'>提示</abbr>
+	<abbr class="tips" title='#(input.notice)' style='float: right;color:#666;display:#((input.notice==null)?"none":"");'>提示</abbr>
 	</div>
 	 
 	#if(input.isRequired)
-	<label class=" col-xs-2 control-label input-label" style='color:red; padding: 7px 0px;'>*必填</label>
+	<span class=" col-xs-2 control-label input-label" style='color:red; padding: 7px 0px;'>必填</span>
 	#end 
 	#if(input.type=='file')
 	<style type='text/css'>
-		#thumb img{width:90px;height:90px;}
-		#thumb img:hover{width:390px;height:390px;position: absolute;left:-50px;top:90px;z-index:900;}
+		#thumbul img{width:90px;height:90px;}
 	</style>
 	<div id='thumb'  class="col-xs-11">
 		<ul id='thumbul'></ul>
+		<div id='bigimg'></div>
 	</div>
 	<script type="text/javascript">
+		function showbigimg(node){
+		 	var img=document.createElement('img');
+		 	img.src=node.src;
+		 	node.parentElement.parentElement.children[1].innerHTML='';
+			node.parentElement.parentElement.children[1].appendChild(img);//.children[0]=img;//.appendChild(img);
+		}
 		if (typeof FileReader == "undefined") {  
 	        alert('您的浏览器不支持预览啊');  
 	    } 
@@ -92,6 +150,8 @@ fieldset{/*max-width:800px;*/min-width: 500px;margin 5px auto;padding:9px;}
 		 	 var img=document.createElement('img');
 		 	 if(e.target.result.substring(0,20).match(/(image|data:;base64,)/))
 		 	 img.src=e.target.result;
+		 	 img.setAttribute('onmouseover','showbigimg(this)');
+		 	img.setAttribute('onmouseout','this.parentElement.parentElement.children[1].innerHTML=null');
 		 	 document.getElementById('thumbul').appendChild(img);
 			return e.target.result;
 		}
@@ -100,7 +160,7 @@ fieldset{/*max-width:800px;*/min-width: 500px;margin 5px auto;padding:9px;}
 			document.getElementById('thumbul').innerHTML='';
 			var fs=node.files;
 			function read(file){
-				console.debug(file);
+				//console.debug(file);
 				if(tmp==0||fr.readyState==2)
 					fr.readAsDataURL(file);
 				else{
@@ -117,8 +177,8 @@ fieldset{/*max-width:800px;*/min-width: 500px;margin 5px auto;padding:9px;}
 	</div>
 	#end</form>
 	  <div class="form-group">
-            <div class="col-xs-8 col-xs-offset-3" id='btsgrp'>
-			<button class="btn btn-primary  " style="padding:6px 22px;margin:1px 10px;width: 40%;" onclick='sendform()'>提交</button>
+            <div class="col-xs-4 col-xs-offset-4" id='btsgrp'>
+			<button class="btn btn-primary  btn-block" style="" onclick='sendform()'>提交</button>
 			<!-- <button class="btn btn-primary  " style="padding:6px 22px;margin:1px 10px;" type='reset'>复原</button> -->
 			</div>
         </div>  
@@ -194,8 +254,9 @@ function sendform(){
 	if(inps[x].name&&(inps[x].value||inps[x].getAttribute('necessity')=='true'))//''==0//||inps[x].value==0
 	if(!inps[x].type.match(/(checkbox|radio)/)||
 	(inps[x].type.match(/(checkbox|radio)/)&&inps[x].checked)){
-	   fd.append(inps[x].name,inps[x].type=='file'?inps[x].files:inps[x].value);
-		ok.push(inps[x].name+'='+inps[x].value);
+		var int_date=!inps[x].type.match(/date/)?inps[x].value:Math.round(new Date(inps[x].value.trim()+' 0:0').getTime()/1000);
+	   //fd.append(inps[x].name,inps[x].type=='file'?inps[x].files:inps[x].value);
+		ok.push(inps[x].name+'='+int_date);//.trim()
 	 	//console.log(x,inps[x]);
 	}}
 	rqpara=ok.join('&');//JSON.stringify(ok);
@@ -240,10 +301,38 @@ function showrsl(resp){
 	console.debug(resp);
 	try{var rsl=JSON.parse(resp.responseText);
 	//加.toString()是为了确保此字段存在.
-    if(rsl.status.toString()==200)layer.msg('操作成功. ',2,1);
+    if(rsl.status.toString()==200){layer.msg('操作成功. ',2,1);
+    //顺便关掉弹窗.
+    setTimeout("parent.delwindowbyid('tstw')",2000);}
     else layer.msg(rsl.description.toString() ,2,2);
     }catch(e){
 	layer.msg(resp.responseText,2,0);}
 }
+(function setSelAndFileCSS(){
+	var ipt=mainform.getElementsByTagName('input');
+	for(var i=0;i<ipt.length;i++){
+		if(ipt[i].type=='file'){
+			ipt[i].style.cssText+='border: none;background: none;';
+			ipt[i].parentElement.style.cssText='width:30%;';
+			getPNode(ipt[i],'xs9').style.width='80%';
+			getPNode(ipt[i],'form-group').style.clear='both';}
+		else if(ipt[i].type=='checkbox'){
+			getPNode(ipt[i],'xs9').style.width='20%';
+		}
+	}
+	 ipt=mainform.getElementsByTagName('textarea');
+	for( i=0;i<ipt.length;i++){
+		//if(ipt[i].type=='file')
+			{getPNode(ipt[i],'xs9').style.width='80%';
+			getPNode(ipt[i],'tips-box').style.cssText='height:134px;margin-bottom: 20px;';
+			getPNode(ipt[i],'form-group').style.clear='both';}
+	}
+	function getPNode(el,cls){
+		var elp=el.parentElement;
+		if(elp.classList.contains(cls))
+			return elp;
+		else return getPNode(elp,cls);
+	}
+})()
 </script>
 </html>

@@ -5,6 +5,8 @@ import java.net.NetworkInterface;
 import java.net.SocketException;
 import java.util.Enumeration;
 
+import javax.servlet.http.HttpServletRequest;
+
 import org.apache.commons.lang3.StringUtils;
 
 public class IpUtil {
@@ -84,4 +86,42 @@ public class IpUtil {
             return localip;
         }
     }
+	/**
+	 * 获取请求ip地址
+	 * @param request
+	 * @return
+	 * @throws Exception
+	 * @author masai
+	 * @time 2017年5月27日 上午11:44:02
+	 */
+	public static String getRemoteIp(HttpServletRequest request) throws Exception {
+		String ip = request.getHeader("x-forwarded-for");
+		if (ip != null)
+			ip = ip.split("\\,")[0];
+		else if (request.getRemoteAddr() != null) {
+			ip = request.getRemoteAddr().split("\\,")[0];
+		}
+		if ("0:0:0:0:0:0:0:1".equals(ip))
+			ip = "127.0.0.1";
+		return ip;
+	}
+	/**
+	 * 获取请求ip地址，并转化成Long
+	 * @Title getRemoteIpToLong 
+	 * @Description TODO
+	 * @param @param ipAddress
+	 * @param @return  
+	 * @return Long 
+	 * @author liuran 
+	 * @time 2017年5月27日下午12:01:52
+	 */
+	public static Long getRemoteIpToLong(HttpServletRequest request){
+		Long ipAddres = null;
+		try {
+			ipAddres = ipStrToLong(getRemoteIp(request));
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return ipAddres;
+	}
 }

@@ -18,6 +18,7 @@ import com.dlcat.common.utils.PageUtil;
 import com.dlcat.common.utils.StringUtils;
 import com.dlcat.core.model.CuObjectCustomer;
 import com.dlcat.core.model.CuProperty;
+import com.dlcat.core.model.SysAdminLog;
 import com.dlcat.core.model.SysMenu;
 import com.dlcat.core.model.SysUser;
 import com.jfinal.aop.Before;
@@ -136,7 +137,8 @@ public class CollateralController extends BaseController {
 	 */
 	 public void form() {
 			String type = getPara(0);
-			String id=getPara("id");
+			String id = getPara("id");
+			String btnId = getPara("btnid");
 			if(type == null){
 				renderJson(createErrorJsonResonse("数据库错误，请联系管理员！"));
 				return;
@@ -163,13 +165,13 @@ public class CollateralController extends BaseController {
 			DyResponse response = null;
 			
 			if (type.equals("add")) {
-				response = PageUtil.createFormPageStructure("押品添加", formFieldList, "/collateral/toAdd");
+				response = PageUtil.createFormPageStructure("押品添加", formFieldList, "/collateral/toAdd?btnId="+btnId);
 			} else if (type.equals("edit")) {
 				if (id==null || id.equals("")) {
 					renderJson(createErrorJsonResonse("请先选择一条记录！"));
 					return;
 				}
-				response = PageUtil.createFormPageStructure("押品编辑", formFieldList, "/collateral/toEdit");
+				response = PageUtil.createFormPageStructure("押品编辑", formFieldList, "/collateral/toEdit?btnId="+btnId);
 			}else if (type.equals("detail")) {
 				if (id==null || id.equals("")) {
 					renderJson(createErrorJsonResonse("请先选择一条记录！"));
@@ -186,9 +188,11 @@ public class CollateralController extends BaseController {
 		}
 
 		public void toAdd() {
+			String btnId=getPara("btnId");
 			String cuId = getPara("cu_id");
 			String certificate_type = getPara("certificate_type");
 			String certificate_no = getPara("certificate_no");
+			SysUser user = getSessionAttr("user");
 			if (!CuObjectCustomer.isHasCustomer(cuId)) {
 				renderJson(createErrorJsonResonse("所属客户不存在，请重新添加！"));
 				return;
@@ -201,12 +205,13 @@ public class CollateralController extends BaseController {
 				renderJson(createErrorJsonResonse("证件已存在，请重新添加！"));
 				return;
 			}
-			CuProperty cuProperty = getModel(CuProperty.class, "");
+			CuProperty cuProperty = getModel(CuProperty.class, "",true);
 			cuProperty.set("id", "YP" + DateUtil.getCurrentTime());
 
-
+			
 			try {
 				cuProperty.save();
+				SysAdminLog.SetAdminLog(user, btnId, "添加客户财产，财产编号为："+cuProperty.getStr("id"));
 				renderJson(createSuccessJsonResonse());
 			} catch (Exception e) {
 				renderJson(createErrorJsonResonse("操作失败！"));
@@ -220,6 +225,8 @@ public class CollateralController extends BaseController {
 		 */
 		@Before(Tx.class)
 		public void del() {
+			String btnId = getPara("btnid");
+			SysUser user = getSessionAttr("user");
 			String id=getPara("id");
 			if (id==null || id.equals("")) {
 				renderJson(createErrorJsonResonse("请选择至少一条记录！"));
@@ -234,6 +241,7 @@ public class CollateralController extends BaseController {
 				for (String id1 : ids) {
 					cuProperty.deleteById(id1);
 				}
+				SysAdminLog.SetAdminLog(user, btnId, "删除客户财产，财产编号为："+id);
 				renderJson(createSuccessJsonResonse());
 			} catch (Exception e) {
 				e.printStackTrace();
@@ -242,6 +250,8 @@ public class CollateralController extends BaseController {
 		}
 	
 		public void toEdit() {
+			String btnId = getPara("btnId");
+			SysUser user = getSessionAttr("user");
 			String cuId = getPara("cu_id");
 			String certificate_type = getPara("certificate_type");
 			String certificate_no = getPara("certificate_type");
@@ -253,9 +263,10 @@ public class CollateralController extends BaseController {
 				renderJson(createErrorJsonResonse("证件填写错误，请重新编辑！"));
 				return;
 			}
-			CuProperty cuProperty = getModel(CuProperty.class, "");
+			CuProperty cuProperty = getModel(CuProperty.class, "",true);
 			try {
 				cuProperty.update();
+				SysAdminLog.SetAdminLog(user, btnId, "编辑客户财产，财产编号为："+cuProperty.getStr("id")+"，内容为："+cuProperty.toString());
 				renderJson(createSuccessJsonResonse());
 			} catch (Exception e) {
 				e.printStackTrace();

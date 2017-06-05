@@ -165,7 +165,7 @@ public class MyCustomerController extends BaseController {
 				}
 				//由于代码相同，这里使用CustomerRecordControllor里面的toEdit方法去更新，如果有差异可以使用本类的toEdit方法去改造
 				//response = PageUtil.createFormPageStructure("客户编辑",formFieldList, "/myCustomer/toEdit");
-				response = PageUtil.createFormPageStructure("客户编辑",formFieldList, "/record/toEdit");
+				response = PageUtil.createFormPageStructure("客户编辑",formFieldList, "/record/toEdit?btnId="+btnId);
 			} else if (type.equals("detail")) {
 				if (id==null || id.equals("")) {
 					renderJson(createErrorJsonResonse("请先选择一条记录！"));
@@ -193,7 +193,7 @@ public class MyCustomerController extends BaseController {
 	 * @time 2017年5月26日下午3:11:56
 	 */
 	public void toAdd() {
-		String btnID = getPara("btnId");
+		String btnId = getPara("btnId");
 		SysUser user = getSessionAttr("user");
 		String card_type =getPara("card_type");//证件类型
 		String card_id =getPara("card_id");//证件编号
@@ -232,7 +232,7 @@ public class MyCustomerController extends BaseController {
 		cuObjectCustomer.set("input_org_name",user.getStr("belong_org_name"));
 		try {
 			cuObjectCustomer.save();
-			SysAdminLog.SetAdminLog(user, btnID, "增加客户："+cuObjectCustomer.getStr("id"));
+			SysAdminLog.SetAdminLog(user, btnId, "增加客户，客户编号："+cuObjectCustomer.getStr("id"));
 			renderJson(createSuccessJsonResonse());
 		} catch (Exception e) {
 			renderJson(createErrorJsonResonse("操作失败！"));

@@ -48,7 +48,7 @@ th,td{margin:0 5px;}
 					#elseif(search.type == "date")
 						<div class="form-group" style="margin-bottom:12px;    margin-right: 20px;">
 		                    <label for="examineTime1">#(search.CNName):</label>
-		                    <input class="Wdate form-control" type="datetime" name='#(search.fieldName)' id="examineTime1" onClick="WdatePicker()">
+		                    <input class="Wdate form-control" type="date" name='#(search.fieldName)'  onClick="WdatePicker()">
 		                </div>         
 		           
 					#else
@@ -82,7 +82,7 @@ th,td{margin:0 5px;}
 		             <thead style='background-color: #7bF;' keys>
 					#if(tableHeaderList)
 						<tr id='datafieldname'>
-							<th class="text-center" style='max-width: 60px;'>#if(thdata.isMultiple())
+							<th class="text-center" style='width: 40px;'>#if(thdata.isMultiple())
 							<input type='checkbox' onchange='selectall(this)'  class='bigchk'>
 							#end</th>
 							#for(header:tableHeaderList)
@@ -96,7 +96,7 @@ th,td{margin:0 5px;}
 		            <tbody v-if='userdatas.response.status==200' id='tbody'>
 					
 					<tr  v-for='user in userdatas.response.data.dataList' v-on:click='get_select_name(user)'
-						:style='(user!=null&&select_user!=null&&user.id==select_user.id)?"background:#a5d8f7;color:white;":""'>
+						:style='(user!=null&&select_user!=null&&user[ths[0]]==select_user[ths[0]])?"background:#a5d8f7;color:white;":""'>
 						<td xdonclick='reversechecked(this)'><input  v-if='#(thdata.isMultiple())' type="checkbox" name='checks' :value='user[ths[0]]' class='bigchk'></td>
 						<td  v-for=' i  in ths.length' v-text='user[ths[i-1]]'>  </td>
 					</tr>

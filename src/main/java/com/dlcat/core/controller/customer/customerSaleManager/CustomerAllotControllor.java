@@ -16,6 +16,7 @@ import org.apache.poi.hssf.usermodel.HSSFDateUtil;
 import org.apache.poi.hssf.usermodel.HSSFRow;
 import org.apache.poi.hssf.usermodel.HSSFSheet;
 import org.apache.poi.hssf.usermodel.HSSFWorkbook;
+
 import com.dlcat.common.BaseController;
 import com.dlcat.common.entity.DyResponse;
 import com.dlcat.common.entity.FormField;
@@ -27,7 +28,9 @@ import com.dlcat.common.utils.DateUtil;
 import com.dlcat.common.utils.ExportExcelUtil;
 import com.dlcat.common.utils.OptionUtil;
 import com.dlcat.common.utils.PageUtil;
+import com.dlcat.common.utils.StringUtils;
 import com.dlcat.core.model.CuPossibleCustomer;
+import com.dlcat.core.model.SysAdminLog;
 import com.dlcat.core.model.SysMenu;
 import com.dlcat.core.model.SysOrg;
 import com.dlcat.core.model.SysUser;
@@ -142,6 +145,7 @@ public class CustomerAllotControllor extends BaseController {
 	* @date 2017年5月15日 上午11:44:25  
 	*/
 	public void btnCustomerAllot() {
+		String btnId=getPara("btnid");
 		//获取选中的意向客户id数组
 		String[] ids=getIdarrays();
 		//分配给某一个用户的用户ID
@@ -156,6 +160,7 @@ public class CustomerAllotControllor extends BaseController {
 		map.put("belong_org_name", user.getStr("belong_org_name")); 
 		try {
 			updateByIds(CuPossibleCustomer.class, ids, map);
+			SysAdminLog.SetAdminLog(user, btnId, "把意向客户："+StringUtils.arrayToStr(ids, ",")+"分配给"+id);
 			renderText("操作成功");
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
@@ -248,10 +253,11 @@ public class CustomerAllotControllor extends BaseController {
 	* @date 2017年5月18日 上午11:19:57  
 	*/
 	public void form() {
+		String btnId = getPara("btnid");
 		String type = getPara(0);
 		String id=getPara("id");
 		if(type == null){
-			renderHtml("<h1>数据库错误，请联系管理员。</h1>");
+			renderJson(createErrorJsonResonse("数据库错误，请联系管理员！"));
 			return;
 		}
 		List<FormField> formFieldList = new ArrayList<FormField>();
@@ -262,26 +268,26 @@ public class CustomerAllotControllor extends BaseController {
 
 		DyResponse response = null;
 		if (type.equals("add")) {
-			formFieldList.add(new FormField("type", "客户类型", "select", "",OptionUtil.getOptionListByCodeLibrary("CustomerType", true, ""),true));
-			response = PageUtil.createFormPageStructure("意向客户添加", formFieldList, "/customerAllot/toAdd");
+			formFieldList.add(new FormField("cu_type", "客户类型", "select", "",OptionUtil.getOptionListByCodeLibrary("CuType", true, ""),true));
+			response = PageUtil.createFormPageStructure("意向客户添加", formFieldList, "/customerAllot/toAdd?btnId="+btnId);
 		} else if (type.equals("edit")) {
 			if (id==null||id.equals("")) {
-				renderHtml("<h1>请先选择一条记录。</h1>");
+				renderJson(createErrorJsonResonse("请先选择一条记录！"));
 				return;
 			}
 			//由于代码相同，这里使用possibleCustomerControllor里面的toEdit方法去更新，如果有差异可以使用本类的toEdit方法去改造
-			response = PageUtil.createFormPageStructure("意向客户编辑", formFieldList, "/possibleCustomer/toEdit");
+			response = PageUtil.createFormPageStructure("意向客户编辑", formFieldList, "/possibleCustomer/toEdit?btnId="+btnId);
 		}else if (type.equals("detail")) {
 			formFieldList.add(new FormField("type", "客户类型", "select", "",OptionUtil.getOptionListByCodeLibrary("CustomerType", true, "")));
 			if (id==null||id.equals("")) {
-				renderHtml("<h1>请先选择一条记录。</h1>");
+				renderJson(createErrorJsonResonse("请先选择一条记录！"));
 				return;
 			}
 			//第三个参数 由于校验非空，所以要随便写点什么即可
 			response = PageUtil.createFormPageStructure("查看详细信息", formFieldList, "/u");
 		}
 		if (response == null) {
-			renderHtml("<h1>数据库错误，请联系管理员。</h1>");
+			renderJson(createErrorJsonResonse("数据库错误，请联系管理员！"));
 			return;
 		}
 		this.setAttr("response", response);
@@ -289,8 +295,9 @@ public class CustomerAllotControllor extends BaseController {
 	}
 
 	public void toAdd() {
-		SysUser sysUser = getSessionAttr("user");
-		CuPossibleCustomer cuPossibleCustomer = getModel(CuPossibleCustomer.class, "");
+		String btnId=getPara("btnId");
+		SysUser user = getSessionAttr("user");
+		CuPossibleCustomer cuPossibleCustomer = getModel(CuPossibleCustomer.class, "",true);
 		//个人客户
 		if(cuPossibleCustomer.getStr("type").equals("2")){
 			cuPossibleCustomer.set("id", "IND" + DateUtil.getCurrentTime());
@@ -300,19 +307,20 @@ public class CustomerAllotControllor extends BaseController {
 			
 		};
 		cuPossibleCustomer.set("belong_org_id", getCurrentUserBelongID());
-		cuPossibleCustomer.set("belong_org_name", sysUser.getStr("belong_org_name"));
+		cuPossibleCustomer.set("belong_org_name", user.getStr("belong_org_name"));
 		
-		cuPossibleCustomer.set("input_user_id", sysUser.getInt("id"));
-		cuPossibleCustomer.set("input_user_name", sysUser.getStr("name"));
-		cuPossibleCustomer.set("input_org_id", sysUser.getInt("belong_org_id"));
-		cuPossibleCustomer.set("input_org_name", sysUser.getStr("belong_org_name"));
+		cuPossibleCustomer.set("input_user_id", user.getInt("id"));
+		cuPossibleCustomer.set("input_user_name", user.getStr("name"));
+		cuPossibleCustomer.set("input_org_id", user.getInt("belong_org_id"));
+		cuPossibleCustomer.set("input_org_name", user.getStr("belong_org_name"));
 		cuPossibleCustomer.set("input_time", DateUtil.getCurrentTime());
 
 		try {
 			cuPossibleCustomer.save();
-			renderHtml("<h1>操作成功！！</h1>");
+			SysAdminLog.SetAdminLog(user, btnId, "添加意向客户，客户编号为："+cuPossibleCustomer.getStr("id"));
+			renderJson(createSuccessJsonResonse());
 		} catch (Exception e) {
-			renderHtml("<h1>操作失败！！</h1>");
+			renderJson(createErrorJsonResonse("操作失败！"));
 		}
 	}
 	
@@ -362,27 +370,31 @@ public class CustomerAllotControllor extends BaseController {
 	}*/
 	
 	public void toImport() {
+		String btnId = getPara("btnid");
 		List<FormField> formFieldList = new ArrayList<FormField>();
 		formFieldList.add(new FormField("file", "请选择xls格式的Excel文件", "file"));
-		DyResponse response = PageUtil.createFormPageStructure("导入", formFieldList, "importExcel");
+		DyResponse response = PageUtil.createFormPageStructure("导入", formFieldList, "/customerAllot/importExcel?btnId="+btnId);
 		this.setAttr("response", response);
 		this.render("common/form.html");
 	}
 	
 	public void importExcel() {
+		String btnId = getPara("btnId");
+		SysUser user = getSessionAttr("user");
 		UploadFile uploadFile=getFile();
 		// 获得上传的文件
 		File file=uploadFile.getFile();
 		if (!file.getName().endsWith(".xls")) {
-			renderHtml("<h1>上传失败！！请选择正确格式的文件进行上传。</h1>");
-		};
+			renderJson(createErrorJsonResonse("上传失败！！请选择正确格式的文件进行上传。"));
+		}
 		try {
 			ExportExcelUtil.imporeExcel("cu_possible_customer", getFields(), file);
-			renderHtml("<h1>导入数据成功</h1>");
+			SysAdminLog.SetAdminLog(user, btnId, "导入意向客户信息excel");
+			renderJson(createSuccessJsonResonse());
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
-			renderHtml("<h1>导入数据失败</h1>");
+			renderJson(createErrorJsonResonse("导入数据失败"));
 		}
 	}
 

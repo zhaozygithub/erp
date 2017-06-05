@@ -40,7 +40,7 @@ public class QueryWhere {
 	/**
 	 * 字段值
 	 */
-	private Object value;
+	private String value;
 	/**
 	 * 条件
 	 */
@@ -121,13 +121,13 @@ public class QueryWhere {
 	}
 	public QueryWhere(String name, Object value) {
 		this.name = name;
-		this.value = value;
+		this.value = value == null ? null : value.toString();
 		this.condition = "=";
 		this.connection = "and";
 	}
 	public QueryWhere(String name, String condition, Object value) {
 		this.name = name;
-		this.value = value;
+		this.value = value == null ? null : value.toString();
 		this.condition = condition;
 		this.connection = "and";
 	}
@@ -142,7 +142,7 @@ public class QueryWhere {
 	 */
 	public QueryWhere(String name, String condition, Object value , String connection) {
 		this.name = name;
-		this.value = value;
+		this.value = value == null ? null : value.toString();
 		this.condition = condition;
 		this.connection = connection;
 	}
@@ -220,7 +220,7 @@ public class QueryWhere {
 	}
 
 	public void setValue(Object value) {
-		this.value = value;
+		this.value = value == null ? null : value.toString();
 	}
 
 	public String getCondition() {

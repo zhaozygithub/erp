@@ -16,20 +16,20 @@ import com.dlcat.core.model.ToCodeLibrary;
 public class FormField implements Serializable {
 	private static final long serialVersionUID = -8269558838532027061L;
 	/**
-	 * 请注意:radio类型的其name value和描述要放到options中
-	 * 
+	 * 请注意:radio类型的其name,value和描述要放到options中
 	 */
 	/**
 	 * 字段名称
 	 */
 	private String filedName;
 	/**
-	 * 字段文本描述,就是左边的labal
+	 * 字段文本描述,就是左边的label
 	 */
 	private String text;
 	/**
-	 * 表单元素类型
-	 * 如：span	span标签、text 输入文本框、radio 单选框、select 下拉选择框、file 文件上传、
+	 * 表单元素类型type
+	 * 如：text 输入文本框、radio 单选框、textarea 多行文本域、select 下拉选择框、file 文件上传、
+	 * checkbox复选框、date日期,password密码、hidden隐藏域、email邮箱地址、color颜色拾取 、
 	 */
 	private String type;
 	/**
@@ -88,10 +88,9 @@ public class FormField implements Serializable {
 	//推荐使用表态方法createFormField来构造,此方法支持输入的内容的校验.
 	/**
 	 * 构造添加函数.最核心的三个参数,适用于除select和radio以外的构造
-	 * @param name
-	 * @param text 旁边的描述
-	 * @param type
-	 * @param value
+	 * @param name  即input的name属性
+	 * @param text 旁边的描述,用于显示到左边的label中.
+	 * @param type 即input的type属性
 	 */
 	public FormField(String name ,String text,String type){
 		setText(text);
@@ -116,6 +115,10 @@ public class FormField implements Serializable {
 	}
 	/**
 	 * 在上面的基础上增加select和radio的构造方法
+	 * @param name  即input的name属性
+	 * @param text 旁边的描述,用于显示到左边的label中.
+	 * @param type 即input的type属性
+	 * @param options 是select和radio的选项
 	 * */
 	public FormField(String name ,String text,String type,List<Map> options){
 		setFiledName(name);
@@ -144,12 +147,12 @@ public class FormField implements Serializable {
 	/**
 	 * 张松添加于2017年5月17日
 	 * 非构造函数便于复用
-	 * @param name
-	 * @param text
-	 * @param type
-	 * @param value
+	 * @param name  即input的name属性
+	 * @param text 旁边的描述,用于显示到左边的label中.
+	 * @param type 即input的type属性
+	 * @param value 默认值.
 	 * @param options 此参数仅用于select和radio类,非select和radio类请设为null
-	 * @param isRequired
+	 * @param isRequired 是否是必填的.必填字段会进行非空验证.
 	 * @return
 	 */
 	public static FormField createFormField(String name ,String text,String type,String value,List<Map> options,boolean isRequired){
@@ -157,19 +160,29 @@ public class FormField implements Serializable {
 		return formField;
 		
 	}
+
+	/**
+	 * 张松添加于2017年5月17日
+	 * 非构造函数便于复用
+	 * @param name  即input的name属性
+	 * @param text 旁边的描述,用于显示到左边的label中.
+	 * @param type 即input的type属性
+	 * @param value 默认值.
+	 * @param options 此参数仅用于select和radio类,非select和radio类请设为null
+	 * @param isRequired 是否是必填的.必填字段会进行非空验证.
+	 */
 	public static FormField createFormField(String name ,String text,String type,String value,boolean isRequired){
 		FormField formField=createFormField( name , text, type, value, null, isRequired,null);
 		return formField;
 		
 	}
 	/**
-	 * 
-	 * @param name
-	 * @param text
-	 * @param type
-	 * @param value
+	 * @param name  即input的name属性
+	 * @param text 旁边的描述,用于显示到左边的label中.
+	 * @param type 即input的type属性
+	 * @param value 默认值.
 	 * @param options 此参数仅用于select和radio类,非select和radio类请设为null
-	 * @param isRequired
+	 * @param isRequired 是否是必填的.必填字段会进行非空验证.
 	 * @param inType 校验类型分三种:decimal digital string 分别是小数 整数 字符串
 	 * @return
 	 */
@@ -178,6 +191,16 @@ public class FormField implements Serializable {
 		return formField;
 		
 	}
+	/**此方法是另外三个createFormField的来源.另外三个createFormField调用的是这个方法.
+	 * @param name  即input的name属性
+	 * @param text 旁边的描述,用于显示到左边的label中.
+	 * @param type 即input的type属性
+	 * @param value 默认值.
+	 * @param options 此参数仅用于select和radio类,非select和radio类请设为null
+	 * @param isRequired 是否是必填的.必填字段会进行非空验证.
+	 * @param inType 校验类型分三种:decimal digital string 分别是小数 整数 字符串
+	 * @return
+	 */
 	public static FormField createFormField(String name ,String text,String type,String value,List<Map> options,boolean isRequired,String inType){
 		FormField formField=new FormField( name , text, type, value, options, isRequired);
 		formField.setInType(inType);

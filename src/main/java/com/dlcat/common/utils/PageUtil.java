@@ -244,6 +244,20 @@ public class PageUtil {
 		return  createFormPageStructure( formName, formFieldList, submitUrl,1);
 	}
 	public static DyResponse createFormPageStructure(String formName,List<FormField> formFieldList,String submitUrl,Integer columnAmount){
+		return createFormPageStructure(formName, formFieldList, submitUrl, null, columnAmount);
+	}
+	/**
+	 * 
+	 * @param formName
+	 * @param formFieldList
+	 * @param submitUrl
+	 * @param extraPara 格式：“a=0&b=0&c=0”
+	 * @param columnAmount 默认1.
+	 * @return
+	 * @author 张松
+	 * @time 2017年6月1日 下午10:01:45
+	 */
+	public static DyResponse createFormPageStructure(String formName,List<FormField> formFieldList,String submitUrl,String extraPara,Integer columnAmount){
 		//参数校验
 		if(formFieldList == null || formFieldList.size() == 0 || StringUtils.isBlank(submitUrl)){
 			return null;
@@ -253,7 +267,11 @@ public class PageUtil {
 			formData.setFormName(formName);
 		}
 		formData.setFormFieldList(formFieldList);
-		formData.setSubmitUrl(submitUrl);
+		//String addString=
+		if(extraPara==null||!extraPara.contains("="))
+			formData.setSubmitUrl(submitUrl);
+		else
+			formData.setSubmitUrl(submitUrl.contains("?")?submitUrl+"&"+extraPara:submitUrl+"?"+extraPara);
 		formData.setColumnAmount(columnAmount == null || columnAmount <= 1 ? 1:columnAmount);
 		
 		DyResponse response = new DyResponse();

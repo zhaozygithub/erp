@@ -18,6 +18,7 @@ import com.dlcat.common.utils.PageUtil;
 import com.dlcat.common.utils.StringUtils;
 import com.dlcat.core.model.CuObjectCustomer;
 import com.dlcat.core.model.CuPossibleCustomer;
+import com.dlcat.core.model.SysAdminLog;
 import com.dlcat.core.model.SysMenu;
 import com.dlcat.core.model.SysRole;
 import com.dlcat.core.model.SysUser;
@@ -128,6 +129,7 @@ public class ObjectCustomerAllotController extends BaseController {
 	 * @time 2017年5月16日 下午5:24:47 void
 	 */
 	public void form() {
+		String btnId = getPara("btnid");
 		String type = getPara(0);
 		String id = getPara("id");
 		if(type == null){
@@ -149,7 +151,7 @@ public class ObjectCustomerAllotController extends BaseController {
 			formFieldList.add(new FormField("type", "客户类型", "select", "",OptionUtil.getOptionListByCodeLibrary("CustomerType", true, ""),true));
 			//由于代码相同，这里使用CustomerRecordControllor里面的toAdd方法去添加，如果有差异可以使用本类的toAdd方法去改造
 			//response = PageUtil.createFormPageStructure("正式客户分配添加",formFieldList, "/distribution/toAdd");
-			response = PageUtil.createFormPageStructure("正式客户分配添加",formFieldList, "/record/toAdd");
+			response = PageUtil.createFormPageStructure("正式客户分配添加",formFieldList, "/record/toAdd?btnId="+btnId);
 		} else if (type.equals("edit")) {
 			if (id==null || id.equals("")) {
 				renderJson(createErrorJsonResonse("请先选择一条记录！"));
@@ -157,7 +159,7 @@ public class ObjectCustomerAllotController extends BaseController {
 			}
 			//由于代码相同，这里使用CustomerRecordControllor里面的toEdit方法去更新，如果有差异可以使用本类的toEdit方法去改造
 			//response = PageUtil.createFormPageStructure("正式客户分配编辑",formFieldList, "/distribution/toEdit");
-			response = PageUtil.createFormPageStructure("正式客户分配编辑",formFieldList, "/record/toEdit");
+			response = PageUtil.createFormPageStructure("正式客户分配编辑",formFieldList, "/record/toEdit?btnId="+btnId);
 		} else if (type.equals("detail")) {
 			if (id==null || id.equals("")) {
 				renderJson(createErrorJsonResonse("请先选择一条记录！"));
@@ -277,6 +279,7 @@ public class ObjectCustomerAllotController extends BaseController {
 	* @date 2017年5月15日 上午11:44:25  
 	*/
 	public void btnCustomerAllot() {
+		String btnId=getPara("btnid");
 		//获取选中的意向客户id数组
 		String[] ids=getIdarrays();
 		//分配给某一个用户的用户ID
@@ -300,6 +303,7 @@ public class ObjectCustomerAllotController extends BaseController {
 		map.put("update_org_name", user.getStr("belong_org_name"));
 		try {
 			updateByIds(CuObjectCustomer.class, ids, map);
+			SysAdminLog.SetAdminLog(user, btnId, "把客户："+StringUtils.arrayToStr(ids, ",")+"分配给"+id);
 			renderJson(createSuccessJsonResonse());
 		} catch (Exception e) {
 			e.printStackTrace();

@@ -232,7 +232,6 @@ public class MyCustomerController extends BaseController {
 		cuObjectCustomer.set("input_org_name",user.getStr("belong_org_name"));
 		try {
 			cuObjectCustomer.save();
-			SysAdminLog.SetAdminLog(user, btnId, "增加客户，客户编号："+cuObjectCustomer.getStr("id"));
 			renderJson(createSuccessJsonResonse());
 		} catch (Exception e) {
 			renderJson(createErrorJsonResonse("操作失败！"));

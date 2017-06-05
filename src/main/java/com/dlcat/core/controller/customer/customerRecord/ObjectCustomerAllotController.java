@@ -303,7 +303,6 @@ public class ObjectCustomerAllotController extends BaseController {
 		map.put("update_org_name", user.getStr("belong_org_name"));
 		try {
 			updateByIds(CuObjectCustomer.class, ids, map);
-			SysAdminLog.SetAdminLog(user, btnId, "把客户："+StringUtils.arrayToStr(ids, ",")+"分配给"+id);
 			renderJson(createSuccessJsonResonse());
 		} catch (Exception e) {
 			e.printStackTrace();

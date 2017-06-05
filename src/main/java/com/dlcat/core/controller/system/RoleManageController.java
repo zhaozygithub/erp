@@ -159,7 +159,6 @@ public class RoleManageController extends BaseController {
 
 		try {
 			role.save();
-			SysAdminLog.SetAdminLog(sysUser, btnId, "添加角色，编号为："+role.getInt("id"));
 			renderJson(createSuccessJsonResonse());
 		} catch (Exception e) {
 			renderJson(createErrorJsonResonse("操作失败！"));
@@ -189,7 +188,6 @@ public class RoleManageController extends BaseController {
 			for (String id1 : ids) {
 				role.deleteById(id1);
 			}
-			SysAdminLog.SetAdminLog(user, btnId, "删除角色，编号为："+id);
 			renderJson(createSuccessJsonResonse());
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -210,7 +208,6 @@ public class RoleManageController extends BaseController {
 		role.set("update_user_id", user.getInt("id"));
 		try {		
 			role.update();
-			SysAdminLog.SetAdminLog(user, btnId, "编辑角色，角色编号为："+role.getInt("id")+"，内容为："+role.toString());
 			renderJson(createSuccessJsonResonse());
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -235,7 +232,6 @@ public class RoleManageController extends BaseController {
 		String menu_id = getPara("id");
 		try {
 			Db.update("update sys_role set role_menus = ?  where id=?",menu_id,id);
-			SysAdminLog.SetAdminLog(user, btnId, "更新角色："+id+"的权限为："+menu_id);
 			renderJson(createSuccessJsonResonse());
 		} catch (Exception e) {
 			e.printStackTrace();

@@ -80,7 +80,7 @@ public class CustomerAllotControllor extends BaseController {
 			// 4.构造页面结构并返回，注意：第一个参数标示请求列表数据时候的url，必须是存在的
 			// 第二个参数是这个列表数据的名称，如果页面中存在这个导出功能，这个名称就是导出的
 			// excel文件的文件名称
-			response = PageUtil.createTablePageStructure("/customerAllot/data", "测试列表数据", tableHeader, search,
+			response = PageUtil.createTablePageStructure("/customerAllot/data", "客户分配", tableHeader, search,
 					super.getLastPara().toString(), (Map<Integer, SysMenu>) this.getSessionAttr("menus"));
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -160,7 +160,6 @@ public class CustomerAllotControllor extends BaseController {
 		map.put("belong_org_name", user.getStr("belong_org_name")); 
 		try {
 			updateByIds(CuPossibleCustomer.class, ids, map);
-			SysAdminLog.SetAdminLog(user, btnId, "把意向客户："+StringUtils.arrayToStr(ids, ",")+"分配给"+id);
 			renderText("操作成功");
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
@@ -317,7 +316,6 @@ public class CustomerAllotControllor extends BaseController {
 
 		try {
 			cuPossibleCustomer.save();
-			SysAdminLog.SetAdminLog(user, btnId, "添加意向客户，客户编号为："+cuPossibleCustomer.getStr("id"));
 			renderJson(createSuccessJsonResonse());
 		} catch (Exception e) {
 			renderJson(createErrorJsonResonse("操作失败！"));
@@ -389,7 +387,6 @@ public class CustomerAllotControllor extends BaseController {
 		}
 		try {
 			ExportExcelUtil.imporeExcel("cu_possible_customer", getFields(), file);
-			SysAdminLog.SetAdminLog(user, btnId, "导入意向客户信息excel");
 			renderJson(createSuccessJsonResonse());
 		} catch (Exception e) {
 			// TODO Auto-generated catch block

@@ -241,7 +241,6 @@ public class PossibleCustomerController extends BaseController {
 		map.put("op_status", 2);
 		try {
 			updateByIds(CuPossibleCustomer.class, ids, map);
-			SysAdminLog.SetAdminLog(user, btnId, "跟进客户："+id);
 			renderJson(createSuccessJsonResonse());
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
@@ -274,7 +273,6 @@ public class PossibleCustomerController extends BaseController {
 		map.put("op_status", 4);
 		try {
 			updateByIds(CuPossibleCustomer.class, ids, map);
-			SysAdminLog.SetAdminLog(user, btnId, "把客户："+id+"转为无效客户");
 			renderJson(createSuccessJsonResonse());
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
@@ -336,7 +334,6 @@ public class PossibleCustomerController extends BaseController {
 					e.printStackTrace();
 				}
 			}
-			SysAdminLog.SetAdminLog(user, btnId, "把客户："+id+"转为正式客户");
 			renderJson(createSuccessJsonResonse());
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
@@ -365,13 +362,13 @@ public class PossibleCustomerController extends BaseController {
 		if (type.equals("add")) {
 			formFieldList.add(new FormField("type", "客户类型", "select", "",OptionUtil.getOptionListByCodeLibrary("CustomerType", true, ""),true));
 
-			response = PageUtil.createFormPageStructure("意向客户添加", formFieldList, "/possibleCustomer/toAdd?btnId="+btnID);
+			response = PageUtil.createFormPageStructure("意向客户添加", formFieldList, "/possibleCustomer/toAdd?btnid="+btnID);
 		} else if (type.equals("edit")) {
 			if (id==null||id.equals("")) {
 				renderJson(createErrorJsonResonse("请先选择一条记录！"));
 				return;
 			}
-			response = PageUtil.createFormPageStructure("意向客户编辑", formFieldList, "/possibleCustomer/toEdit?btnId="+btnID);
+			response = PageUtil.createFormPageStructure("意向客户编辑", formFieldList, "/possibleCustomer/toEdit?btnid="+btnID);
 		}else if (type.equals("detail")) {
 			formFieldList.add(new FormField("type", "客户类型", "select", "",OptionUtil.getOptionListByCodeLibrary("CustomerType", true, "")));
 
@@ -414,7 +411,6 @@ public class PossibleCustomerController extends BaseController {
 
 		try {
 			cuPossibleCustomer.save();
-			SysAdminLog.SetAdminLog(sysUser, btnID, "添加意向客户，客户编号为："+cuPossibleCustomer.getStr("id"));
 			renderJson(createSuccessJsonResonse());
 		} catch (Exception e) {
 			renderJson(createErrorJsonResonse("操作失败！"));
@@ -445,7 +441,6 @@ public class PossibleCustomerController extends BaseController {
 			for (String id1 : ids) {
 				cuPossibleCustomer.deleteById(id1);
 			}
-			SysAdminLog.SetAdminLog(user, btnId, "删除意向客户，客户编号为："+id);
 			renderJson(createSuccessJsonResonse());
 		} catch (Exception e) {
 			renderJson(createErrorJsonResonse("操作失败！"));
@@ -464,7 +459,6 @@ public class PossibleCustomerController extends BaseController {
 		CuPossibleCustomer cuPossibleCustomer = getModel(CuPossibleCustomer.class, "",true);
 		try {
 			cuPossibleCustomer.update();
-			SysAdminLog.SetAdminLog(user, btnId, "编辑客户，客户编号为："+cuPossibleCustomer.getStr("id")+"，内容为："+cuPossibleCustomer.toString());
 			renderJson(createSuccessJsonResonse());
 		} catch (Exception e) {
 			renderJson(createErrorJsonResonse("操作失败！"));

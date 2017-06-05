@@ -44,7 +44,7 @@ public class KissoJfinalPlugin implements IPlugin {
 		// ssoConfig.setPluginList(pluginList);
 		
 		//运行模式设置，可选择指定模式的配置
-		ssoConfig.setRunMode("test_mode");
+//		ssoConfig.setRunMode("test_mode");
 		ssoConfig.initKisso();
 		return true;
 	}

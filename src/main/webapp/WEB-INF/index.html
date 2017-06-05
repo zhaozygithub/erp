@@ -27,16 +27,14 @@
 								#for(sec : first.children??)
 								<ul class="list-unstyled">
 
-									#for(third:sec.children??) 
-									#set(level = third.level)
-									#set(size = for.size) #end
-
-									#if(size&&level==3)
-									<li class="dropdown">
-										<button type="button" class="btn dropdown-toggle" 
-											id="dropdownMenu1" data-toggle="dropdown" onclick="$('#secName').text('>#(sec.name??)');$('#thirdName').text('')"
+									#for(third:sec.children??) #set(level = third.level) #set(size
+									= for.size) #end #if(size&&level==3)
+									<li class="dropdown level2">
+										<button type="button" class="btn dropdown-toggle l2menubutton"
+											id="dropdownMenu1" data-toggle="dropdown"
+											onclick="$('#secName').text('>#(sec.name??)');$('#thirdName').text('')"
 											style="width: 180px; height: 54px; color: #fff; background-color: transparent !important; border: none; font-size: 16px;">
-											<a href="##(sec.id ??)" >#(sec.name??)</a> <b class="down-up"><img
+											<a href="##(sec.id ??)">#(sec.name??)</a> <b class="down-up"><img
 												class="down-up-img" alt="向上箭头" src="images/up.png"></b> <b
 												class="down-down"><img class="down-down-img" alt="向下箭头"
 												src="images/down.png"></b>
@@ -46,16 +44,19 @@
 											aria-labelledby="myTabDrop1">
 
 											#for(third:sec.children??)
-											<li><a id="#(third.id??)"  class="hs" href="#" rel="#(third.url??)" tabindex="-1"
-												data-toggle="tab" onclick="$('#thirdName').text('>#(third.name??)')">#(third.name??)</a><b class="triangle-box"><img
-													alt="三角" src="images/triangle.png"></b></li>
-											#end
+											<li class='level3'><a id="#(third.id??)" class="hs" href="#"
+												rel="#(third.url??)" tabindex="-1" data-toggle="tab"
+												onclick="$('#thirdName').text('>#(third.name??)')">#(third.name??)</a><b
+												class="triangle-box"><img alt="三角"
+													src="images/triangle.png"></b></li> #end
 										</ul>
 									</li> #set(size = null) #else
-									<li class="menu-li"><button type="button" class="btn dropdown-toggle secbtn menu-only"
-											data-toggle="dropdown" onclick="$('#secName').text('>#(sec.name??)');$('#thirdName').text('')"
+									<li class="menu-li level2">
+									<button type="button" class="btn dropdown-toggle secbtn menu-only l2menuonly" data-toggle="dropdown"
+											onclick="$('#secName').text('>#(sec.name??)');$('#thirdName').text('')"
 											style="width: 180px; height: 54px; color: #fff; background-color: transparent !important; border: none; font-size: 16px;">
-											<a href="#" id="#(sec.id)" data-toggle="tab" rel="#(sec.url??)" >#(sec.name??)</a>
+											<a href="#" id="#(sec.id)" data-toggle="tab"
+												rel="#(sec.url??)">#(sec.name??)</a>
 										</button></li> #end
 								</ul>
 
@@ -180,7 +181,7 @@
 			function getTabs(id) {
 				$.ajax({
 							type : "POST",
-							url : "/getTabsById/" + id,
+							url : "/login/getTabsById/" + id,
 							success : function(tabs) {
 								//debugger;
 								$("#myTabs").empty();
@@ -231,116 +232,67 @@
 				var height = $(this).height();  
 				 $("iframe").css("height",height-149); 
 		});
-		
+	
 		//首页的背景处于活动状态
-		$("a[id='7']").parent().parent().css("background-color","#d38606");
+		$("#myTabContent .tab-pane:first-child ul:first-child li:first-child").css("background-color","#d38606");
 
 		$("#myTabContent div:first-child").addClass("active");
 		$("#myTab li:first-child").addClass("active");
 
-		//点击显示颜色
-		   $(".tab-pane li").click(function () {
-				//debugger;
-				//二级菜单.有子菜单则不变色.
-				if(this.classList.contains('dropdown')){
-					$('.dropdown').css('background','');
-					$(this).css('background','#d38606');
-					//dropdownMenushow();
-					return;}
-				$(".tab-pane li").css("background-color","");
-				$(this).css("background-color","#d38606");
-				
-				if ($(this).children("b").length>0) {
-				$(".triangle-box").css("display","");
-				$(this).children("b").css("display","inline");
-				
-				$(".hs").each(function() {
-					if($(this).css("color")=='rgb(211, 134, 6)'){
-						$(this).css("color","");
-					}
+		//左侧栏按钮下拉控制，此段JS删除会用下拉菜单插件效果
+
+		//无子菜单的二级菜单
+		$('.l2menuonly').click(function(){
+			closel3menu(this);
+			$(this).parent().css('background','#d38606');
+		});
+		function closel3menu(node){
+			$('.level2').css('background','');
+			$("b.down-up").css("display", "none");
+			$("b.down-down").css("display", "block");
+			$('.level3').parent().css("display", "none");
+			$('.level3').find('a.hs').css('color','');
+			$('b.triangle-box').css('display','none');
+		}
+		 //有子菜单的二级菜单  
+		 $("b.down-up").css("display", "none");
+		 $("b.down-down").css("display", "block");
+		 $('.l2menubutton').click(function(){
+				//console.log(this); 
+				if($(this).parent().css('background-color')!='#d38606'&& $(this).parent().css('background-color')!='rgb(211, 134, 6)'){
+					$(this).parent().css('background','#d38606');
+					$(this).parent().find('ul').css('display','block');
+					$(this).find("b.down-up").css("display", "block");
+					$(this).find("b.down-down").css("display", "none");
+					
+				}
+				else{
+					$(this).parent().css('background','');
+					$(this).parent().find('ul').css('display','none');
+					$(this).find("b.down-up").css("display", "none");
+					$(this).find("b.down-down").css("display", "block");
+				}
 			});
 			
-			$(this).children("a").css("color","#d38606");
-			$(".tab-pane li").css("background-color","");
-			$(this).parent().parent().css("background-color","#d38606");
-			}
-		}); 
-		
-		//拓展toggle方法
-		$.fn.toggle = function( fn, fn2 ) {
-			var args = arguments,guid = fn.guid || $.guid++,i=0,
-			toggle = function( event ) {
-			  var lastToggle = ( $._data( this, "lastToggle" + fn.guid ) || 0 ) % i;
-			  $._data( this, "lastToggle" + fn.guid, lastToggle + 1 );
-			  event.preventDefault();
-			  return args[ lastToggle ].apply( this, arguments ) || false;
-			};
-			toggle.guid = guid;
-			while ( i < args.length ) {
-			  args[ i++ ].guid = guid;
-			}
-			return this.click( toggle );
-		  };
-		  
-		//左侧栏按钮下拉控制，此段JS删除会用下拉菜单插件效果		
-		$(".down-up").css("display", "none");
-
-		function drowToggle(){
-			$(".dropdown-toggle").unbind();   //阻止事件冒泡 
-			$(".dropdown-toggle").toggle(function() {		
-				$(this).siblings("ul.dropdown-menu").css("display","block");
-				$(this).parent("li").css("background-color","rgb(211, 134, 6)");
-				$(this).parent("li.dropdown").find(".dropdown-toggle").find(".down-up").css("display", "");
-				$(this).parent("li.dropdown").find(".dropdown-toggle").find(".down-down").css("display", "none");
-			
-			},function(){
-				$(this).siblings("ul.dropdown-menu").css("display","none");
-				//如果里面的ul展开，他的父级li的背景色为黄色 
-				var as=$(this).siblings("ul.dropdown-menu").find('a.hs'),c=0;
-				for(var i=0;i<as.length;i++){
-					if(as[i].style.color=='rgb(211, 134, 6)'||as[i].style.color=='#d38606'){
-						c=1;return;}}
-				if(c!=1){
-					$(this).parent("li").css("background-color","#505050");}
-				$(this).parent("li.dropdown").find(".dropdown-toggle").find(".down-up").css("display", "none");
-				$(this).parent("li.dropdown").find(".dropdown-toggle").find(".down-down").css("display", "");
-				})
+		//三级菜单 
+		function showdown(node){
+			$('b.down-down').css('display','block');
+			$('b.down-up').css('display','none');
+			$(node).parent().siblings('button').find('b.down-up').css('display','block');
+			$(node).parent().siblings('button').find('b.down-down').css('display','none');
 		}
-		drowToggle();
-
-
-		//二级菜单，没有三级菜单 
-		$(".menu-li").click(function(){
-			$(this).css("background-color","rgb(211, 134, 6)");
-			$(this).parent("ul").parent("div.tab-pane").siblings("div.tab-pane").children("ul").children("li.dropdown").css("background-color","#505050");
-			$(this).parent("ul").parent("div.tab-pane").siblings("div.tab-pane").children("ul").children("li.dropdown").children("ul.dropdown-menu").css("display","none");
-			$(this).parent("ul").parent("div.tab-pane").siblings("div.tab-pane").children("ul").children("li.dropdown").find("button").find("b.down-up").css("display", "none");
-			$(this).parent("ul").parent("div.tab-pane").siblings("div.tab-pane").children("ul").children("li.dropdown").find("button").find("b.down-down").css("display", "");
-			$(this).parent("ul").parent("div.tab-pane").siblings("div.tab-pane").children("ul").children("li.dropdown").children("ul.dropdown-menu").find("a.hs").css("color", "#999999");
-			$(this).parent("ul").parent("div.tab-pane").siblings("div.tab-pane").children("ul").children("li.dropdown").children("ul.dropdown-menu").find("b.triangle-box").css("display", "none");	
-			$(this).parent("ul").siblings("ul").children("li.dropdown").css("background-color","#505050");
-			$(this).parent("ul").siblings("ul").children("li.dropdown").children("ul.dropdown-menu").css("display", "none");	
-			$(this).parent("ul").siblings("ul").children("li.dropdown").find("button").find("b.down-up").css("display", "none");
-			$(this).parent("ul").siblings("ul").children("li.dropdown").find("button").find("b.down-down").css("display", "");
-			$(this).parent("ul").siblings("ul").children("li.dropdown").children("ul.dropdown-menu").find("a.hs").css("color", "#999999");
-			$(this).parent("ul").siblings("ul").children("li.dropdown").children("ul.dropdown-menu").find("b.triangle-box").css("display", "none");	
-			//不能省略，和上面的功能不同   处理同一页只有三级和有四级菜单  四级菜单父级下拉图片转换 
-			drowToggle();
-		 }); 
-		
-		
-		$(".dropdown .dropdown-menu li").click(function(){
-			$(this).parent("ul.dropdown-menu").css("display","block");
-			$(this).parent("ul").parent("li.dropdown").css("background-color","rgb(211, 134, 6)");
-			$(this).parent("ul").parent("li.dropdown").parent("ul").siblings("ul").children("li.dropdown").children("ul.dropdown-menu").css("display","none");
-			$(this).parent("ul").parent("li.dropdown").parent("ul").siblings("ul").children("li.dropdown").find("button").find("b.down-up").css("display", "none");	
-			$(this).parent("ul").parent("li.dropdown").parent("ul").siblings("ul").children("li.dropdown").find("button").find("b.down-down").css("display", "");
-			$(this).parent("ul").parent("li.dropdown").parent("ul").parent("div.tab-pane").siblings("div.tab-pane").children("ul").children("li.dropdown").children("ul.dropdown-menu").css("display","none");
-			$(this).parent("ul").parent("li.dropdown").parent("ul").parent("div.tab-pane").siblings("div.tab-pane").children("ul").children("li.dropdown").find("button").find("b.down-up").css("display", "none");
-			$(this).parent("ul").parent("li.dropdown").parent("ul").parent("div.tab-pane").siblings("div.tab-pane").children("ul").children("li.dropdown").find("button").find("b.down-down").css("display", "");
-			drowToggle();
+		$(".level3").click(function(){
+			$('.level2 ul').css('display','none');
+			$('.level2').css('background','');
+			showdown(this);
+			$('a.hs').css('color','');
+			$('b.triangle-box').css('display','none');
+			$(this).parent().css('display','block');
+			$(this).parent().parent().css('background','#d38606');
+			$(this).find('a.hs').css('color','#d38606');
+			$(this).find('b.triangle-box').css('display','block');
 		}); 
-		
+			
 	 //消息框 	
 	 $(".news-box").click(function () {
 		if ($(this).css("display")=="block") {

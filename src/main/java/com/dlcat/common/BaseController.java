@@ -11,6 +11,7 @@ import com.dlcat.common.entity.DyResponse;
 import com.dlcat.common.entity.QueryItem;
 import com.dlcat.common.utils.JsonUtils;
 import com.dlcat.common.utils.StringUtils;
+import com.dlcat.core.model.SysAdminLog;
 import com.dlcat.core.model.SysUser;
 import com.jfinal.core.Controller;
 import com.jfinal.kit.JMap;
@@ -45,6 +46,19 @@ public class BaseController extends Controller {
 	public static final String LIKE_ALL = "like_all";
 	public static final String NULL = "is_null";	//注意：此处nulL和空值不同
 	public static final String NOT_NULL = "is_not_null";
+	
+	
+	/**
+	* @author:zhaozhongyuan 
+	* @Description:
+	* @return void   
+	* @date 2017年6月5日 下午7:32:05  
+	*/
+	public void SetAdminLog(String btnID, String data) {
+		SysUser user=getCurrentUser();
+		SysAdminLog.SetAdminLog(user, btnID, data, getRequest());
+	}
+	
 	
 	/**
 	 * 请求列表数据（自动组装sql）

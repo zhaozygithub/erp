@@ -117,7 +117,7 @@ public class CustomerRecordController extends BaseController {
 	public void form() {
 		String type = getPara(0);
 		String id = getPara("id");
-		String btnId=getPara("btnid");
+		String btnid=getPara("btnid");
 		if(type == null){
 			renderJson(createErrorJsonResonse("数据库错误，请联系管理员！"));
 			return;
@@ -135,13 +135,13 @@ public class CustomerRecordController extends BaseController {
 
 			if (type.equals("add")) {
 				formFieldList.add(new FormField("type", "客户类型", "select", "",OptionUtil.getOptionListByCodeLibrary("CustomerType", true, ""),true));
-				response = PageUtil.createFormPageStructure("客户添加",formFieldList, "/record/toAdd?btnId="+btnId);
+				response = PageUtil.createFormPageStructure("客户添加",formFieldList, "/record/toAdd?btnid="+btnid);
 			} else if (type.equals("edit")) {
 				if (id==null || id.equals("")) {
 					renderJson(createErrorJsonResonse("请先选择一条记录！"));
 					return;
 				}
-				response = PageUtil.createFormPageStructure("客户编辑",formFieldList, "/record/toEdit?btnId="+btnId);
+				response = PageUtil.createFormPageStructure("客户编辑",formFieldList, "/record/toEdit?btnid="+btnid);
 			} else if (type.equals("detail")) {
 				if (id==null || id.equals("")) {
 					renderJson(createErrorJsonResonse("请先选择一条记录！"));
@@ -169,7 +169,7 @@ public class CustomerRecordController extends BaseController {
 	 * @time 2017年5月26日下午3:13:47
 	 */
 	public void toAdd() {
-		String btnId=getPara("btnId");
+		String btnId=getPara("btnid");
 		SysUser user = getSessionAttr("user");
 		String card_type =getPara("card_type");//证件类型
 		String card_id =getPara("card_id");//证件编号
@@ -208,7 +208,6 @@ public class CustomerRecordController extends BaseController {
 
 		try {
 			cuObjectCustomer.save();
-			SysAdminLog.SetAdminLog(user, btnId, "添加正式客户，客户编号为："+cuObjectCustomer.getStr("id"));
 			renderJson(createSuccessJsonResonse());
 		} catch (Exception e) {		
 			renderJson(createErrorJsonResonse("操作失败！"));
@@ -237,7 +236,6 @@ public class CustomerRecordController extends BaseController {
 			for (String id1 : ids) {
 				cuObjectCustomer.deleteById(id1);
 			}
-			SysAdminLog.SetAdminLog(user, btnId, "删除正式客户，客户编号为："+id);
 			renderJson(createSuccessJsonResonse());
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
@@ -259,7 +257,6 @@ public class CustomerRecordController extends BaseController {
 		try {			
 			cuObjectCustomer.update();
 //			String json = cuObjectCustomer.toJson();
-			SysAdminLog.SetAdminLog(user, btnId, "编辑客户，客户编号为："+cuObjectCustomer.getStr("id")+"，内容为："+cuObjectCustomer.toString());
 			renderJson(createSuccessJsonResonse());
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
@@ -293,7 +290,6 @@ public class CustomerRecordController extends BaseController {
 		map.put("update_org_name", user.getStr("belong_org_name"));
 		try {
 			updateByIds(CuObjectCustomer.class, ids, map);
-			SysAdminLog.SetAdminLog(user, btnId, "放弃维护客户，客户编号为："+id);
 			renderJson(createSuccessJsonResonse());
 		} catch (Exception e) {
 			// TODO Auto-generated catch block

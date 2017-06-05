@@ -1,6 +1,6 @@
 package com.dlcat.core.model;
 
-import java.net.SocketException;
+import javax.servlet.http.HttpServletRequest;
 
 import com.dlcat.common.BaseModel;
 import com.dlcat.common.utils.DateUtil;
@@ -13,7 +13,7 @@ import com.dlcat.common.utils.IpUtil;
 public class SysAdminLog extends BaseModel<SysAdminLog> {
 	public static final SysAdminLog dao = new SysAdminLog();
 	
-	public static void SetAdminLog(SysUser user,String btnID,String data) {
+	public static void SetAdminLog(SysUser user,String btnID,String data, HttpServletRequest request) {
 		SysAdminLog sysAdminLog=new SysAdminLog();
 		sysAdminLog.set("Login_id", user.getInt("id"));
 		sysAdminLog.set("Login_name", user.getStr("name"));
@@ -26,10 +26,9 @@ public class SysAdminLog extends BaseModel<SysAdminLog> {
 		
 		String ip="";
 		try {
-			ip = IpUtil.getRealIp();
-		} catch (SocketException e) {
+			ip = IpUtil.getRemoteIp(request);
+		} catch (Exception e) {
 			// TODO Auto-generated catch block
-			System.out.println("获取用户IP失败。");
 			e.printStackTrace();
 		}
 		

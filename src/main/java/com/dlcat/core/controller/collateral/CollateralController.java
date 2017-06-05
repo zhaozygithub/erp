@@ -211,7 +211,6 @@ public class CollateralController extends BaseController {
 			
 			try {
 				cuProperty.save();
-				SysAdminLog.SetAdminLog(user, btnId, "添加客户财产，财产编号为："+cuProperty.getStr("id"));
 				renderJson(createSuccessJsonResonse());
 			} catch (Exception e) {
 				renderJson(createErrorJsonResonse("操作失败！"));
@@ -241,7 +240,6 @@ public class CollateralController extends BaseController {
 				for (String id1 : ids) {
 					cuProperty.deleteById(id1);
 				}
-				SysAdminLog.SetAdminLog(user, btnId, "删除客户财产，财产编号为："+id);
 				renderJson(createSuccessJsonResonse());
 			} catch (Exception e) {
 				e.printStackTrace();
@@ -266,7 +264,6 @@ public class CollateralController extends BaseController {
 			CuProperty cuProperty = getModel(CuProperty.class, "",true);
 			try {
 				cuProperty.update();
-				SysAdminLog.SetAdminLog(user, btnId, "编辑客户财产，财产编号为："+cuProperty.getStr("id")+"，内容为："+cuProperty.toString());
 				renderJson(createSuccessJsonResonse());
 			} catch (Exception e) {
 				e.printStackTrace();

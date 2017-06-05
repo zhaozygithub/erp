@@ -108,7 +108,7 @@ ul.dropdown-menu li a.hs:hover {
 }
 
 -menu>.active>a, -menu>.active>a:focus, .dropdown-menu>.active>a:hover {
-	background-color: #d38606;
+	background-color: #d38607;
 }
 
 
@@ -159,10 +159,10 @@ ul.dropdown-menu li a.hs:hover {
 }
 
 #sidebar>ul>li.active>a, #sidebar>ul>li>a:hover, #sidebar>ul>li:hover>a{
-	background-color: #d38606;
+	background-color: #d38607;
 }
 .slider-left li:hover{
-	background-color: #d38606;
+	background-color: #d38607;
 }
 .content-box .media {
 	display: inline-block;
@@ -292,7 +292,7 @@ label {
 	padding:19px !important;
 }
 .menu-li:hover,.dropdown:hover{
-	background-color:rgb(211, 134, 6);
+	background-color:rgb(211, 134, 7);
 }
 /*消息框*/
 .news-box{

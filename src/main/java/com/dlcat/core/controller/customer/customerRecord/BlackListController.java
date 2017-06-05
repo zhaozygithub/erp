@@ -137,7 +137,6 @@ public class BlackListController extends BaseController {
 		
 		try {
 			updateByIds(CuObjectCustomer.class, ids, map);
-			SysAdminLog.SetAdminLog(user, btnId, "移除黑名单客户编号："+id);
 			renderJson(createSuccessJsonResonse());
 		} catch (Exception e) {
 			e.printStackTrace();
